@@ -7,11 +7,11 @@
       "headings": {
         "about-us": "About Us",
         "project-team": "Project team",
-        "john-doe": "John Doe",
-        "jane-doe": "Jane Doe",
-        "johnny-doe": "Johnny Doe",
-        "jean-doe": "Jean Doe",
-        "james-doe": "James Doe"
+        "chen-wai": "Chen Wai",
+        "ong-russell": "Ong Russell",
+        "ryan-wen": "Ryan Wen",
+        "wesley-pribadi": "Wesley Pribadi",
+        "wong-lucas": "Wong Lucas"
       },
       "headingKeywords": {}
     },
@@ -107,7 +107,7 @@
       "src": "UserGuide.md",
       "title": "User Guide",
       "headings": {
-        "ab-3-user-guide": "AB-3 User Guide",
+        "taa-user-guide": "TAA User Guide",
         "quick-start": "Quick start",
         "features": "Features",
         "viewing-help-help": "Viewing help : help",
