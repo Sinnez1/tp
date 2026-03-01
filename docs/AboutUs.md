@@ -11,15 +11,15 @@ You can reach us at the email `ay2526s2-cs2103t-f14-1@nusu.onmicrosoft.com`
 
 ## Project team
 
-### Chen Ka Wai
+### Cheng Ka Wai
 
-<img src="https://github.com/Ch3ngK.png" width="200px">
+<img src="images/ch3ngk.png" width="200px">
 
 [[github](https://github.com/Ch3ngK)]
 [[portfolio](team/Ch3ngK.md)]
 
-* Role: Developer
-* Responsibilities: Developer
+* Role: Documentation
+* Responsibilities: Responsible for the quality of various project documents.
 
 ### Ong Russell
 
