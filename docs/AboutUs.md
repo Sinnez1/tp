@@ -52,12 +52,12 @@ Integration: In charge of versioning of the code, maintaining the code repositor
 * Role: Scheduling and Tracking
 * Responsibilities: In charge of defining, assigning, and tracking project tasks.
 
-### Wong Lucas
+### Wong Paul-Jin Lucas
 
-<img src="https://github.com/Coding4NUS.png" width="200px">
+<img src="images/coding4nus.png" width="200px">
 
 [[github](https://github.com/Coding4NUS)]
 [[portfolio](team/Coding4NUS.md)]
 
-* Role: Developer
-* Responsibilities: Developer
+* Role: Testing
+* Responsibilities: Ensures the testing of the project is done properly and on time.
