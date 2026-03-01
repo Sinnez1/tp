@@ -43,13 +43,13 @@ You can reach us at the email `ay2526s2-cs2103t-f14-1@nusu.onmicrosoft.com`
 
 ### Wesley Pribadi
 
-<img src="https://github.com/wesley-pribadi.png" width="200px">
+<img src="images/wesley-pribadi.png" width="200px">
 
 [[github](https://github.com/wesley-pribadi)]
 [[portfolio](team/wesley-pribadi.md)]
 
-* Role: Developer
-* Responsibilities: Developer
+* Role: Scheduling and Tracking
+* Responsibilities: In charge of defining, assigning, and tracking project tasks.
 
 ### Wong Lucas
 
