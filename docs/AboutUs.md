@@ -51,12 +51,12 @@ You can reach us at the email `ay2526s2-cs2103t-f14-1@nusu.onmicrosoft.com`
 * Role: Developer
 * Responsibilities: Developer
 
-### Wong Lucas
+### Wong Paul-Jin Lucas
 
-<img src="https://github.com/Coding4NUS.png" width="200px">
+<img src="images/coding4nus.png" width="200px">
 
 [[github](https://github.com/Coding4NUS)]
 [[portfolio](team/Coding4NUS.md)]
 
 * Role: Developer
-* Responsibilities: Developer
+* Responsibilities: Testing
