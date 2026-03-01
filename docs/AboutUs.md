@@ -31,15 +31,15 @@ You can reach us at the email `ay2526s2-cs2103t-f14-1@nusu.onmicrosoft.com`
 * Role: Developer
 * Responsibilities: Developer
 
-### Ryan Wen
+### Ryan Ang Jun Wen
 
-<img src="https://github.com/Sinnez1.png" width="200px">
+<img src="images/sinnez1.png" width="200px">
 
 [[github](https://github.com/Sinnez1)]
 [[portfolio](team/Sinnez1.md)]
 
 * Role: Developer
-* Responsibilities: Developer
+* Responsibilities: Developer & Ensuring good code quality
 
 ### Wesley Pribadi
 
