@@ -23,13 +23,14 @@ You can reach us at the email `ay2526s2-cs2103t-f14-1@nusu.onmicrosoft.com`
 
 ### Ong Russell
 
-<img src="https://github.com/ongrussell.png" width="200px">
+<img src="images/ongrussell.png" width="200px">
 
 [[github](https://github.com/ongrussell)]
 [[portfolio](team/ongrussell.md)]
 
-* Role: Developer
-* Responsibilities: Developer
+* Role: Deliverables & Deadlines
+* Responsibilities: Ensure project deliverables are done on time and in the right format.
+Integration: In charge of versioning of the code, maintaining the code repository, integrating various parts of the software to create a whole.
 
 ### Ryan Wen
 
