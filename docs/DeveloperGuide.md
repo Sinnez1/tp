@@ -325,6 +325,56 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 2.
 
+**Use case: Edit a contact**
+
+**MSS**
+
+1.  User requests to add a wrong contact
+2.  User requests to list persons
+3.  AddressBook shows a list of persons
+4.  User requests to delete that contact in the list
+5.  AddressBook deletes the person
+6.  User requests to add the correct contact
+
+    Use case ends.
+
+**Extensions**
+
+* 4a. The given index is invalid.
+
+    * 4a1. AddressBook shows an error message.
+
+      Use case resumes at step 3.
+
+**Use case: Mark attendance**
+
+**MSS**
+
+1.  User requests to list persons
+2.  AddressBook shows a list of persons
+3.  User requests to mark attendance for a person in the list
+4.  AddressBook marks the attendance of that person
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The given index is invalid.
+
+    * 3a1. AddressBook shows an error message.
+
+      Use case resumes at step 2.
+
+* 3b. The given tutorial group is invalid.
+
+    * 3a1. AddressBook shows an error message.
+
+      Use case resumes at step 2.
+
 *{More to be added}*
 
 ### Non-Functional Requirements
