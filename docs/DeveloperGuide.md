@@ -338,7 +338,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Teaching Assistant**: A course staff member responsible for conducting tutorials, grading assignments, and supporting students.
+* **Tutorial Group**: A subgroup of students assigned to a specific TA for tutorials or lab sessions.
+* **Attendance Status**: The recorded presence or absence of a student for a tutorial session.
+* **Participation Score**: A qualitative or quantitative measure of a student's engagement during tutorials.
+* **Submission Status**: The state of a student’s assignment (e.g., Submitted, Late, Missing, Graded).
+* **Command**: A user-issued instruction in TAA to perform a specific action (e.g., add, edit, delete, mark).
 
 --------------------------------------------------------------------------------------------------------------------
 
