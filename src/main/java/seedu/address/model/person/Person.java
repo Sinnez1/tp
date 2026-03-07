@@ -109,7 +109,7 @@ public class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
-                .add("address", matricNumber)
+                .add("matricNumber", matricNumber)
                 .add("tags", tags)
                 .toString();
     }
