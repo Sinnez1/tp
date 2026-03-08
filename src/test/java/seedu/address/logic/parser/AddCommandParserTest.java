@@ -83,7 +83,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, EMAIL_DESC_AMY + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
 
-        // multiple addresses
+        // multiple matriculation numbers
         assertParseFailure(parser, MATRIC_NUMBER_DESC_AMY + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MATRIC_NUMBER));
 
@@ -108,7 +108,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, INVALID_PHONE_DESC + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
-        // invalid address
+        // invalid matriculation number
         assertParseFailure(parser, INVALID_MATRIC_NUMBER_DESC + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MATRIC_NUMBER));
 
@@ -126,7 +126,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, validExpectedPersonString + INVALID_PHONE_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
-        // invalid address
+        // invalid matriculation number
         assertParseFailure(parser, validExpectedPersonString + INVALID_MATRIC_NUMBER_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MATRIC_NUMBER));
     }
@@ -155,7 +155,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB + MATRIC_NUMBER_DESC_BOB,
                 expectedMessage);
 
-        // missing address prefix
+        // missing matric number prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_MATRIC_NUMBER_BOB,
                 expectedMessage);
 
@@ -178,7 +178,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC + MATRIC_NUMBER_DESC_BOB
                 + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Email.MESSAGE_CONSTRAINTS);
 
-        // invalid address
+        // invalid matriculation number
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + INVALID_MATRIC_NUMBER_DESC
                 + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, MatricNumber.MESSAGE_CONSTRAINTS);
 

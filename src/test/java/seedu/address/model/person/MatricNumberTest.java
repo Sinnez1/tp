@@ -14,14 +14,14 @@ public class MatricNumberTest {
     }
 
     @Test
-    public void constructor_invalidAddress_throwsIllegalArgumentException() {
-        String invalidAddress = "";
-        assertThrows(IllegalArgumentException.class, () -> new MatricNumber(invalidAddress));
+    public void constructor_invalidMatricNumber_throwsIllegalArgumentException() {
+        String invalidMatricNumber = "";
+        assertThrows(IllegalArgumentException.class, () -> new MatricNumber(invalidMatricNumber));
     }
 
     @Test
     public void isValidMatricNumber() {
-        // null address
+        // null matriculation number
         assertThrows(NullPointerException.class, () -> MatricNumber.isValidMatricNumber(null));
 
         // invalid matriculation numbers

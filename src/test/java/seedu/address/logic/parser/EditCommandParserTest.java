@@ -87,7 +87,7 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS); // invalid phone
         assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS); // invalid email
         assertParseFailure(parser, "1" + INVALID_MATRIC_NUMBER_DESC,
-                MatricNumber.MESSAGE_CONSTRAINTS); // invalid address
+                MatricNumber.MESSAGE_CONSTRAINTS); // invalid matriculation number
         assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_CONSTRAINTS); // invalid tag
 
         // invalid phone followed by valid email
@@ -151,7 +151,7 @@ public class EditCommandParserTest {
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
-        // address
+        // matriculation number
         userInput = targetIndex.getOneBased() + MATRIC_NUMBER_DESC_AMY;
         descriptor = new EditPersonDescriptorBuilder().withMatricNumber(VALID_MATRIC_NUMBER_AMY).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
