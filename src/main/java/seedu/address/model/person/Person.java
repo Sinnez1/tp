@@ -24,26 +24,30 @@ public class Person {
 
     // Data fields
     private final MatricNumber matricNumber;
+    private final Participation participation;
     private final Set<Tag> tags = new HashSet<>();
     private final Set<ClassSpaceName> classSpaces = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, MatricNumber matricNumber, Set<Tag> tags) {
-        this(name, phone, email, matricNumber, tags, Collections.emptySet());
+    public Person(Name name, Phone phone, Email email, MatricNumber matricNumber,
+                  Participation participation, Set<Tag> tags) {
+        this(name, phone, email, matricNumber, participation, tags, Collections.emptySet());
     }
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, MatricNumber matricNumber, Set<Tag> tags,
+    public Person(Name name, Phone phone, Email email, MatricNumber matricNumber,
+                  Participation participation, Set<Tag> tags,
                   Set<ClassSpaceName> classSpaces) {
-        requireAllNonNull(name, phone, email, matricNumber, tags, classSpaces);
+        requireAllNonNull(name, phone, email, matricNumber, participation, tags, classSpaces);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.matricNumber = matricNumber;
+        this.participation = participation;
         this.tags.addAll(tags);
         this.classSpaces.addAll(classSpaces);
     }
@@ -62,6 +66,10 @@ public class Person {
 
     public MatricNumber getMatricNumber() {
         return matricNumber;
+    }
+
+    public Participation getParticipation() {
+        return participation;
     }
 
     /**
@@ -120,6 +128,7 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && matricNumber.equals(otherPerson.matricNumber)
+                && participation.equals(otherPerson.participation)
                 && tags.equals(otherPerson.tags)
                 && classSpaces.equals(otherPerson.classSpaces);
     }
@@ -127,7 +136,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, matricNumber, tags, classSpaces);
+        return Objects.hash(name, phone, email, matricNumber, participation, tags, classSpaces);
     }
 
     @Override
@@ -137,6 +146,7 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("matricNumber", matricNumber)
+                .add("participation", participation)
                 .add("tags", tags)
                 .add("classSpaces", classSpaces)
                 .toString();

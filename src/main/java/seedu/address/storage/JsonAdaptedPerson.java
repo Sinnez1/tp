@@ -14,6 +14,7 @@ import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Participation;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -29,6 +30,7 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String matricNumber;
+    private final Integer participation;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final List<String> classSpaces = new ArrayList<>();
 
@@ -38,12 +40,14 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("matricNumber") String matricNumber,
+            @JsonProperty("participation") Integer participation,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("classSpaces") List<String> classSpaces) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.matricNumber = matricNumber;
+        this.participation = participation;
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -53,8 +57,8 @@ class JsonAdaptedPerson {
     }
 
     public JsonAdaptedPerson(String name, String phone, String email, String matricNumber,
-                             List<JsonAdaptedTag> tags) {
-        this(name, phone, email, matricNumber, tags, null);
+                             Integer participation, List<JsonAdaptedTag> tags) {
+        this(name, phone, email, matricNumber, participation, tags, null);
     }
 
     /**
@@ -65,6 +69,7 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         matricNumber = source.getMatricNumber().value;
+        participation = source.getParticipation().value;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -126,8 +131,18 @@ class JsonAdaptedPerson {
         }
         final MatricNumber modelMatricNumber = new MatricNumber(matricNumber);
 
+        final Participation modelParticipation;
+        if (participation == null) {
+            modelParticipation = new Participation(0);
+        } else if (!Participation.isValidParticipation(participation)) {
+            throw new IllegalValueException(Participation.MESSAGE_CONSTRAINTS);
+        } else {
+            modelParticipation = new Participation(participation);
+        }
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelMatricNumber, modelTags, modelClassSpaces);
+        return new Person(modelName, modelPhone, modelEmail, modelMatricNumber,
+                modelParticipation, modelTags, modelClassSpaces);
     }
 
 }

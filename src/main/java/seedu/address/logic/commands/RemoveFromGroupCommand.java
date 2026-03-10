@@ -66,7 +66,7 @@ public class RemoveFromGroupCommand extends GroupMembershipCommand {
             HashSet<ClassSpaceName> updatedClassSpaces = new HashSet<>(person.getClassSpaces());
             updatedClassSpaces.remove(classSpaceName);
             Person updatedPerson = new Person(person.getName(), person.getPhone(), person.getEmail(),
-                    person.getMatricNumber(), person.getTags(), updatedClassSpaces);
+                    person.getMatricNumber(), person.getParticipation(), person.getTags(), updatedClassSpaces);
             model.setPerson(person, updatedPerson);
             removedStudents.add(person.getName().fullName);
         }

@@ -44,6 +44,8 @@ public class Messages {
                 .append(person.getEmail())
                 .append("; Matric Number: ")
                 .append(person.getMatricNumber())
+                .append("; Participation: ")
+                .append(person.getParticipation())
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         builder.append("; Class Spaces: ");

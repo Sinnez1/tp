@@ -69,7 +69,7 @@ public class AddToGroupCommand extends GroupMembershipCommand {
             HashSet<ClassSpaceName> updatedClassSpaces = new HashSet<>(person.getClassSpaces());
             updatedClassSpaces.add(classSpaceName);
             Person updatedPerson = new Person(person.getName(), person.getPhone(), person.getEmail(),
-                    person.getMatricNumber(), person.getTags(), updatedClassSpaces);
+                    person.getMatricNumber(), person.getParticipation(), person.getTags(), updatedClassSpaces);
             model.setPerson(person, updatedPerson);
             addedStudents.add(person.getName().fullName);
         }
