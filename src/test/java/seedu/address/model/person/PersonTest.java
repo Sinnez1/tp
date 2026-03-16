@@ -4,21 +4,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.FIVE_PARTICIPATION;
+import static seedu.address.logic.commands.CommandTestUtil.ONE_PARTICIPATION;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_MATRIC_NUMBER_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_MATRIC_NUMBER_BOB_LOWERCASE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.ZERO_PARTICIPATION;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
+    private ClassSpaceName testClassSpaceGroup = new ClassSpaceName("T01");
 
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
@@ -50,6 +57,78 @@ public class PersonTest {
         //different case for matriculation number -> returns true
         editedBob = new PersonBuilder(BOB).withMatricNumber(VALID_MATRIC_NUMBER_BOB_LOWERCASE).build();
         assertTrue(BOB.isSamePerson(editedBob));
+    }
+
+    @Test
+    public void getOrCreateSession_sessionExists_returnsExistingSession() {
+        LocalDate date = LocalDate.now();
+        Session existingSession = new Session(date, new Attendance(Attendance.Status.PRESENT),
+                new Participation(FIVE_PARTICIPATION));
+        Person person = new PersonBuilder(ALICE).build().withUpdatedSession(testClassSpaceGroup, existingSession);
+
+        Session retrievedSession = person.getOrCreateSession(testClassSpaceGroup, date);
+        assertEquals(existingSession, retrievedSession);
+    }
+
+    @Test
+    public void getOrCreateSession_sessionDoesNotExist_returnsDefaultSession() {
+        LocalDate date = LocalDate.now();
+        Person person = new PersonBuilder(ALICE).build(); // Person with no sessions.
+
+        Session createdSession = person.getOrCreateSession(testClassSpaceGroup, date);
+
+        // Check for default values
+        assertEquals(date, createdSession.getDate());
+        assertEquals(new Attendance(Attendance.Status.UNINITIALISED), createdSession.getAttendance());
+        assertEquals(new Participation(ZERO_PARTICIPATION), createdSession.getParticipation());
+
+        // Ensure original person object was not mutated
+        assertTrue(person.getClassSpaceSessions().isEmpty());
+    }
+
+    @Test
+    public void withUpdatedSession_addNewSession_returnsNewPersonWithSession() {
+        Person originalPerson = new PersonBuilder(ALICE).build();
+        LocalDate date = LocalDate.now();
+        Session newSession = new Session(date, new Attendance(Attendance.Status.PRESENT),
+                new Participation(ONE_PARTICIPATION));
+
+        Person updatedPerson = originalPerson.withUpdatedSession(testClassSpaceGroup, newSession);
+
+        // Check that the new person has the session, and the old one does not.
+        assertFalse(originalPerson.equals(updatedPerson));
+        assertTrue(originalPerson.getClassSpaceSessions().isEmpty());
+        assertEquals(newSession, updatedPerson.getOrCreateSession(testClassSpaceGroup, date));
+    }
+
+    @Test
+    public void withUpdatedSession_updateExistingSession_returnsNewPersonWithUpdatedSession() {
+        LocalDate date = LocalDate.now();
+        Session initialSession = new Session(date, new Attendance(Attendance.Status.UNINITIALISED),
+                new Participation(ZERO_PARTICIPATION));
+        Person originalPerson = new PersonBuilder(ALICE)
+                .build()
+                .withUpdatedSession(testClassSpaceGroup, initialSession);
+
+        Session updatedSession = new Session(date, new Attendance(Attendance.Status.PRESENT),
+                new Participation(FIVE_PARTICIPATION));
+        Person updatedPerson = originalPerson.withUpdatedSession(testClassSpaceGroup, updatedSession);
+
+        // Check that the person was updated correctly.
+        assertFalse(originalPerson.equals(updatedPerson));
+        assertEquals(updatedSession, updatedPerson.getOrCreateSession(testClassSpaceGroup, date));
+        assertEquals(1, updatedPerson.getClassSpaceSessions().get(testClassSpaceGroup).getSessions().size());
+    }
+
+    @Test
+    public void equals_differentSessionMaps_returnsFalse() {
+        // Two persons, one with a session and one without.
+        Person personWithSession = new PersonBuilder(ALICE).build()
+                .withUpdatedSession(testClassSpaceGroup, new Session(LocalDate.now(),
+                        new Attendance(Attendance.Status.PRESENT), new Participation(ONE_PARTICIPATION)));
+        Person personWithoutSession = new PersonBuilder(ALICE).build();
+
+        assertFalse(personWithSession.equals(personWithoutSession));
     }
 
     @Test
