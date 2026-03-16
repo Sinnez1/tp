@@ -95,7 +95,7 @@ public class JsonAddressBookStorageTest {
         original.addClassSpace(new ClassSpace(new ClassSpaceName("CS2103T-T01")));
         original.addPerson(new PersonBuilder()
                 .withName("Session Student")
-                .withMatricNumber("A1234567B")
+                .withMatricNumber("A1234567X")
                 .withPhone("91234567")
                 .withEmail("session@example.com")
                 .withClassSpaces("CS2103T-T01")

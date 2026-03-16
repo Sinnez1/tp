@@ -41,11 +41,11 @@ public class AttViewCommandTest {
     @Test
     public void execute_presentFilter_showsMatchingPersons() {
         Model model = new ModelManager();
-        model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567A")
+        model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT").build());
-        model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234567B")
+        model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234568W")
                 .withEmail("bob@example.com").withPhone("92345678").withAttendance("ABSENT").build());
-        model.addPerson(new PersonBuilder().withName("Cara Present").withMatricNumber("A1234567C")
+        model.addPerson(new PersonBuilder().withName("Cara Present").withMatricNumber("A1234569U")
                 .withEmail("cara@example.com").withPhone("93456789").withAttendance("PRESENT").build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -58,9 +58,9 @@ public class AttViewCommandTest {
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(List.of(
-                new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567A")
+                new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
                         .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT").build(),
-                new PersonBuilder().withName("Cara Present").withMatricNumber("A1234567C")
+                new PersonBuilder().withName("Cara Present").withMatricNumber("A1234569U")
                         .withEmail("cara@example.com").withPhone("93456789").withAttendance("PRESENT").build()
         ), model.getFilteredPersonList());
     }
@@ -68,9 +68,9 @@ public class AttViewCommandTest {
     @Test
     public void execute_noFilter_showsCurrentView() {
         Model model = new ModelManager();
-        model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567A")
+        model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT").build());
-        model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234567B")
+        model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234568W")
                 .withEmail("bob@example.com").withPhone("92345678").withAttendance("ABSENT").build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -89,13 +89,13 @@ public class AttViewCommandTest {
         Model model = new ModelManager();
         model.addClassSpace(new ClassSpace(new ClassSpaceName("T01")));
         model.addClassSpace(new ClassSpace(new ClassSpaceName("T02")));
-        model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567A")
+        model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT")
                 .withClassSpaces("T01").build());
-        model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234567B")
+        model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234568W")
                 .withEmail("bob@example.com").withPhone("92345678").withAttendance("ABSENT")
                 .withClassSpaces("T01").build());
-        model.addPerson(new PersonBuilder().withName("Cara Elsewhere").withMatricNumber("A1234567C")
+        model.addPerson(new PersonBuilder().withName("Cara Elsewhere").withMatricNumber("A1234569U")
                 .withEmail("cara@example.com").withPhone("93456789").withAttendance("PRESENT")
                 .withClassSpaces("T02").build());
 
@@ -121,7 +121,7 @@ public class AttViewCommandTest {
     @Test
     public void execute_noMatches_returnsNoMatchesMessage() {
         Model model = new ModelManager();
-        model.addPerson(new PersonBuilder().withName("Only Present").withMatricNumber("A1234567D")
+        model.addPerson(new PersonBuilder().withName("Only Present").withMatricNumber("A1234567X")
                 .withEmail("present@example.com").withPhone("94567890").withAttendance("PRESENT").build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());

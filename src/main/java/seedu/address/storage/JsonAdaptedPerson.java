@@ -126,6 +126,11 @@ class JsonAdaptedPerson {
         }
         final Email modelEmail = new Email(email);
 
+        if (matricNumber == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    MatricNumber.class.getSimpleName()));
+        }
+
         final MatricNumber modelMatricNumber;
         try {
             modelMatricNumber = new MatricNumber(matricNumber);
