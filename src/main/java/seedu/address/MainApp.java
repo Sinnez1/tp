@@ -178,7 +178,18 @@ public class MainApp extends Application {
     public void stop() {
         logger.info("============================ [ Stopping AddressBook ] =============================");
         try {
-            storage.saveUserPrefs(model.getUserPrefs());
+            storage.saveAddressBook(model.getAddressBook());
+        } catch (IOException e) {
+            logger.severe("Failed to save address book " + StringUtil.getDetails(e));
+        }
+        try {
+            UserPrefs prefsToSave = new UserPrefs(model.getUserPrefs());
+            prefsToSave.setLastActiveClassSpaceName(
+                    model.getActiveClassSpaceName().map(classSpaceName -> classSpaceName.value).orElse(null));
+            prefsToSave.setLastActiveSessionDate(
+                    model.getActiveSessionDate().map(Object::toString).orElse(null));
+            prefsToSave.setAttendanceViewActive(model.isAttendanceViewActive());
+            storage.saveUserPrefs(prefsToSave);
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
         }

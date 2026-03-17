@@ -1,8 +1,10 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -17,6 +19,8 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Participation;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Session;
+import seedu.address.model.person.SessionList;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -34,6 +38,7 @@ class JsonAdaptedPerson {
     private final Integer participation;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final List<String> classSpaces = new ArrayList<>();
+    private final Map<String, List<JsonAdaptedSession>> classSpaceSessions = new HashMap<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -44,7 +49,8 @@ class JsonAdaptedPerson {
             @JsonProperty("attendance") String attendance,
             @JsonProperty("participation") Integer participation,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("classSpaces") List<String> classSpaces) {
+            @JsonProperty("classSpaces") List<String> classSpaces,
+            @JsonProperty("classSpaceSessions") Map<String, List<JsonAdaptedSession>> classSpaceSessions) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -57,11 +63,17 @@ class JsonAdaptedPerson {
         if (classSpaces != null) {
             this.classSpaces.addAll(classSpaces);
         }
+        if (classSpaceSessions != null) {
+            classSpaceSessions.forEach((classSpaceName, sessions) -> {
+                List<JsonAdaptedSession> adaptedSessions = sessions == null ? new ArrayList<>() : new ArrayList<>(sessions);
+                this.classSpaceSessions.put(classSpaceName, adaptedSessions);
+            });
+        }
     }
 
     public JsonAdaptedPerson(String name, String phone, String email, String matricNumber,
                              List<JsonAdaptedTag> tags) {
-        this(name, phone, email, matricNumber, null, null, tags, null);
+        this(name, phone, email, matricNumber, null, null, tags, null, null);
     }
 
     /**
@@ -81,6 +93,10 @@ class JsonAdaptedPerson {
                 .map(classSpaceName -> classSpaceName.value)
                 .sorted(String.CASE_INSENSITIVE_ORDER)
                 .toList());
+        source.getClassSpaceSessions().forEach((classSpaceName, sessionList) -> classSpaceSessions.put(
+                classSpaceName.value,
+                sessionList.getSessions().stream().map(JsonAdaptedSession::new).toList()
+        ));
     }
 
     /**
@@ -160,7 +176,26 @@ class JsonAdaptedPerson {
         Person person = new Person(modelName, modelPhone, modelEmail, modelMatricNumber, modelClassSpaces, modelTags);
         person = new Person(person, modelAttendance);
         person = new Person(person, modelParticipation);
+        person = new Person(person, parseClassSpaceSessions());
         return person;
+    }
+
+    private Map<ClassSpaceName, SessionList> parseClassSpaceSessions() throws IllegalValueException {
+        Map<ClassSpaceName, SessionList> modelSessionMap = new HashMap<>();
+        for (Map.Entry<String, List<JsonAdaptedSession>> entry : classSpaceSessions.entrySet()) {
+            String classSpaceNameString = entry.getKey();
+            if (!ClassSpaceName.isValidClassSpaceName(classSpaceNameString)) {
+                throw new IllegalValueException(ClassSpaceName.MESSAGE_CONSTRAINTS);
+            }
+            ClassSpaceName classSpaceName = new ClassSpaceName(classSpaceNameString);
+            List<Session> sessions = new ArrayList<>();
+            List<JsonAdaptedSession> adaptedSessions = entry.getValue() == null ? List.of() : entry.getValue();
+            for (JsonAdaptedSession adaptedSession : adaptedSessions) {
+                sessions.add(adaptedSession.toModelType());
+            }
+            modelSessionMap.put(classSpaceName, new SessionList(sessions));
+        }
+        return modelSessionMap;
     }
 
 }

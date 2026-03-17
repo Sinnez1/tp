@@ -98,6 +98,7 @@ public class UnmarkCommand extends Command {
         Person updatedPerson = personToUpdate.withUpdatedSession(classSpace, updatedSession);
 
         model.setPerson(personToUpdate, updatedPerson);
+        model.setActiveSessionDate(date);
 
         return new CommandResult(
                 String.format(MESSAGE_UNMARK_SUCCESS, Messages.format(updatedPerson, classSpace, date))

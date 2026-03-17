@@ -1,6 +1,9 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GROUP;
+
+import java.time.LocalDate;
 
 import seedu.address.logic.commands.AttViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -29,21 +32,29 @@ public class AttViewCommandParser implements Parser<AttViewCommand> {
         }
 
         String tokenizableArgs = " " + trimmedArgs;
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(tokenizableArgs, PREFIX_GROUP);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(tokenizableArgs, PREFIX_GROUP, PREFIX_DATE);
         String preamble = argMultimap.getPreamble();
-
-        if (argMultimap.getAllValues(PREFIX_GROUP).size() > 1) {
-            throw new ParseException(MESSAGE_TOO_MANY_ARGUMENTS + "\n" + AttViewCommand.MESSAGE_USAGE);
-        }
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_GROUP, PREFIX_DATE);
 
         ClassSpaceName classSpaceName = null;
         if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
             classSpaceName = ParserUtil.parseClassSpaceName(argMultimap.getValue(PREFIX_GROUP).get());
         }
 
+        LocalDate sessionDate = null;
+        if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
+            sessionDate = ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get());
+        }
+
         if (preamble.isBlank()) {
+            if (classSpaceName != null && sessionDate != null) {
+                return new AttViewCommand(classSpaceName, sessionDate);
+            }
             if (classSpaceName != null) {
                 return new AttViewCommand(classSpaceName);
+            }
+            if (sessionDate != null) {
+                return new AttViewCommand(sessionDate);
             }
             return new AttViewCommand();
         }
@@ -55,8 +66,14 @@ public class AttViewCommandParser implements Parser<AttViewCommand> {
 
         try {
             Attendance attendance = new Attendance(parts[0]);
+            if (classSpaceName != null && sessionDate != null) {
+                return new AttViewCommand(attendance, classSpaceName, sessionDate);
+            }
             if (classSpaceName != null) {
                 return new AttViewCommand(attendance, classSpaceName);
+            }
+            if (sessionDate != null) {
+                return new AttViewCommand(attendance, sessionDate);
             }
             return new AttViewCommand(attendance);
         } catch (IllegalArgumentException e) {

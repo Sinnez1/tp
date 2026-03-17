@@ -4,13 +4,16 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -32,9 +35,10 @@ public class ModelManager implements Model {
     private final FilteredList<Person> filteredPersons;
     private final SimpleStringProperty currentView;
     private final SimpleBooleanProperty attendanceViewActive;
+    private final SimpleObjectProperty<ClassSpaceName> activeClassSpaceName;
+    private final SimpleObjectProperty<LocalDate> activeSessionDate;
 
     private Predicate<Person> currentAdditionalPredicate;
-    private ClassSpaceName activeClassSpaceName;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -49,6 +53,8 @@ public class ModelManager implements Model {
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         currentView = new SimpleStringProperty(ALL_STUDENTS_VIEW_NAME);
         attendanceViewActive = new SimpleBooleanProperty(false);
+        activeClassSpaceName = new SimpleObjectProperty<>();
+        activeSessionDate = new SimpleObjectProperty<>();
         currentAdditionalPredicate = PREDICATE_SHOW_ALL_PERSONS;
         refreshFilteredPersonList();
     }
@@ -163,7 +169,7 @@ public class ModelManager implements Model {
     public void deleteClassSpace(ClassSpace target) {
         requireNonNull(target);
         addressBook.removeClassSpace(target);
-        if (activeClassSpaceName != null && activeClassSpaceName.equals(target.getClassSpaceName())) {
+        if (target.getClassSpaceName().equals(activeClassSpaceName.get())) {
             switchToAllStudentsView();
             return;
         }
@@ -174,8 +180,8 @@ public class ModelManager implements Model {
     public void setClassSpace(ClassSpace target, ClassSpace editedClassSpace) {
         requireAllNonNull(target, editedClassSpace);
         addressBook.setClassSpace(target, editedClassSpace);
-        if (activeClassSpaceName != null && activeClassSpaceName.equals(target.getClassSpaceName())) {
-            activeClassSpaceName = editedClassSpace.getClassSpaceName();
+        if (target.getClassSpaceName().equals(activeClassSpaceName.get())) {
+            activeClassSpaceName.set(editedClassSpace.getClassSpaceName());
             updateCurrentViewLabel();
         }
         refreshFilteredPersonList();
@@ -205,7 +211,8 @@ public class ModelManager implements Model {
 
     @Override
     public void switchToAllStudentsView() {
-        activeClassSpaceName = null;
+        activeClassSpaceName.set(null);
+        clearActiveSessionDate();
         currentAdditionalPredicate = PREDICATE_SHOW_ALL_PERSONS;
         updateCurrentViewLabel();
         refreshFilteredPersonList();
@@ -214,7 +221,7 @@ public class ModelManager implements Model {
     @Override
     public void switchToClassSpaceView(ClassSpaceName classSpaceName) {
         requireNonNull(classSpaceName);
-        activeClassSpaceName = classSpaceName;
+        activeClassSpaceName.set(classSpaceName);
         currentAdditionalPredicate = PREDICATE_SHOW_ALL_PERSONS;
         updateCurrentViewLabel();
         refreshFilteredPersonList();
@@ -222,12 +229,38 @@ public class ModelManager implements Model {
 
     @Override
     public Optional<ClassSpaceName> getActiveClassSpaceName() {
-        return Optional.ofNullable(activeClassSpaceName);
+        return Optional.ofNullable(activeClassSpaceName.get());
+    }
+
+    @Override
+    public Optional<LocalDate> getActiveSessionDate() {
+        return Optional.ofNullable(activeSessionDate.get());
+    }
+
+    @Override
+    public void setActiveSessionDate(LocalDate date) {
+        requireNonNull(date);
+        activeSessionDate.set(date);
+    }
+
+    @Override
+    public void clearActiveSessionDate() {
+        activeSessionDate.set(null);
     }
 
     @Override
     public ReadOnlyStringProperty currentViewProperty() {
         return currentView;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<ClassSpaceName> activeClassSpaceNameProperty() {
+        return activeClassSpaceName;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<LocalDate> activeSessionDateProperty() {
+        return activeSessionDate;
     }
 
     @Override
@@ -246,15 +279,15 @@ public class ModelManager implements Model {
     }
 
     private void updateCurrentViewLabel() {
-        currentView.set(activeClassSpaceName == null
+        currentView.set(activeClassSpaceName.get() == null
                 ? ALL_STUDENTS_VIEW_NAME
-                : activeClassSpaceName.value);
+                : activeClassSpaceName.get().value);
     }
 
     private void refreshFilteredPersonList() {
-        Predicate<Person> basePredicate = activeClassSpaceName == null
+        Predicate<Person> basePredicate = activeClassSpaceName.get() == null
                 ? PREDICATE_SHOW_ALL_PERSONS
-                : person -> person.hasClassSpace(activeClassSpaceName);
+                : person -> person.hasClassSpace(activeClassSpaceName.get());
         filteredPersons.setPredicate(basePredicate.and(currentAdditionalPredicate));
     }
 
@@ -274,8 +307,10 @@ public class ModelManager implements Model {
                 && filteredPersons.equals(otherModelManager.filteredPersons)
                 && currentView.get().equals(otherModelManager.currentView.get())
                 && attendanceViewActive.get() == otherModelManager.attendanceViewActive.get()
-                && Optional.ofNullable(activeClassSpaceName).equals(
-                        Optional.ofNullable(otherModelManager.activeClassSpaceName));
+                && Optional.ofNullable(activeClassSpaceName.get()).equals(
+                        Optional.ofNullable(otherModelManager.activeClassSpaceName.get()))
+                && Optional.ofNullable(activeSessionDate.get()).equals(
+                        Optional.ofNullable(otherModelManager.activeSessionDate.get()));
     }
 
 }

@@ -128,14 +128,14 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidAttendance_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER,
-                INVALID_ATTENDANCE, VALID_PARTICIPATION, VALID_TAGS, VALID_CLASS_SPACES);
+                INVALID_ATTENDANCE, VALID_PARTICIPATION, VALID_TAGS, VALID_CLASS_SPACES, null);
         assertThrows(IllegalValueException.class, Attendance.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 
     @Test
     public void toModelType_invalidClassSpace_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER,
-                VALID_ATTENDANCE, VALID_PARTICIPATION, VALID_TAGS, List.of(INVALID_CLASS_SPACE));
+                VALID_ATTENDANCE, VALID_PARTICIPATION, VALID_TAGS, List.of(INVALID_CLASS_SPACE), null);
         assertThrows(IllegalValueException.class, ClassSpaceName.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 

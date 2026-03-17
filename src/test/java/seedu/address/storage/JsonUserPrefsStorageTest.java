@@ -120,4 +120,19 @@ public class JsonUserPrefsStorageTest {
         assertEquals(original, readBack);
     }
 
+    @Test
+    public void saveUserPrefs_viewContextFields_success() throws DataLoadingException, IOException {
+        UserPrefs original = new UserPrefs();
+        original.setLastActiveClassSpaceName("T01");
+        original.setLastActiveSessionDate("2026-03-16");
+        original.setAttendanceViewActive(true);
+
+        Path prefsFilePath = testFolder.resolve("TempPrefsWithViewContext.json");
+        JsonUserPrefsStorage jsonUserPrefsStorage = new JsonUserPrefsStorage(prefsFilePath);
+
+        jsonUserPrefsStorage.saveUserPrefs(original);
+        UserPrefs readBack = jsonUserPrefsStorage.readUserPrefs().get();
+        assertEquals(original, readBack);
+    }
+
 }

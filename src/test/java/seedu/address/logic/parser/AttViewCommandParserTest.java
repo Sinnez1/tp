@@ -3,9 +3,12 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AttViewCommand;
+import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Attendance;
 
 public class AttViewCommandParserTest {
@@ -34,10 +37,14 @@ public class AttViewCommandParserTest {
         assertParseSuccess(parser, "", new AttViewCommand());
         assertParseSuccess(parser, "present", new AttViewCommand(new Attendance("PRESENT")));
         assertParseSuccess(parser, "  ABSENT  ", new AttViewCommand(new Attendance("ABSENT")));
-        assertParseSuccess(parser, "g/T01",
-                new AttViewCommand(new seedu.address.model.classspace.ClassSpaceName("T01")));
-        assertParseSuccess(parser, "present g/T01",
+        assertParseSuccess(parser, "d/2026-03-16", new AttViewCommand(LocalDate.of(2026, 3, 16)));
+        assertParseSuccess(parser, "g/T01", new AttViewCommand(new ClassSpaceName("T01")));
+        assertParseSuccess(parser, "d/2026-03-16 g/T01",
+                new AttViewCommand(new ClassSpaceName("T01"), LocalDate.of(2026, 3, 16)));
+        assertParseSuccess(parser, "present d/2026-03-16",
+                new AttViewCommand(new Attendance("PRESENT"), LocalDate.of(2026, 3, 16)));
+        assertParseSuccess(parser, "present d/2026-03-16 g/T01",
                 new AttViewCommand(new Attendance("PRESENT"),
-                        new seedu.address.model.classspace.ClassSpaceName("T01")));
+                        new ClassSpaceName("T01"), LocalDate.of(2026, 3, 16)));
     }
 }

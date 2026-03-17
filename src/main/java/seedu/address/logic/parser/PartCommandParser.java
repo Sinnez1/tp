@@ -8,7 +8,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PARTICIPATION;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.PartCommand;
@@ -30,7 +29,8 @@ public class PartCommandParser implements Parser<PartCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_INDEXES, PREFIX_DATE, PREFIX_GROUP, PREFIX_PARTICIPATION);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_INDEXES, PREFIX_DATE, PREFIX_PARTICIPATION)
+        if (!argMultimap.getValue(PREFIX_INDEXES).isPresent()
+                || !argMultimap.getValue(PREFIX_PARTICIPATION).isPresent()
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, PartCommand.MESSAGE_USAGE));
         }
@@ -39,7 +39,10 @@ public class PartCommandParser implements Parser<PartCommand> {
 
         try {
             Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEXES).get());
-            LocalDate date = ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get());
+            Optional<LocalDate> date = Optional.empty();
+            if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
+                date = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
+            }
 
             Optional<ClassSpaceName> classSpaceName = Optional.empty();
             if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
@@ -55,12 +58,5 @@ public class PartCommandParser implements Parser<PartCommand> {
         } catch (IllegalArgumentException | ParseException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, PartCommand.MESSAGE_USAGE), e);
         }
-    }
-
-    /**
-     * Returns true if all the specified prefixes are present in the argument multimap.
-     */
-    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
-        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }

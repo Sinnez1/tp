@@ -10,11 +10,14 @@ import static seedu.address.testutil.TypicalPersons.BENSON;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
 
@@ -27,6 +30,22 @@ public class ModelManagerTest {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
         assertEquals(new AddressBook(), new AddressBook(modelManager.getAddressBook()));
+    }
+
+    @Test
+    public void constructor_withSavedViewContext_startsAtHomeView() {
+        AddressBook addressBook = new AddressBookBuilder().build();
+        addressBook.addClassSpace(new ClassSpace(new ClassSpaceName("T01")));
+        UserPrefs userPrefs = new UserPrefs();
+        userPrefs.setLastActiveClassSpaceName("T01");
+        userPrefs.setLastActiveSessionDate("2026-03-16");
+        userPrefs.setAttendanceViewActive(true);
+
+        ModelManager modelManager = new ModelManager(addressBook, userPrefs);
+        assertTrue(modelManager.getActiveClassSpaceName().isEmpty());
+        assertTrue(modelManager.getActiveSessionDate().isEmpty());
+        assertFalse(modelManager.isAttendanceViewActive());
+        assertEquals(Model.ALL_STUDENTS_VIEW_NAME, modelManager.currentViewProperty().get());
     }
 
     @Test
@@ -133,5 +152,10 @@ public class ModelManagerTest {
         ModelManager attendanceViewModel = new ModelManager(addressBook, userPrefs);
         attendanceViewModel.setAttendanceViewActive(true);
         assertFalse(modelManager.equals(attendanceViewModel));
+
+        // different active session date -> returns false
+        ModelManager activeSessionModel = new ModelManager(addressBook, userPrefs);
+        activeSessionModel.setActiveSessionDate(LocalDate.of(2026, 3, 16));
+        assertFalse(modelManager.equals(activeSessionModel));
     }
 }
