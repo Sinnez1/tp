@@ -25,9 +25,10 @@ public class MatricNumber {
     private static final int CHECKSUM_POSITION = 8;
     private static final int DIGITS_START_INDEX = 2;
     private static final int DIGITS_END_INDEX = 8;
-    private static final String CHECKSUM_LETTERS = "BAEHJLMNRUWXY";
+    private static final int EXPECTED_CHECKSUM_DIGITS_LENGTH = 6;
+    private static final String CHECKSUM_LETTERS = "YXWURNMLJHEAB";
     private static final int EXPECTED_CHECKSUM_LETTERS_LENGTH = 13;
-    private static final int[] WEIGHTS = {-1, -1, -1, -1, -1, -1};
+    private static final int EXPECTED_MATRIC_NUMBER_LENGTH = 9;
     private static final Logger logger = LogsCenter.getLogger(MatricNumber.class);
     public final String value;
 
@@ -97,20 +98,20 @@ public class MatricNumber {
      * @return Checksum character for matriculation number.
      */
     private static char calculateChecksum(String matricNumber) {
+        assert matricNumber.length() == EXPECTED_MATRIC_NUMBER_LENGTH
+                : "Matriculation number length should be 9";
         String digits = matricNumber.substring(DIGITS_START_INDEX, DIGITS_END_INDEX);
-        assert digits.length() == WEIGHTS.length : "Mismatch in length between weights array and extracted digits";
+        assert digits.length() == EXPECTED_CHECKSUM_DIGITS_LENGTH
+                : "Mismatch in length between expected length and extracted digits";
         int length = CHECKSUM_LETTERS.length();
         assert length == EXPECTED_CHECKSUM_LETTERS_LENGTH : "Checksum letters string has 13 characters";
         int sum = 0;
 
         for (int i = 0; i < digits.length(); i++) {
-            sum += Character.getNumericValue(digits.charAt(i)) * WEIGHTS[i];
+            sum += Character.getNumericValue(digits.charAt(i));
         }
 
-        int remainder = (sum - 1) % length;
-        if (remainder < 0) {
-            remainder += length;
-        }
+        int remainder = sum % length;
         assert remainder >= 0 && remainder < length : "Calculated remainder is out of bounds";
 
         return CHECKSUM_LETTERS.charAt(remainder);
