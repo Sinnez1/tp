@@ -20,6 +20,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.classspace.ClassSpace;
 import seedu.address.model.classspace.ClassSpaceName;
+import seedu.address.model.person.MatricNumber;
 import seedu.address.testutil.PersonBuilder;
 
 public class JsonAddressBookStorageTest {
@@ -104,8 +105,7 @@ public class JsonAddressBookStorageTest {
                 .withPhone("91234567")
                 .withEmail("session@example.com")
                 .withClassSpaces("CS2103T-T01")
-                .withAttendance("PRESENT")
-                .withParticipation(5)
+                .withSession("CS2103T-T01", "2026-03-16", "PRESENT", 5)
                 .build());
 
         JsonAddressBookStorage jsonAddressBookStorage = new JsonAddressBookStorage(filePath);
@@ -113,6 +113,12 @@ public class JsonAddressBookStorageTest {
 
         ReadOnlyAddressBook readBack = jsonAddressBookStorage.readAddressBook(filePath).get();
         assertEquals(original, new AddressBook(readBack));
+        assertEquals("PRESENT", readBack.getPersonList().stream()
+                .filter(person -> person.getMatricNumber().equals(new MatricNumber("A1234567X")))
+                .findFirst()
+                .orElseThrow()
+                .getAttendance(new ClassSpaceName("CS2103T-T01"), java.time.LocalDate.of(2026, 3, 16))
+                .toString());
     }
 
     @Test

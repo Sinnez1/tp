@@ -1,10 +1,12 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
@@ -138,8 +140,29 @@ public interface Model {
      */
     Optional<ClassSpaceName> getActiveClassSpaceName();
 
+    /**
+     * Returns the current active session date, or empty if no session is selected.
+     */
+    Optional<LocalDate> getActiveSessionDate();
+
+    /**
+     * Sets the current active session date.
+     */
+    void setActiveSessionDate(LocalDate date);
+
+    /**
+     * Clears the current active session date.
+     */
+    void clearActiveSessionDate();
+
     /** Returns the current view label property. */
     ReadOnlyStringProperty currentViewProperty();
+
+    /** Returns the current active class space property. */
+    ReadOnlyObjectProperty<ClassSpaceName> activeClassSpaceNameProperty();
+
+    /** Returns the current active session date property. */
+    ReadOnlyObjectProperty<LocalDate> activeSessionDateProperty();
 
     /** Sets whether attendance view mode is active. */
     void setAttendanceViewActive(boolean isActive);

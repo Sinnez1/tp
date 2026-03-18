@@ -27,9 +27,10 @@ public class PartCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Assigns participation to the person identified by the index number in the displayed person list.\n"
-            + "Parameters: i/INDEX d/YYYY-MM-DD [g/CLASSSPACE] pv/PARTICIPATION_VALUE\n"
+            + "Parameters: i/INDEX [d/YYYY-MM-DD] [g/CLASSSPACE] pv/PARTICIPATION_VALUE\n"
             + "Participation must be an integer from 0 to 5.\n"
-            + "Example: " + COMMAND_WORD + " i/1 d/2026-03-16 g/T02 pv/4";
+            + "Example: " + COMMAND_WORD + " i/1 d/2026-03-16 g/T02 pv/4\n"
+            + "         " + COMMAND_WORD + " i/1 pv/4";
 
     public static final String MESSAGE_PARTICIPATION_SUCCESS =
             "Updated participation for Person: %1$s";
@@ -39,9 +40,11 @@ public class PartCommand extends Command {
 
     public static final String MESSAGE_NO_ACTIVE_CLASS_SPACE =
             "No class space selected. Enter a class space first or provide g/CLASS_SPACE.";
+    public static final String MESSAGE_NO_ACTIVE_SESSION =
+            "No session selected. Provide d/YYYY-MM-DD or run attview with d/YYYY-MM-DD first.";
 
     private final Index targetIndex;
-    private final LocalDate date;
+    private final Optional<LocalDate> date;
     private final Optional<ClassSpaceName> classSpaceName;
     private final Participation participation;
 
@@ -56,7 +59,7 @@ public class PartCommand extends Command {
      * @param classSpaceName Class space containing this session, if explicitly provided.
      * @param participation Participation value to assign to the specified person.
      */
-    public PartCommand(Index targetIndex, LocalDate date, Optional<ClassSpaceName> classSpaceName,
+    public PartCommand(Index targetIndex, Optional<LocalDate> date, Optional<ClassSpaceName> classSpaceName,
                        Participation participation) {
         requireAllNonNull(targetIndex, date, classSpaceName, participation);
         this.targetIndex = targetIndex;
@@ -88,6 +91,11 @@ public class PartCommand extends Command {
         }
 
         ClassSpaceName classSpace = activeClassSpace.get();
+        Optional<LocalDate> resolvedDate = date.isPresent() ? date : model.getActiveSessionDate();
+        if (resolvedDate.isEmpty()) {
+            throw new CommandException(MESSAGE_NO_ACTIVE_SESSION);
+        }
+        LocalDate targetDate = resolvedDate.get();
 
         // Step 3: get person
         List<Person> lastShownList = model.getFilteredPersonList();
@@ -99,11 +107,11 @@ public class PartCommand extends Command {
         Person personToUpdate = lastShownList.get(targetIndex.getZeroBased());
 
         // Step 4: get session
-        Session currentSession = personToUpdate.getOrCreateSession(classSpace, date);
+        Session currentSession = personToUpdate.getOrCreateSession(classSpace, targetDate);
 
         // Step 5: update participation
         Session updatedSession = new Session(
-                date,
+                targetDate,
                 currentSession.getAttendance(),
                 participation
         );
@@ -113,10 +121,11 @@ public class PartCommand extends Command {
 
         // Step 7: update model
         model.setPerson(personToUpdate, updatedPerson);
+        model.setActiveSessionDate(targetDate);
 
         return new CommandResult(String.format(
                 MESSAGE_PARTICIPATION_SUCCESS,
-                Messages.format(updatedPerson, classSpace, date))
+                Messages.format(updatedPerson, classSpace, targetDate))
         );
     }
 

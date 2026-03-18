@@ -26,8 +26,9 @@ public class UnmarkCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Marks the person identified by the index number used in the displayed person list as ABSENT.\n"
-            + "Parameters: i/INDEX d/YYYY-MM-DD [g/CLASSSPACE]\n"
-            + "Example: " + COMMAND_WORD + " i/1 d/2026-03-16 g/T02";
+            + "Parameters: i/INDEX [d/YYYY-MM-DD] [g/CLASSSPACE]\n"
+            + "Example: " + COMMAND_WORD + " i/1 d/2026-03-16 g/T02\n"
+            + "         " + COMMAND_WORD + " i/1";
 
     public static final String MESSAGE_UNMARK_SUCCESS =
             "Marked Person as ABSENT: %1$s";
@@ -37,9 +38,11 @@ public class UnmarkCommand extends Command {
 
     public static final String MESSAGE_NO_ACTIVE_CLASS_SPACE =
             "No class space selected. Enter a class space first or provide g/CLASSSPACE.";
+    public static final String MESSAGE_NO_ACTIVE_SESSION =
+            "No session selected. Provide d/YYYY-MM-DD or run attview with d/YYYY-MM-DD first.";
 
     private final Index targetIndex;
-    private final LocalDate date;
+    private final Optional<LocalDate> date;
     private final Optional<ClassSpaceName> classSpaceName;
 
     /**
@@ -50,7 +53,7 @@ public class UnmarkCommand extends Command {
      * @param date Date of the session to mark attendance for.
      * @param classSpaceName Class space containing this session, if explicitly provided.
      */
-    public UnmarkCommand(Index targetIndex, LocalDate date, Optional<ClassSpaceName> classSpaceName) {
+    public UnmarkCommand(Index targetIndex, Optional<LocalDate> date, Optional<ClassSpaceName> classSpaceName) {
         requireAllNonNull(targetIndex, date, classSpaceName);
         this.targetIndex = targetIndex;
         this.date = date;
@@ -78,6 +81,11 @@ public class UnmarkCommand extends Command {
         }
 
         ClassSpaceName classSpace = activeClassSpace.get();
+        Optional<LocalDate> resolvedDate = date.isPresent() ? date : model.getActiveSessionDate();
+        if (resolvedDate.isEmpty()) {
+            throw new CommandException(MESSAGE_NO_ACTIVE_SESSION);
+        }
+        LocalDate targetDate = resolvedDate.get();
 
         List<Person> lastShownList = model.getFilteredPersonList();
 
@@ -87,10 +95,10 @@ public class UnmarkCommand extends Command {
 
         Person personToUpdate = lastShownList.get(targetIndex.getZeroBased());
 
-        Session currentSession = personToUpdate.getOrCreateSession(classSpace, date);
+        Session currentSession = personToUpdate.getOrCreateSession(classSpace, targetDate);
 
         Session updatedSession = new Session(
-                date,
+                targetDate,
                 new Attendance(Attendance.Status.ABSENT),
                 currentSession.getParticipation()
         );
@@ -98,9 +106,10 @@ public class UnmarkCommand extends Command {
         Person updatedPerson = personToUpdate.withUpdatedSession(classSpace, updatedSession);
 
         model.setPerson(personToUpdate, updatedPerson);
+        model.setActiveSessionDate(targetDate);
 
         return new CommandResult(
-                String.format(MESSAGE_UNMARK_SUCCESS, Messages.format(updatedPerson, classSpace, date))
+                String.format(MESSAGE_UNMARK_SUCCESS, Messages.format(updatedPerson, classSpace, targetDate))
         );
     }
 

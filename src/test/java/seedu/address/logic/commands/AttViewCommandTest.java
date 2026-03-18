@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -17,22 +18,26 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.classspace.ClassSpace;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Attendance;
+import seedu.address.model.person.MatricNumber;
 import seedu.address.testutil.PersonBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code AttViewCommand}.
  */
 public class AttViewCommandTest {
+    private static final ClassSpaceName T01 = new ClassSpaceName("T01");
+    private static final ClassSpaceName T02 = new ClassSpaceName("T02");
+    private static final LocalDate SESSION_DATE = LocalDate.of(2026, 3, 16);
 
     @Test
     public void equals() {
-        AttViewCommand presentCommand = new AttViewCommand(new Attendance("PRESENT"));
-        AttViewCommand absentCommand = new AttViewCommand(new Attendance("ABSENT"));
-        AttViewCommand groupCommand = new AttViewCommand(new ClassSpaceName("T01"));
+        AttViewCommand presentCommand = new AttViewCommand(new Attendance("PRESENT"), SESSION_DATE);
+        AttViewCommand absentCommand = new AttViewCommand(new Attendance("ABSENT"), SESSION_DATE);
+        AttViewCommand groupCommand = new AttViewCommand(T01, SESSION_DATE);
 
         assertTrue(presentCommand.equals(presentCommand));
-        assertTrue(presentCommand.equals(new AttViewCommand(new Attendance("PRESENT"))));
-        assertTrue(groupCommand.equals(new AttViewCommand(new ClassSpaceName("T01"))));
+        assertTrue(presentCommand.equals(new AttViewCommand(new Attendance("PRESENT"), SESSION_DATE)));
+        assertTrue(groupCommand.equals(new AttViewCommand(T01, SESSION_DATE)));
         assertFalse(presentCommand.equals(1));
         assertFalse(presentCommand.equals(null));
         assertFalse(presentCommand.equals(absentCommand));
@@ -41,44 +46,60 @@ public class AttViewCommandTest {
     @Test
     public void execute_presentFilter_showsMatchingPersons() {
         Model model = new ModelManager();
+        model.addClassSpace(new ClassSpace(T01));
+        model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
-                .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT").build());
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 1).build());
         model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234568W")
-                .withEmail("bob@example.com").withPhone("92345678").withAttendance("ABSENT").build());
+                .withEmail("bob@example.com").withPhone("92345678")
+                .withSession("T01", SESSION_DATE.toString(), "ABSENT", 0).build());
         model.addPerson(new PersonBuilder().withName("Cara Present").withMatricNumber("A1234569U")
-                .withEmail("cara@example.com").withPhone("93456789").withAttendance("PRESENT").build());
+                .withEmail("cara@example.com").withPhone("93456789")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 2).build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToClassSpaceView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
         Attendance attendance = new Attendance(Attendance.Status.PRESENT);
         expectedModel.setAttendanceViewActive(true);
-        expectedModel.updateFilteredPersonList(person -> person.getAttendance().equals(attendance));
+        expectedModel.updateFilteredPersonList(person -> person.getAttendance(T01, SESSION_DATE).equals(attendance));
 
-        AttViewCommand command = new AttViewCommand(attendance);
-        String expectedMessage = String.format(AttViewCommand.MESSAGE_SUCCESS, 2, attendance);
+        AttViewCommand command = new AttViewCommand(attendance, SESSION_DATE);
+        String expectedMessage = String.format(AttViewCommand.MESSAGE_SUCCESS, 2, attendance, T01, SESSION_DATE);
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(List.of(
                 new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
-                        .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT").build(),
+                        .withEmail("alice@example.com").withPhone("91234567")
+                        .withSession("T01", SESSION_DATE.toString(), "PRESENT", 1).build(),
                 new PersonBuilder().withName("Cara Present").withMatricNumber("A1234569U")
-                        .withEmail("cara@example.com").withPhone("93456789").withAttendance("PRESENT").build()
+                        .withEmail("cara@example.com").withPhone("93456789")
+                        .withSession("T01", SESSION_DATE.toString(), "PRESENT", 2).build()
         ), model.getFilteredPersonList());
     }
 
     @Test
     public void execute_noFilter_showsCurrentView() {
         Model model = new ModelManager();
+        model.addClassSpace(new ClassSpace(T01));
+        model.switchToClassSpaceView(T01);
+        model.setActiveSessionDate(SESSION_DATE);
         model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
-                .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT").build());
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 0).build());
         model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234568W")
-                .withEmail("bob@example.com").withPhone("92345678").withAttendance("ABSENT").build());
+                .withEmail("bob@example.com").withPhone("92345678")
+                .withSession("T01", SESSION_DATE.toString(), "ABSENT", 0).build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToClassSpaceView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
         expectedModel.setAttendanceViewActive(true);
         expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
 
         AttViewCommand command = new AttViewCommand();
-        String expectedMessage = String.format(AttViewCommand.MESSAGE_VIEW_SUCCESS, 2);
+        String expectedMessage = String.format(AttViewCommand.MESSAGE_VIEW_SUCCESS, 2, T01, SESSION_DATE);
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(2, model.getFilteredPersonList().size());
@@ -87,25 +108,26 @@ public class AttViewCommandTest {
     @Test
     public void execute_groupView_showsWholeGroup() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(new ClassSpaceName("T01")));
-        model.addClassSpace(new ClassSpace(new ClassSpaceName("T02")));
+        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new ClassSpace(T02));
         model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
-                .withEmail("alice@example.com").withPhone("91234567").withAttendance("PRESENT")
-                .withClassSpaces("T01").build());
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 1).build());
         model.addPerson(new PersonBuilder().withName("Bob Absent").withMatricNumber("A1234568W")
-                .withEmail("bob@example.com").withPhone("92345678").withAttendance("ABSENT")
-                .withClassSpaces("T01").build());
+                .withEmail("bob@example.com").withPhone("92345678")
+                .withSession("T01", SESSION_DATE.toString(), "ABSENT", 0).build());
         model.addPerson(new PersonBuilder().withName("Cara Elsewhere").withMatricNumber("A1234569U")
-                .withEmail("cara@example.com").withPhone("93456789").withAttendance("PRESENT")
-                .withClassSpaces("T02").build());
+                .withEmail("cara@example.com").withPhone("93456789")
+                .withSession("T02", SESSION_DATE.toString(), "PRESENT", 4).build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.switchToClassSpaceView(new ClassSpaceName("T01"));
+        expectedModel.switchToClassSpaceView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
         expectedModel.setAttendanceViewActive(true);
         expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
 
-        AttViewCommand command = new AttViewCommand(new ClassSpaceName("T01"));
-        String expectedMessage = String.format(AttViewCommand.MESSAGE_VIEW_SUCCESS, 2);
+        AttViewCommand command = new AttViewCommand(T01, SESSION_DATE);
+        String expectedMessage = String.format(AttViewCommand.MESSAGE_VIEW_SUCCESS, 2, T01, SESSION_DATE);
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(2, model.getFilteredPersonList().size());
@@ -114,34 +136,88 @@ public class AttViewCommandTest {
     @Test
     public void execute_missingGroup_throwsCommandException() {
         Model model = new ModelManager();
-        AttViewCommand command = new AttViewCommand(new ClassSpaceName("Missing"));
+        AttViewCommand command = new AttViewCommand(new ClassSpaceName("Missing"), SESSION_DATE);
         assertThrows(CommandException.class, AttViewCommand.MESSAGE_GROUP_NOT_FOUND, () -> command.execute(model));
     }
 
     @Test
     public void execute_noMatches_returnsNoMatchesMessage() {
         Model model = new ModelManager();
+        model.addClassSpace(new ClassSpace(T01));
+        model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Only Present").withMatricNumber("A1234567X")
-                .withEmail("present@example.com").withPhone("94567890").withAttendance("PRESENT").build());
+                .withEmail("present@example.com").withPhone("94567890")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 0).build());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToClassSpaceView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
         Attendance attendance = new Attendance(Attendance.Status.ABSENT);
         expectedModel.setAttendanceViewActive(true);
-        expectedModel.updateFilteredPersonList(person -> person.getAttendance().equals(attendance));
+        expectedModel.updateFilteredPersonList(person -> person.getAttendance(T01, SESSION_DATE).equals(attendance));
 
-        AttViewCommand command = new AttViewCommand(attendance);
-        String expectedMessage = String.format(AttViewCommand.MESSAGE_NO_MATCHES, attendance);
+        AttViewCommand command = new AttViewCommand(attendance, SESSION_DATE);
+        String expectedMessage = String.format(AttViewCommand.MESSAGE_NO_MATCHES, attendance, T01, SESSION_DATE);
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(List.of(), model.getFilteredPersonList());
     }
 
     @Test
+    public void execute_withoutSessionContext_throwsCommandException() {
+        Model model = new ModelManager();
+        model.addClassSpace(new ClassSpace(T01));
+        model.switchToClassSpaceView(T01);
+
+        AttViewCommand command = new AttViewCommand();
+        assertThrows(CommandException.class, AttViewCommand.MESSAGE_NO_ACTIVE_SESSION, () -> command.execute(model));
+    }
+
+    @Test
+    public void executeNoFilter_missingSession_persistsDefaultSession() {
+        Model model = new ModelManager();
+        model.addClassSpace(new ClassSpace(T01));
+        model.switchToClassSpaceView(T01);
+        String matricNumber = "A1234567X";
+        model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(matricNumber)
+                .withEmail("alice@example.com").withPhone("91234567").withClassSpaces("T01").build());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToClassSpaceView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
+        expectedModel.setAttendanceViewActive(true);
+        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        var expectedOriginalPerson = expectedModel.findPersonByMatricNumber(new MatricNumber(matricNumber))
+                .orElseThrow();
+        var expectedUpdatedPerson = expectedOriginalPerson.withUpdatedSession(
+                T01,
+                new seedu.address.model.person.Session(SESSION_DATE,
+                        new Attendance(Attendance.Status.UNINITIALISED),
+                        new seedu.address.model.person.Participation(0))
+        );
+        expectedModel.setPerson(expectedOriginalPerson, expectedUpdatedPerson);
+
+        AttViewCommand command = new AttViewCommand(T01, SESSION_DATE);
+        assertCommandSuccess(command, model,
+                String.format(AttViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE),
+                expectedModel);
+
+        assertTrue(model.findPersonByMatricNumber(new MatricNumber(matricNumber))
+                .orElseThrow()
+                .getClassSpaceSessions()
+                .get(T01)
+                .getSession(SESSION_DATE)
+                .isPresent());
+    }
+
+    @Test
     public void toStringMethod() {
         Attendance attendance = new Attendance("ABSENT");
-        AttViewCommand command = new AttViewCommand(attendance);
+        AttViewCommand command = new AttViewCommand(attendance, SESSION_DATE);
         String expected = AttViewCommand.class.getCanonicalName()
-                + "{attendance=Optional[" + attendance + "], classSpaceName=Optional.empty}";
+                + "{attendance=Optional[" + attendance + "], classSpaceName=Optional.empty, "
+                + "sessionDate=Optional[" + SESSION_DATE + "]}";
         assertEquals(expected, command.toString());
     }
 }
