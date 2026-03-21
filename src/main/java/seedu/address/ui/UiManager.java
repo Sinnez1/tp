@@ -90,8 +90,7 @@ public class UiManager implements Ui {
      *
      * @param message The warning message to display to the user.
      */
-    public void showStartupWarning(String message) {
-        // Ensure the UI is fully rendered first before showing the warning
+    public void showStartUpWarning(String message) {
         Platform.runLater(() -> mainWindow.showStartupWarning(message));
     }
 

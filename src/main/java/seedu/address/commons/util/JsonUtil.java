@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
@@ -109,6 +110,32 @@ public class JsonUtil {
      */
     public static <T> String toJsonString(T instance) throws JsonProcessingException {
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
+    }
+
+    /**
+     * Converts a given object into a {@code JsonNode}.
+     *
+     * @param value The object to convert into a JSON tree.
+     * @return JSON tree representation of the given object.
+     */
+    public static JsonNode toJsonNode(Object value) {
+        requireNonNull(value);
+        return objectMapper.valueToTree(value);
+    }
+
+    /**
+     * Converts a given {@code JsonNode} into an instance of the specified class.
+     *
+     * @param node The JSON tree to convert.
+     * @param classToConvert The class to convert the JSON tree into.
+     * @param <T> The generic type to create an instance of.
+     * @return The instance of {@code T} represented by the JSON tree.
+     * @throws JsonProcessingException if the JSON tree cannot be converted into the requested type.
+     */
+    public static <T> T fromJsonNode(JsonNode node, Class<T> classToConvert) throws JsonProcessingException {
+        requireNonNull(node);
+        requireNonNull(classToConvert);
+        return objectMapper.treeToValue(node, classToConvert);
     }
 
     /**

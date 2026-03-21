@@ -93,15 +93,15 @@ public class MainApp extends Application {
             if (storage instanceof StorageManager sm) {
                 List<String> warnings = sm.getLastLoadWarnings();
                 if (!warnings.isEmpty()) {
-                    startupWarnings.add("Warning: Some contacts were skipped due to invalid data in the save file:");
-                    startupWarnings.addAll(warnings);
+                    startUpWarnings.add("Warning: Some contacts were skipped due to invalid data in the save file:");
+                    startUpWarnings.addAll(warnings);
                 }
             }
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty AddressBook.");
             initialData = new AddressBook();
-            startupWarnings.add("WARNING: Save file at " + storage.getAddressBookFilePath()
+            startUpWarnings.add("WARNING: Save file at " + storage.getAddressBookFilePath()
                     + " could not be loaded and has been replaced with an empty address book."
                     + " Your previous data may be corrupted.");
         }

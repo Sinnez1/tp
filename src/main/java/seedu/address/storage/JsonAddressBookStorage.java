@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.commons.exceptions.IllegalValueException;
@@ -28,6 +30,7 @@ public class JsonAddressBookStorage implements AddressBookStorage {
     private Path filePath;
 
     private List<String> lastLoadWarnings = new ArrayList<>();
+    private List<JsonNode> lastSkippedPersons = new ArrayList<>();
 
     public JsonAddressBookStorage(Path filePath) {
         this.filePath = filePath;
@@ -66,6 +69,7 @@ public class JsonAddressBookStorage implements AddressBookStorage {
         requireNonNull(filePath);
 
         lastLoadWarnings = new ArrayList<>();
+        lastSkippedPersons = new ArrayList<>();
 
         Optional<JsonSerializableAddressBook> jsonAddressBook = JsonUtil.readJsonFile(
                 filePath, JsonSerializableAddressBook.class);
@@ -76,6 +80,7 @@ public class JsonAddressBookStorage implements AddressBookStorage {
             JsonSerializableAddressBook serializable = jsonAddressBook.get();
             ReadOnlyAddressBook result = serializable.toModelType();
             lastLoadWarnings.addAll(serializable.getLoadWarnings());
+            lastSkippedPersons.addAll(serializable.getPreservedSkippedPersons());
             return Optional.of(result);
         } catch (IllegalValueException ive) {
             logger.info("Illegal values found in " + filePath + ": " + ive.getMessage());
@@ -98,7 +103,7 @@ public class JsonAddressBookStorage implements AddressBookStorage {
         requireNonNull(filePath);
 
         FileUtil.createIfMissing(filePath);
-        JsonUtil.saveJsonFile(new JsonSerializableAddressBook(addressBook), filePath);
+        JsonUtil.saveJsonFile(new JsonSerializableAddressBook(addressBook, lastSkippedPersons), filePath);
     }
 
 }
