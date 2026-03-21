@@ -90,14 +90,10 @@ class JsonSerializableAddressBook {
     /**
      * Returns the raw skipped person entries that should be preserved on the next save.
      *
-     * @return Unmodifiable list of deep-copied skipped person JSON nodes.
+     * @return Unmodifiable list of skipped person JSON nodes.
      */
     public List<JsonNode> getPreservedSkippedPersons() {
-        List<JsonNode> copies = new ArrayList<>();
-        for (JsonNode skippedPerson : preservedSkippedPersons) {
-            copies.add(skippedPerson.deepCopy());
-        }
-        return Collections.unmodifiableList(copies);
+        return Collections.unmodifiableList(preservedSkippedPersons);
     }
     /**
      * Converts this address book into the model's {@code AddressBook} object.
@@ -122,6 +118,7 @@ class JsonSerializableAddressBook {
     }
 
     private void loadPersons(AddressBook addressBook) {
+        requireNonNull(addressBook);
         for (int i = 0; i < persons.size(); i++) {
             loadPerson(addressBook, persons.get(i), i);
         }
@@ -179,11 +176,4 @@ class JsonSerializableAddressBook {
         }
     }
 
-    private static List<JsonNode> copyJsonNodes(List<JsonNode> nodes) {
-        List<JsonNode> copies = new ArrayList<>();
-        for (JsonNode node : nodes) {
-            copies.add(node.deepCopy());
-        }
-        return copies;
-    }
 }

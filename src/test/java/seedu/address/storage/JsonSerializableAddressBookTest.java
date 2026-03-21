@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +46,32 @@ public class JsonSerializableAddressBookTest {
 
         // Since the file contains 2 duplicates, it skips the 2nd one and loads exactly 1 person.
         assertEquals(1, addressBookFromFile.getPersonList().size());
+    }
+
+    @Test
+    public void toModelType_invalidPersonFile_preservesSkippedRawPersonAndWarning() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(INVALID_PERSON_FILE,
+                JsonSerializableAddressBook.class).get();
+
+        AddressBook addressBookFromFile = dataFromFile.toModelType();
+
+        assertEquals(0, addressBookFromFile.getPersonList().size());
+        assertEquals(1, dataFromFile.getPreservedSkippedPersons().size());
+        assertEquals(1, dataFromFile.getLoadWarnings().size());
+        assertTrue(dataFromFile.getLoadWarnings().get(0).contains("Skipped invalid contact"));
+    }
+
+    @Test
+    public void toModelType_duplicatePersons_preservesSkippedDuplicateAndWarning() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_PERSON_FILE,
+                JsonSerializableAddressBook.class).get();
+
+        AddressBook addressBookFromFile = dataFromFile.toModelType();
+
+        assertEquals(1, addressBookFromFile.getPersonList().size());
+        assertEquals(1, dataFromFile.getPreservedSkippedPersons().size());
+        assertEquals(1, dataFromFile.getLoadWarnings().size());
+        assertTrue(dataFromFile.getLoadWarnings().get(0).contains("Skipped duplicate contact"));
     }
 
 }
