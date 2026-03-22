@@ -109,6 +109,9 @@ public class ViewCommand extends Command {
         this(Optional.empty(), Optional.empty(), Optional.of(sessionDate), Optional.empty(), Optional.empty());
     }
 
+    /**
+     * Creates a view command with optional attendance, class space, session date, and visible date range filters.
+     */
     public ViewCommand(Optional<Attendance> attendance,
                        Optional<ClassSpaceName> classSpaceName,
                        Optional<LocalDate> sessionDate,

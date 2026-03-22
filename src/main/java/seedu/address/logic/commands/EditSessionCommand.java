@@ -112,7 +112,8 @@ public class EditSessionCommand extends Command {
             if (!person.hasClassSpace(targetClassSpace)) {
                 continue;
             }
-            Optional<Session> originalSession = Optional.ofNullable(person.getClassSpaceSessions().get(targetClassSpace))
+            Optional<Session> originalSession = Optional.ofNullable(
+                    person.getClassSpaceSessions().get(targetClassSpace))
                     .flatMap(sessionList -> sessionList.getSession(originalDate));
             if (originalSession.isEmpty()) {
                 continue;
