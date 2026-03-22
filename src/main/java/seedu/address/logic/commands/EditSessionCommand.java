@@ -137,7 +137,9 @@ public class EditSessionCommand extends Command {
                 ? originalDate.toString()
                 : originalDate + " -> " + targetDate;
         if (newNote.isPresent()) {
-            String noteDescription = newNote.get().isBlank() ? "cleared note" : "note \"" + newNote.get() + "\"";
+            String noteDescription = newNote.get().isBlank()
+                    ? "cleared note"
+                    : "note \"" + newNote.get() + "\"";
             sessionDescription = sessionDescription + " (" + noteDescription + ")";
         }
 

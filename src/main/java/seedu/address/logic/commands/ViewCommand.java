@@ -63,6 +63,9 @@ public class ViewCommand extends Command {
         this(Optional.of(attendance), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
+    /**
+     * Creates a view command filtered by attendance for a specific session date.
+     */
     public ViewCommand(Attendance attendance, LocalDate sessionDate) {
         this(Optional.of(attendance), Optional.empty(), Optional.of(sessionDate),
                 Optional.empty(), Optional.empty());
@@ -91,11 +94,17 @@ public class ViewCommand extends Command {
         this(Optional.empty(), Optional.of(classSpaceName), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
+    /**
+     * Creates a view command scoped to a class space and highlighted session date.
+     */
     public ViewCommand(ClassSpaceName classSpaceName, LocalDate sessionDate) {
         this(Optional.empty(), Optional.of(classSpaceName), Optional.of(sessionDate),
                 Optional.empty(), Optional.empty());
     }
 
+    /**
+     * Creates a view command highlighted on a specific session date.
+     */
     public ViewCommand(LocalDate sessionDate) {
         this(Optional.empty(), Optional.empty(), Optional.of(sessionDate), Optional.empty(), Optional.empty());
     }
