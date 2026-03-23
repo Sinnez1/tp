@@ -57,6 +57,8 @@ public class JsonSerializableAddressBookTest {
             TEST_DATA_FOLDER.resolve("preservedSkippedClassSpacesAddressBook.json");
     private static final Path INVALID_ASSIGNMENT_NAME_FILE =
             TEST_DATA_FOLDER.resolve("invalidAssignmentNameAddressBook.json");
+    private static final Path MISSING_NAME_CLASS_SPACE_FILE =
+            TEST_DATA_FOLDER.resolve("missingNameClassSpaceAddressBook.json");
 
     @Test
     public void toModelType_invalidPersonWithMultipleInvalidFields_formatsWarningAsBulletList() throws Exception {
@@ -468,9 +470,6 @@ public class JsonSerializableAddressBookTest {
         assertTrue(dataFromFile.getLoadWarnings().get(0).contains("entry #1 (missing name)"));
         assertEquals(0, dataFromFile.toModelType().getPersonList().size());
     }
-
-    private static final Path MISSING_NAME_CLASS_SPACE_FILE =
-            TEST_DATA_FOLDER.resolve("missingNameClassSpaceAddressBook.json");
 
     @Test
     public void toModelType_classSpaceWithMissingName_generatesEntryNumberWarning() throws Exception {
