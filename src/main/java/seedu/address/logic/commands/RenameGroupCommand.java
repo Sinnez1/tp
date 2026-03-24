@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Person;
 
@@ -40,7 +40,7 @@ public class RenameGroupCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ClassSpace target = model.findClassSpaceByName(targetName)
+        Group target = model.findClassSpaceByName(targetName)
                 .orElseThrow(() -> new CommandException(MESSAGE_GROUP_NOT_FOUND));
         if (!targetName.equals(newName) && model.findClassSpaceByName(newName).isPresent()) {
             throw new CommandException(MESSAGE_DUPLICATE_GROUP);
@@ -54,7 +54,7 @@ public class RenameGroupCommand extends Command {
             model.setPerson(person, updatedPerson);
         }
 
-        model.setClassSpace(target, new ClassSpace(newName, java.util.List.copyOf(target.getAssignments())));
+        model.setClassSpace(target, new Group(newName, java.util.List.copyOf(target.getAssignments())));
         return new CommandResult(String.format(MESSAGE_SUCCESS, targetName.value, newName.value));
     }
 

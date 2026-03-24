@@ -15,7 +15,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Attendance;
 import seedu.address.model.person.MatricNumber;
@@ -46,7 +46,7 @@ public class AttViewCommandTest {
     @Test
     public void execute_presentFilter_showsMatchingPersons() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567")
@@ -82,7 +82,7 @@ public class AttViewCommandTest {
     @Test
     public void execute_noFilter_showsCurrentView() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.setActiveSessionDate(SESSION_DATE);
         model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
@@ -108,8 +108,8 @@ public class AttViewCommandTest {
     @Test
     public void execute_groupView_showsWholeGroup() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
-        model.addClassSpace(new ClassSpace(T02));
+        model.addClassSpace(new Group(T01));
+        model.addClassSpace(new Group(T02));
         model.addPerson(new PersonBuilder().withName("Alice Present").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567")
                 .withSession("T01", SESSION_DATE.toString(), "PRESENT", 1).build());
@@ -143,7 +143,7 @@ public class AttViewCommandTest {
     @Test
     public void execute_noMatches_returnsNoMatchesMessage() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Only Present").withMatricNumber("A1234567X")
                 .withEmail("present@example.com").withPhone("94567890")
@@ -166,7 +166,7 @@ public class AttViewCommandTest {
     @Test
     public void execute_withoutSessionContext_throwsCommandException() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
 
         ViewCommand command = new ViewCommand(new Attendance("PRESENT"));
@@ -176,7 +176,7 @@ public class AttViewCommandTest {
     @Test
     public void execute_noFilterWithoutSessionContext_showsOverview() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567").withClassSpaces("T01").build());
@@ -194,7 +194,7 @@ public class AttViewCommandTest {
     @Test
     public void executeNoFilter_missingSession_persistsDefaultSession() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         String matricNumber = "A1234567X";
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(matricNumber)

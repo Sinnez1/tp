@@ -12,7 +12,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.testutil.PersonBuilder;
@@ -25,7 +25,7 @@ public class EditSessionCommandTest {
     @Test
     public void execute_movesSessionDate() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.setActiveSessionDate(ORIGINAL_DATE);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
@@ -50,7 +50,7 @@ public class EditSessionCommandTest {
     @Test
     public void execute_missingSession_throwsCommandException() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
 
         EditSessionCommand command = new EditSessionCommand(ORIGINAL_DATE, NEW_DATE);

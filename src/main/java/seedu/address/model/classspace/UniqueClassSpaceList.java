@@ -14,16 +14,16 @@ import seedu.address.model.classspace.exceptions.DuplicateClassSpaceException;
 /**
  * A list of class spaces that enforces uniqueness between its elements and does not allow nulls.
  */
-public class UniqueClassSpaceList implements Iterable<ClassSpace> {
+public class UniqueClassSpaceList implements Iterable<Group> {
 
-    private final ObservableList<ClassSpace> internalList = FXCollections.observableArrayList();
-    private final ObservableList<ClassSpace> internalUnmodifiableList =
+    private final ObservableList<Group> internalList = FXCollections.observableArrayList();
+    private final ObservableList<Group> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
 
     /**
      * Returns true if the list contains an equivalent class space as the given argument.
      */
-    public boolean contains(ClassSpace toCheck) {
+    public boolean contains(Group toCheck) {
         requireNonNull(toCheck);
         return internalList.stream().anyMatch(toCheck::isSameClassSpace);
     }
@@ -31,7 +31,7 @@ public class UniqueClassSpaceList implements Iterable<ClassSpace> {
     /**
      * Adds a class space to the list.
      */
-    public void add(ClassSpace toAdd) {
+    public void add(Group toAdd) {
         requireNonNull(toAdd);
         if (contains(toAdd)) {
             throw new DuplicateClassSpaceException();
@@ -40,48 +40,48 @@ public class UniqueClassSpaceList implements Iterable<ClassSpace> {
     }
 
     /**
-     * Replaces the class space {@code target} in the list with {@code editedClassSpace}.
+     * Replaces the class space {@code target} in the list with {@code editedGroup}.
      */
-    public void setClassSpace(ClassSpace target, ClassSpace editedClassSpace) {
-        requireAllNonNull(target, editedClassSpace);
+    public void setClassSpace(Group target, Group editedGroup) {
+        requireAllNonNull(target, editedGroup);
 
         int index = internalList.indexOf(target);
         if (index == -1) {
             throw new ClassSpaceNotFoundException();
         }
 
-        if (!target.isSameClassSpace(editedClassSpace) && contains(editedClassSpace)) {
+        if (!target.isSameClassSpace(editedGroup) && contains(editedGroup)) {
             throw new DuplicateClassSpaceException();
         }
 
-        internalList.set(index, editedClassSpace);
+        internalList.set(index, editedGroup);
     }
 
     /**
      * Removes the equivalent class space from the list.
      */
-    public void remove(ClassSpace toRemove) {
+    public void remove(Group toRemove) {
         requireNonNull(toRemove);
         if (!internalList.remove(toRemove)) {
             throw new ClassSpaceNotFoundException();
         }
     }
 
-    public void setClassSpaces(List<ClassSpace> classSpaces) {
-        requireAllNonNull(classSpaces);
-        if (!classSpacesAreUnique(classSpaces)) {
+    public void setClassSpaces(List<Group> groups) {
+        requireAllNonNull(groups);
+        if (!classSpacesAreUnique(groups)) {
             throw new DuplicateClassSpaceException();
         }
 
-        internalList.setAll(classSpaces);
+        internalList.setAll(groups);
     }
 
-    public ObservableList<ClassSpace> asUnmodifiableObservableList() {
+    public ObservableList<Group> asUnmodifiableObservableList() {
         return internalUnmodifiableList;
     }
 
     @Override
-    public Iterator<ClassSpace> iterator() {
+    public Iterator<Group> iterator() {
         return internalList.iterator();
     }
 
@@ -109,10 +109,10 @@ public class UniqueClassSpaceList implements Iterable<ClassSpace> {
         return internalList.toString();
     }
 
-    private boolean classSpacesAreUnique(List<ClassSpace> classSpaces) {
-        for (int i = 0; i < classSpaces.size() - 1; i++) {
-            for (int j = i + 1; j < classSpaces.size(); j++) {
-                if (classSpaces.get(i).isSameClassSpace(classSpaces.get(j))) {
+    private boolean classSpacesAreUnique(List<Group> groups) {
+        for (int i = 0; i < groups.size() - 1; i++) {
+            for (int j = i + 1; j < groups.size(); j++) {
+                if (groups.get(i).isSameClassSpace(groups.get(j))) {
                     return false;
                 }
             }

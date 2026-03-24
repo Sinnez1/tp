@@ -14,7 +14,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Attendance;
 import seedu.address.model.person.MatricNumber;
@@ -27,7 +27,7 @@ public class AddSessionCommandTest {
     @Test
     public void execute_addsSessionForCurrentGroup() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567").withClassSpaces("T01").build());
@@ -51,7 +51,7 @@ public class AddSessionCommandTest {
     @Test
     public void execute_sessionAlreadyExists_throwsCommandException() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567")
@@ -88,7 +88,7 @@ public class AddSessionCommandTest {
     @Test
     public void execute_partialSessionCoverage_addsMissingStudentsOnly() throws Exception {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567")

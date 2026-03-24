@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.CreateGroupCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 
 /**
@@ -24,7 +24,7 @@ public class CreateGroupCommandParser implements Parser<CreateGroupCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_GROUP);
         ClassSpaceName classSpaceName = ParserUtil.parseClassSpaceName(argMultimap.getValue(PREFIX_GROUP).get());
-        return new CreateGroupCommand(new ClassSpace(classSpaceName));
+        return new CreateGroupCommand(new Group(classSpaceName));
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {

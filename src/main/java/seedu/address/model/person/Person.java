@@ -88,7 +88,7 @@ public class Person {
     }
 
     /**
-     * Used for ClassSpace commands. Every field must be present and not null.
+     * Used for Group commands. Every field must be present and not null.
      */
     public Person(Person person, Set<ClassSpaceName> classSpaces) {
         this(person.name, person.phone, person.email, person.matricNumber, person.tags, classSpaces,

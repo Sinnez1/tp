@@ -6,7 +6,7 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.UniqueClassSpaceList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
@@ -46,11 +46,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Replaces the contents of the class space list with {@code classSpaces}.
-     * {@code classSpaces} must not contain duplicate class spaces.
+     * Replaces the contents of the class space list with {@code groups}.
+     * {@code groups} must not contain duplicate class spaces.
      */
-    public void setClassSpaces(List<ClassSpace> classSpaces) {
-        this.classSpaces.setClassSpaces(classSpaces);
+    public void setClassSpaces(List<Group> groups) {
+        this.classSpaces.setClassSpaces(groups);
     }
 
     /**
@@ -103,33 +103,33 @@ public class AddressBook implements ReadOnlyAddressBook {
     //// class-space-level operations
 
     /**
-     * Returns true if a class space with the same identity as {@code classSpace} exists in the address book.
+     * Returns true if a class space with the same identity as {@code group} exists in the address book.
      */
-    public boolean hasClassSpace(ClassSpace classSpace) {
-        requireNonNull(classSpace);
-        return classSpaces.contains(classSpace);
+    public boolean hasClassSpace(Group group) {
+        requireNonNull(group);
+        return classSpaces.contains(group);
     }
 
     /**
      * Adds a class space to the address book.
      * The class space must not already exist in the address book.
      */
-    public void addClassSpace(ClassSpace classSpace) {
-        classSpaces.add(classSpace);
+    public void addClassSpace(Group group) {
+        classSpaces.add(group);
     }
 
     /**
-     * Replaces the given class space {@code target} in the list with {@code editedClassSpace}.
+     * Replaces the given class space {@code target} in the list with {@code editedGroup}.
      */
-    public void setClassSpace(ClassSpace target, ClassSpace editedClassSpace) {
-        requireNonNull(editedClassSpace);
-        classSpaces.setClassSpace(target, editedClassSpace);
+    public void setClassSpace(Group target, Group editedGroup) {
+        requireNonNull(editedGroup);
+        classSpaces.setClassSpace(target, editedGroup);
     }
 
     /**
      * Removes the given class space from the address book.
      */
-    public void removeClassSpace(ClassSpace target) {
+    public void removeClassSpace(Group target) {
         classSpaces.remove(target);
     }
 
@@ -149,7 +149,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
-    public ObservableList<ClassSpace> getClassSpaceList() {
+    public ObservableList<Group> getClassSpaceList() {
         return classSpaces.asUnmodifiableObservableList();
     }
 

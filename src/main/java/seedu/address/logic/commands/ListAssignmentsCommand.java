@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import seedu.address.model.Model;
 import seedu.address.model.assignment.Assignment;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.person.Person;
 
 /**
@@ -25,24 +25,24 @@ public class ListAssignmentsCommand extends ClassScopedAssignmentCommand {
     @Override
     public CommandResult execute(Model model) throws seedu.address.logic.commands.exceptions.CommandException {
         requireNonNull(model);
-        ClassSpace activeClassSpace = getActiveClassSpace(model);
-        List<Assignment> assignments = activeClassSpace.getAssignments();
+        Group activeGroup = getActiveClassSpace(model);
+        List<Assignment> assignments = activeGroup.getAssignments();
         if (assignments.isEmpty()) {
             return new CommandResult(String.format("No assignments in %s.",
-                    activeClassSpace.getClassSpaceName().value));
+                    activeGroup.getClassSpaceName().value));
         }
 
-        List<Person> studentsInClass = getStudentsInClass(model, activeClassSpace.getClassSpaceName());
+        List<Person> studentsInClass = getStudentsInClass(model, activeGroup.getClassSpaceName());
         String assignmentSummary = assignments.stream()
-                .map(assignment -> formatAssignment(assignment, studentsInClass, activeClassSpace))
+                .map(assignment -> formatAssignment(assignment, studentsInClass, activeGroup))
                 .collect(Collectors.joining("\n"));
         return new CommandResult(String.format("Assignments in %s:\n%s",
-                activeClassSpace.getClassSpaceName().value, assignmentSummary));
+                activeGroup.getClassSpaceName().value, assignmentSummary));
     }
 
-    private String formatAssignment(Assignment assignment, List<Person> studentsInClass, ClassSpace classSpace) {
+    private String formatAssignment(Assignment assignment, List<Person> studentsInClass, Group group) {
         long gradedCount = studentsInClass.stream()
-                .filter(person -> person.getAssignmentGrade(classSpace.getClassSpaceName(),
+                .filter(person -> person.getAssignmentGrade(group.getClassSpaceName(),
                                 assignment.getAssignmentName())
                         .isPresent())
                 .count();

@@ -10,7 +10,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 
 /**
  * Creates an assignment in the current class space.
@@ -45,17 +45,17 @@ public class CreateAssignmentCommand extends ClassScopedAssignmentCommand {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ClassSpace activeClassSpace = getActiveClassSpace(model);
-        if (activeClassSpace.hasAssignment(assignmentName)) {
+        Group activeGroup = getActiveClassSpace(model);
+        if (activeGroup.hasAssignment(assignmentName)) {
             throw new CommandException(MESSAGE_DUPLICATE_ASSIGNMENT);
         }
 
-        List<Assignment> updatedAssignments = new ArrayList<>(activeClassSpace.getAssignments());
+        List<Assignment> updatedAssignments = new ArrayList<>(activeGroup.getAssignments());
         updatedAssignments.add(new Assignment(assignmentName, dueDate, maxMarks));
-        ClassSpace updatedClassSpace = new ClassSpace(activeClassSpace.getClassSpaceName(), updatedAssignments);
-        model.setClassSpace(activeClassSpace, updatedClassSpace);
+        Group updatedGroup = new Group(activeGroup.getClassSpaceName(), updatedAssignments);
+        model.setClassSpace(activeGroup, updatedGroup);
         return new CommandResult(String.format(MESSAGE_SUCCESS, assignmentName.value,
-                activeClassSpace.getClassSpaceName().value));
+                activeGroup.getClassSpaceName().value));
     }
 
     @Override

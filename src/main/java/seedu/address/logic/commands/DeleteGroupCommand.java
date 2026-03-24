@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Person;
 
@@ -31,7 +31,7 @@ public class DeleteGroupCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ClassSpace classSpace = model.findClassSpaceByName(classSpaceName)
+        Group group = model.findClassSpaceByName(classSpaceName)
                 .orElseThrow(() -> new CommandException(MESSAGE_GROUP_NOT_FOUND));
 
         for (Person person : java.util.List.copyOf(model.getAddressBook().getPersonList())) {
@@ -42,7 +42,7 @@ public class DeleteGroupCommand extends Command {
             model.setPerson(person, updatedPerson);
         }
 
-        model.deleteClassSpace(classSpace);
+        model.deleteClassSpace(group);
         return new CommandResult(String.format(MESSAGE_SUCCESS, classSpaceName.value));
     }
 

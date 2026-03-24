@@ -10,7 +10,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Person;
@@ -91,34 +91,34 @@ public interface Model {
     void setPerson(Person target, Person editedPerson);
 
     /**
-     * Returns true if a class space with the same identity as {@code classSpace} exists in the address book.
+     * Returns true if a class space with the same identity as {@code group} exists in the address book.
      */
-    boolean hasClassSpace(ClassSpace classSpace);
+    boolean hasClassSpace(Group group);
 
     /**
      * Returns the class space with the given name if it exists.
      */
-    Optional<ClassSpace> findClassSpaceByName(ClassSpaceName classSpaceName);
+    Optional<Group> findClassSpaceByName(ClassSpaceName classSpaceName);
 
     /**
      * Adds the given class space.
-     * {@code classSpace} must not already exist in the address book.
+     * {@code group} must not already exist in the address book.
      */
-    void addClassSpace(ClassSpace classSpace);
+    void addClassSpace(Group group);
 
     /**
      * Deletes the given class space.
      * The class space must exist in the address book.
      */
-    void deleteClassSpace(ClassSpace target);
+    void deleteClassSpace(Group target);
 
     /**
-     * Replaces the given class space {@code target} with {@code editedClassSpace}.
+     * Replaces the given class space {@code target} with {@code editedGroup}.
      */
-    void setClassSpace(ClassSpace target, ClassSpace editedClassSpace);
+    void setClassSpace(Group target, Group editedGroup);
 
     /** Returns an unmodifiable view of the class space list. */
-    ObservableList<ClassSpace> getClassSpaceList();
+    ObservableList<Group> getClassSpaceList();
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();

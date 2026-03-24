@@ -14,7 +14,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
@@ -26,9 +26,9 @@ public class GradeAssignmentCommandTest {
     @Test
     public void execute_validIndexTarget_success() {
         Model model = new ModelManager();
-        ClassSpace classSpace = new ClassSpace(T01,
+        Group group = new Group(T01,
                 List.of(new Assignment(new AssignmentName("Quiz 1"), LocalDate.of(2026, 4, 5), 20)));
-        model.addClassSpace(classSpace);
+        model.addClassSpace(group);
         model.switchToClassSpaceView(T01);
 
         Person originalPerson = new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
@@ -49,7 +49,7 @@ public class GradeAssignmentCommandTest {
     @Test
     public void execute_gradeAboveMaxMarks_failure() {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01,
+        model.addClassSpace(new Group(T01,
                 List.of(new Assignment(new AssignmentName("Quiz 1"), LocalDate.of(2026, 4, 5), 20))));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")

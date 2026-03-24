@@ -8,11 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.assignment.Assignment;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 
 /**
- * Jackson-friendly version of {@link ClassSpace}.
+ * Jackson-friendly version of {@link Group}.
  */
 class JsonAdaptedClassSpace {
 
@@ -31,12 +31,12 @@ class JsonAdaptedClassSpace {
         }
     }
 
-    public JsonAdaptedClassSpace(ClassSpace source) {
+    public JsonAdaptedClassSpace(Group source) {
         name = source.getClassSpaceName().value;
         assignments.addAll(source.getAssignments().stream().map(JsonAdaptedAssignment::new).toList());
     }
 
-    public ClassSpace toModelType() throws IllegalValueException {
+    public Group toModelType() throws IllegalValueException {
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     ClassSpaceName.class.getSimpleName()));
@@ -49,6 +49,6 @@ class JsonAdaptedClassSpace {
         for (JsonAdaptedAssignment assignment : assignments) {
             modelAssignments.add(assignment.toModelType());
         }
-        return new ClassSpace(new ClassSpaceName(name), modelAssignments);
+        return new Group(new ClassSpaceName(name), modelAssignments);
     }
 }

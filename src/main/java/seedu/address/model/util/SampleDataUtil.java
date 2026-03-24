@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.MatricNumber;
@@ -41,7 +41,7 @@ public class SampleDataUtil {
     public static ReadOnlyAddressBook getSampleAddressBook() {
         AddressBook sampleAb = new AddressBook();
         for (String classSpaceName : new String[] {"T01", "T02", "Project-Team", "EmptyGroup"}) {
-            sampleAb.addClassSpace(new ClassSpace(new ClassSpaceName(classSpaceName)));
+            sampleAb.addClassSpace(new Group(new ClassSpaceName(classSpaceName)));
         }
         for (Person samplePerson : getSamplePersons()) {
             sampleAb.addPerson(samplePerson);

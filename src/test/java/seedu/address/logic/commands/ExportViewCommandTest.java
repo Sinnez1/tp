@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.testutil.PersonBuilder;
 
@@ -22,7 +22,7 @@ public class ExportViewCommandTest {
     @Test
     public void execute_exportsCsv() throws Exception {
         Model model = new ModelManager();
-        model.addClassSpace(new ClassSpace(T01));
+        model.addClassSpace(new Group(T01));
         model.switchToClassSpaceView(T01);
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
                 .withEmail("alice@example.com").withPhone("91234567")

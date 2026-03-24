@@ -19,7 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Person;
@@ -150,13 +150,13 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasClassSpace(ClassSpace classSpace) {
-        requireNonNull(classSpace);
-        return addressBook.hasClassSpace(classSpace);
+    public boolean hasClassSpace(Group group) {
+        requireNonNull(group);
+        return addressBook.hasClassSpace(group);
     }
 
     @Override
-    public Optional<ClassSpace> findClassSpaceByName(ClassSpaceName classSpaceName) {
+    public Optional<Group> findClassSpaceByName(ClassSpaceName classSpaceName) {
         requireNonNull(classSpaceName);
         return addressBook.getClassSpaceList().stream()
                 .filter(classSpace -> classSpace.getClassSpaceName().equals(classSpaceName))
@@ -164,13 +164,13 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void addClassSpace(ClassSpace classSpace) {
-        requireNonNull(classSpace);
-        addressBook.addClassSpace(classSpace);
+    public void addClassSpace(Group group) {
+        requireNonNull(group);
+        addressBook.addClassSpace(group);
     }
 
     @Override
-    public void deleteClassSpace(ClassSpace target) {
+    public void deleteClassSpace(Group target) {
         requireNonNull(target);
         addressBook.removeClassSpace(target);
         if (target.getClassSpaceName().equals(activeClassSpaceName.get())) {
@@ -181,18 +181,18 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void setClassSpace(ClassSpace target, ClassSpace editedClassSpace) {
-        requireAllNonNull(target, editedClassSpace);
-        addressBook.setClassSpace(target, editedClassSpace);
+    public void setClassSpace(Group target, Group editedGroup) {
+        requireAllNonNull(target, editedGroup);
+        addressBook.setClassSpace(target, editedGroup);
         if (target.getClassSpaceName().equals(activeClassSpaceName.get())) {
-            activeClassSpaceName.set(editedClassSpace.getClassSpaceName());
+            activeClassSpaceName.set(editedGroup.getClassSpaceName());
             updateCurrentViewLabel();
         }
         refreshFilteredPersonList();
     }
 
     @Override
-    public ObservableList<ClassSpace> getClassSpaceList() {
+    public ObservableList<Group> getClassSpaceList() {
         return addressBook.getClassSpaceList();
     }
 

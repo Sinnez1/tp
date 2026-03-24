@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 
 /**
  * Creates a new class space.
@@ -20,20 +20,20 @@ public class CreateGroupCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Created group: %1$s";
     public static final String MESSAGE_DUPLICATE_GROUP = "This group already exists.";
 
-    private final ClassSpace classSpace;
+    private final Group group;
 
-    public CreateGroupCommand(ClassSpace classSpace) {
-        this.classSpace = classSpace;
+    public CreateGroupCommand(Group group) {
+        this.group = group;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (model.hasClassSpace(classSpace)) {
+        if (model.hasClassSpace(group)) {
             throw new CommandException(MESSAGE_DUPLICATE_GROUP);
         }
-        model.addClassSpace(classSpace);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, classSpace.getClassSpaceName().value));
+        model.addClassSpace(group);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, group.getClassSpaceName().value));
     }
 
     @Override
@@ -45,6 +45,6 @@ public class CreateGroupCommand extends Command {
             return false;
         }
         CreateGroupCommand otherCommand = (CreateGroupCommand) other;
-        return classSpace.equals(otherCommand.classSpace);
+        return group.equals(otherCommand.group);
     }
 }

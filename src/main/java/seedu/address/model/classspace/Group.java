@@ -16,23 +16,23 @@ import seedu.address.model.assignment.UniqueAssignmentList;
  * This concept is purely internal to the codebase, and all user-facing strings should use the term
  * "{@code GROUP_NAME}".
  */
-public class ClassSpace {
+public class Group {
     private final ClassSpaceName classSpaceName;
     private final UniqueAssignmentList assignments;
 
     /**
-     * Creates a {@code ClassSpace} with the given name.
+     * Creates a {@code Group} with the given name.
      *
      * @param classSpaceName Name of the class space.
      */
-    public ClassSpace(ClassSpaceName classSpaceName) {
+    public Group(ClassSpaceName classSpaceName) {
         this(classSpaceName, List.of());
     }
 
     /**
-     * Creates a {@code ClassSpace} with the given name and assignments.
+     * Creates a {@code Group} with the given name and assignments.
      */
-    public ClassSpace(ClassSpaceName classSpaceName, List<Assignment> assignments) {
+    public Group(ClassSpaceName classSpaceName, List<Assignment> assignments) {
         requireNonNull(classSpaceName);
         requireNonNull(assignments);
         this.classSpaceName = classSpaceName;
@@ -70,13 +70,13 @@ public class ClassSpace {
     /**
      * Returns true if both class spaces have the same identity.
      */
-    public boolean isSameClassSpace(ClassSpace otherClassSpace) {
-        if (otherClassSpace == this) {
+    public boolean isSameClassSpace(Group otherGroup) {
+        if (otherGroup == this) {
             return true;
         }
 
-        return otherClassSpace != null
-                && classSpaceName.equals(otherClassSpace.classSpaceName);
+        return otherGroup != null
+                && classSpaceName.equals(otherGroup.classSpaceName);
     }
 
     @Override
@@ -85,13 +85,13 @@ public class ClassSpace {
             return true;
         }
 
-        if (!(other instanceof ClassSpace)) {
+        if (!(other instanceof Group)) {
             return false;
         }
 
-        ClassSpace otherClassSpace = (ClassSpace) other;
-        return classSpaceName.equals(otherClassSpace.classSpaceName)
-                && assignments.equals(otherClassSpace.assignments);
+        Group otherGroup = (Group) other;
+        return classSpaceName.equals(otherGroup.classSpaceName)
+                && assignments.equals(otherGroup.assignments);
     }
 
     @Override

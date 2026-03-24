@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import seedu.address.commons.util.JsonUtil;
 import seedu.address.model.AddressBook;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Name;
@@ -160,11 +161,11 @@ public class JsonSerializableAddressBookTest {
         assertEquals(1, addressBookFromFile.getClassSpaceList().size());
 
         // Verify that it is the expected class space.
-        seedu.address.model.classspace.ClassSpace expectedClassSpace =
-                new seedu.address.model.classspace.ClassSpace(
+        Group expectedGroup =
+                new Group(
                         new seedu.address.model.classspace.ClassSpaceName("Implicit-Class-Space"));
 
-        assertTrue(addressBookFromFile.hasClassSpace(expectedClassSpace));
+        assertTrue(addressBookFromFile.hasClassSpace(expectedGroup));
     }
 
     @Test
@@ -482,4 +483,3 @@ public class JsonSerializableAddressBookTest {
         assertTrue(dataFromFile.getLoadWarnings().get(0).contains("entry #1 (missing name)"));
     }
 }
-

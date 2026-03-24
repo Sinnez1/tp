@@ -13,7 +13,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.person.Person;
 
 /**
@@ -49,31 +49,31 @@ public class EditAssignmentCommand extends ClassScopedAssignmentCommand {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ClassSpace activeClassSpace = getActiveClassSpace(model);
-        Assignment assignmentToEdit = getRequiredAssignment(activeClassSpace, targetAssignmentName);
+        Group activeGroup = getActiveClassSpace(model);
+        Assignment assignmentToEdit = getRequiredAssignment(activeGroup, targetAssignmentName);
         Assignment editedAssignment = createEditedAssignment(assignmentToEdit, editAssignmentDescriptor);
 
         if (!assignmentToEdit.getAssignmentName().equals(editedAssignment.getAssignmentName())
-                && activeClassSpace.hasAssignment(editedAssignment.getAssignmentName())) {
+                && activeGroup.hasAssignment(editedAssignment.getAssignmentName())) {
             throw new CommandException(MESSAGE_DUPLICATE_ASSIGNMENT);
         }
 
-        if (editedAssignment.getMaxMarks() < findHighestExistingGrade(model, activeClassSpace, targetAssignmentName)) {
+        if (editedAssignment.getMaxMarks() < findHighestExistingGrade(model, activeGroup, targetAssignmentName)) {
             throw new CommandException(MESSAGE_INVALID_MAX_MARKS_FOR_EXISTING_GRADES);
         }
 
-        List<Assignment> updatedAssignments = new ArrayList<>(activeClassSpace.getAssignments());
+        List<Assignment> updatedAssignments = new ArrayList<>(activeGroup.getAssignments());
         int index = updatedAssignments.indexOf(assignmentToEdit);
         updatedAssignments.set(index, editedAssignment);
-        ClassSpace updatedClassSpace = new ClassSpace(activeClassSpace.getClassSpaceName(), updatedAssignments);
-        model.setClassSpace(activeClassSpace, updatedClassSpace);
+        Group updatedGroup = new Group(activeGroup.getClassSpaceName(), updatedAssignments);
+        model.setClassSpace(activeGroup, updatedGroup);
 
         if (!targetAssignmentName.equals(editedAssignment.getAssignmentName())) {
             for (Person person : List.copyOf(model.getAddressBook().getPersonList())) {
-                if (!person.hasClassSpace(activeClassSpace.getClassSpaceName())) {
+                if (!person.hasClassSpace(activeGroup.getClassSpaceName())) {
                     continue;
                 }
-                Person updatedPerson = person.withRenamedAssignmentGrade(activeClassSpace.getClassSpaceName(),
+                Person updatedPerson = person.withRenamedAssignmentGrade(activeGroup.getClassSpaceName(),
                         targetAssignmentName, editedAssignment.getAssignmentName());
                 if (!updatedPerson.equals(person)) {
                     model.setPerson(person, updatedPerson);
@@ -82,7 +82,7 @@ public class EditAssignmentCommand extends ClassScopedAssignmentCommand {
         }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, editedAssignment.getAssignmentName().value,
-                activeClassSpace.getClassSpaceName().value));
+                activeGroup.getClassSpaceName().value));
     }
 
     private Assignment createEditedAssignment(Assignment assignmentToEdit,
@@ -94,9 +94,9 @@ public class EditAssignmentCommand extends ClassScopedAssignmentCommand {
         return new Assignment(updatedAssignmentName, updatedDueDate, updatedMaxMarks);
     }
 
-    private int findHighestExistingGrade(Model model, ClassSpace activeClassSpace, AssignmentName assignmentName) {
-        return getStudentsInClass(model, activeClassSpace.getClassSpaceName()).stream()
-                .flatMap(person -> person.getAssignmentGrade(activeClassSpace.getClassSpaceName(),
+    private int findHighestExistingGrade(Model model, Group activeGroup, AssignmentName assignmentName) {
+        return getStudentsInClass(model, activeGroup.getClassSpaceName()).stream()
+                .flatMap(person -> person.getAssignmentGrade(activeGroup.getClassSpaceName(),
                                 assignmentName)
                         .stream())
                 .max(Integer::compareTo)

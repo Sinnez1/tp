@@ -15,7 +15,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Person;
 
@@ -66,15 +66,15 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ClassSpace activeClassSpace = getActiveClassSpace(model);
-        Assignment assignment = getRequiredAssignment(activeClassSpace, assignmentName);
+        Group activeGroup = getActiveClassSpace(model);
+        Assignment assignment = getRequiredAssignment(activeGroup, assignmentName);
         if (grade > assignment.getMaxMarks()) {
             throw new CommandException(MESSAGE_GRADE_OUT_OF_RANGE);
         }
 
-        List<Person> targetPersons = resolveTargetPersons(model, activeClassSpace.getClassSpaceName());
+        List<Person> targetPersons = resolveTargetPersons(model, activeGroup.getClassSpaceName());
         for (Person person : targetPersons) {
-            Person updatedPerson = person.withUpdatedAssignmentGrade(activeClassSpace.getClassSpaceName(),
+            Person updatedPerson = person.withUpdatedAssignmentGrade(activeGroup.getClassSpaceName(),
                     assignmentName, grade);
             model.setPerson(person, updatedPerson);
         }

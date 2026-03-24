@@ -24,7 +24,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Attendance;
 import seedu.address.model.person.Person;
@@ -90,7 +90,7 @@ public class PersonListPanel extends UiPart<Region> {
      */
     public PersonListPanel(ObservableList<Person> personList,
                            ObservableList<Person> allPersons,
-                           ObservableList<ClassSpace> classSpaces,
+                           ObservableList<Group> groups,
                            ReadOnlyBooleanProperty attendanceViewActive,
                            ReadOnlyObjectProperty<ClassSpaceName> activeClassSpaceName,
                            ReadOnlyObjectProperty<LocalDate> activeSessionDate,
@@ -106,7 +106,7 @@ public class PersonListPanel extends UiPart<Region> {
 
         personListView.setItems(personList);
         personListView.setCellFactory(listView ->
-                new PersonListViewCell(classSpaces, attendanceViewActive, activeClassSpaceName, activeSessionDate));
+                new PersonListViewCell(groups, attendanceViewActive, activeClassSpaceName, activeSessionDate));
 
         attendanceViewActive.addListener((observable, oldValue, newValue) -> {
             personListView.refresh();
@@ -127,7 +127,7 @@ public class PersonListPanel extends UiPart<Region> {
         visibleSessionRangeEnd.addListener((observable, oldValue, newValue) ->
                 refreshAttendanceMatrix(personList, attendanceViewActive.get(),
                         activeClassSpaceName.get(), activeSessionDate.get()));
-        classSpaces.addListener((ListChangeListener<ClassSpace>) change -> personListView.refresh());
+        groups.addListener((ListChangeListener<Group>) change -> personListView.refresh());
         personList.addListener((ListChangeListener<Person>) change -> refreshAttendanceMatrix(
                 personList, attendanceViewActive.get(), activeClassSpaceName.get(), activeSessionDate.get()));
         allPersons.addListener((ListChangeListener<Person>) change -> refreshAttendanceMatrix(
@@ -453,16 +453,16 @@ public class PersonListPanel extends UiPart<Region> {
      * Custom {@code ListCell} that displays the graphics of a {@code Person} using a {@code PersonCard}.
      */
     class PersonListViewCell extends ListCell<Person> {
-        private final ObservableList<ClassSpace> classSpaces;
+        private final ObservableList<Group> groups;
         private final ReadOnlyBooleanProperty attendanceViewActive;
         private final ReadOnlyObjectProperty<ClassSpaceName> activeClassSpaceName;
         private final ReadOnlyObjectProperty<LocalDate> activeSessionDate;
 
-        PersonListViewCell(ObservableList<ClassSpace> classSpaces,
+        PersonListViewCell(ObservableList<Group> groups,
                            ReadOnlyBooleanProperty attendanceViewActive,
                            ReadOnlyObjectProperty<ClassSpaceName> activeClassSpaceName,
                            ReadOnlyObjectProperty<LocalDate> activeSessionDate) {
-            this.classSpaces = classSpaces;
+            this.groups = groups;
             this.attendanceViewActive = attendanceViewActive;
             this.activeClassSpaceName = activeClassSpaceName;
             this.activeSessionDate = activeSessionDate;
@@ -477,7 +477,7 @@ public class PersonListPanel extends UiPart<Region> {
                 setText(null);
             } else {
                 setGraphic(new PersonCard(person, getIndex() + 1, attendanceViewActive.get(),
-                        activeClassSpaceName.get(), activeSessionDate.get(), classSpaces).getRoot());
+                        activeClassSpaceName.get(), activeSessionDate.get(), groups).getRoot());
             }
         }
     }

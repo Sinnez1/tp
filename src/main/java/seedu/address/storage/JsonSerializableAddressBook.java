@@ -22,7 +22,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Person;
 
@@ -226,13 +226,13 @@ class JsonSerializableAddressBook {
             exists before this method is called. The orElseThrow is a defensive guard against
             future errors in the load sequence.
              */
-            ClassSpace classSpace = addressBook.getClassSpaceList().stream()
+            Group group = addressBook.getClassSpaceList().stream()
                     .filter(cs -> cs.getClassSpaceName().equals(classSpaceName))
                     .findFirst()
                     .orElseThrow(() ->
                             new AssertionError("Class space '" + classSpaceName.value
                                     + "' should exist after ensureClassSpacesExist"));
-            validateGradesAgainstClassSpace(classSpace, classSpaceName, grades);
+            validateGradesAgainstClassSpace(group, classSpaceName, grades);
         }
     }
 
@@ -245,20 +245,20 @@ class JsonSerializableAddressBook {
         }
     }
 
-    private void validateGradesAgainstClassSpace(ClassSpace classSpace, ClassSpaceName classSpaceName,
+    private void validateGradesAgainstClassSpace(Group group, ClassSpaceName classSpaceName,
                                                  Map<AssignmentName, Integer> grades) throws IllegalValueException {
         for (var gradeEntry : grades.entrySet()) {
             AssignmentName assignmentName = gradeEntry.getKey();
             int grade = gradeEntry.getValue();
 
-            if (!classSpace.hasAssignment(assignmentName)) {
+            if (!group.hasAssignment(assignmentName)) {
                 throw new IllegalValueException(String.format(
                         "Person has a grade for assignment '%s' in class space '%s',"
                                 + "but that assignment does not exist.",
                         assignmentName.value, classSpaceName.value));
             }
 
-            Assignment assignment = classSpace.findAssignmentByName(assignmentName).get();
+            Assignment assignment = group.findAssignmentByName(assignmentName).get();
             if (grade > assignment.getMaxMarks()) {
                 throw new IllegalValueException(String.format(
                         "Grade %d for assignment '%s' in class space '%s' exceeds max marks of %d.",
@@ -287,9 +287,9 @@ class JsonSerializableAddressBook {
 
     private void ensureClassSpacesExist(AddressBook addressBook, Person person) {
         for (var classSpaceName : person.getClassSpaces()) {
-            ClassSpace classSpace = new ClassSpace(classSpaceName);
-            if (!addressBook.hasClassSpace(classSpace)) {
-                addressBook.addClassSpace(classSpace);
+            Group group = new Group(classSpaceName);
+            if (!addressBook.hasClassSpace(group)) {
+                addressBook.addClassSpace(group);
             }
         }
     }
@@ -309,17 +309,17 @@ class JsonSerializableAddressBook {
         try {
             JsonAdaptedClassSpace jsonAdaptedClassSpace =
                     JsonUtil.fromJsonNode(rawClassSpaceNode, JsonAdaptedClassSpace.class);
-            ClassSpace classSpace = jsonAdaptedClassSpace.toModelType();
+            Group group = jsonAdaptedClassSpace.toModelType();
 
-            if (addressBook.hasClassSpace(classSpace)) {
-                String identifier = "'" + classSpace.getClassSpaceName().value + "'";
+            if (addressBook.hasClassSpace(group)) {
+                String identifier = "'" + group.getClassSpaceName().value + "'";
                 logger.warning("Skipping duplicate class space at entry #" + (index + 1) + ": " + identifier);
                 preservedSkippedClassSpaces.add(rawClassSpaceNode.deepCopy());
                 loadWarnings.add("Skipped duplicate class space: " + identifier);
                 return;
             }
 
-            addressBook.addClassSpace(classSpace);
+            addressBook.addClassSpace(group);
         } catch (IllegalValueException | JsonProcessingException e) {
             String identifier = getRawClassSpaceIdentifier(rawClassSpaceNode, index);
             String formattedWarning = formatInvalidClassSpaceWarning(identifier, e.getMessage());

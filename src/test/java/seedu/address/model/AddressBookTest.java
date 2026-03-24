@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.testutil.PersonBuilder;
@@ -109,7 +109,7 @@ public class AddressBookTest {
         }
 
         @Override
-        public ObservableList<ClassSpace> getClassSpaceList() {
+        public ObservableList<Group> getClassSpaceList() {
             return FXCollections.observableArrayList();
         }
     }

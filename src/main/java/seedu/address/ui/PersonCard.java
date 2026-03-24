@@ -14,7 +14,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.assignment.Assignment;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.Attendance;
 import seedu.address.model.person.Person;
@@ -56,7 +56,7 @@ public class PersonCard extends UiPart<Region> {
      */
     public PersonCard(Person person, int displayedIndex, boolean showSessionDetails,
                       ClassSpaceName activeClassSpaceName, LocalDate activeSessionDate,
-                      ObservableList<ClassSpace> classSpaces) {
+                      ObservableList<Group> groups) {
         super(FXML);
         this.person = person;
         id.setText(displayedIndex + ". ");
@@ -79,12 +79,12 @@ public class PersonCard extends UiPart<Region> {
         person.getClassSpaces().stream()
                 .sorted(Comparator.comparing(classSpaceName -> classSpaceName.value,
                         String.CASE_INSENSITIVE_ORDER))
-                .forEach(classSpaceName -> groups.getChildren().add(new Label(classSpaceName.value)));
+                .forEach(classSpaceName -> this.groups.getChildren().add(new Label(classSpaceName.value)));
 
-        populateAssignments(activeClassSpaceName, classSpaces);
+        populateAssignments(activeClassSpaceName, groups);
     }
 
-    private void populateAssignments(ClassSpaceName activeClassSpaceName, ObservableList<ClassSpace> classSpaces) {
+    private void populateAssignments(ClassSpaceName activeClassSpaceName, ObservableList<Group> groups) {
         boolean shouldShowAssignments = activeClassSpaceName != null;
         assignments.setManaged(shouldShowAssignments);
         assignments.setVisible(shouldShowAssignments);
@@ -92,7 +92,7 @@ public class PersonCard extends UiPart<Region> {
             return;
         }
 
-        Optional<ClassSpace> activeClassSpace = classSpaces.stream()
+        Optional<Group> activeClassSpace = groups.stream()
                 .filter(classSpace -> classSpace.getClassSpaceName().equals(activeClassSpaceName))
                 .findFirst();
         if (activeClassSpace.isEmpty()) {

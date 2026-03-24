@@ -105,7 +105,7 @@ public class StorageManagerTest {
         String json = """
             {
               "persons": [],
-              "classSpaces": [
+              "groups": [
                 {
                   "name": "T01",
                   "assignments": []

@@ -27,7 +27,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Person;
@@ -172,32 +172,32 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasClassSpace(ClassSpace classSpace) {
+        public boolean hasClassSpace(Group group) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public Optional<ClassSpace> findClassSpaceByName(ClassSpaceName classSpaceName) {
+        public Optional<Group> findClassSpaceByName(ClassSpaceName classSpaceName) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void addClassSpace(ClassSpace classSpace) {
+        public void addClassSpace(Group group) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void deleteClassSpace(ClassSpace target) {
+        public void deleteClassSpace(Group target) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setClassSpace(ClassSpace target, ClassSpace editedClassSpace) {
+        public void setClassSpace(Group target, Group editedGroup) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public ObservableList<ClassSpace> getClassSpaceList() {
+        public ObservableList<Group> getClassSpaceList() {
             throw new AssertionError("This method should not be called.");
         }
 

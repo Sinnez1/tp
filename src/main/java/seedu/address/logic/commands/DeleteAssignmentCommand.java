@@ -9,7 +9,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.person.Person;
 
 /**
@@ -40,26 +40,26 @@ public class DeleteAssignmentCommand extends ClassScopedAssignmentCommand {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ClassSpace activeClassSpace = getActiveClassSpace(model);
-        Assignment assignmentToDelete = getRequiredAssignment(activeClassSpace, assignmentName);
+        Group activeGroup = getActiveClassSpace(model);
+        Assignment assignmentToDelete = getRequiredAssignment(activeGroup, assignmentName);
 
-        List<Assignment> updatedAssignments = new ArrayList<>(activeClassSpace.getAssignments());
+        List<Assignment> updatedAssignments = new ArrayList<>(activeGroup.getAssignments());
         updatedAssignments.remove(assignmentToDelete);
-        ClassSpace updatedClassSpace = new ClassSpace(activeClassSpace.getClassSpaceName(), updatedAssignments);
-        model.setClassSpace(activeClassSpace, updatedClassSpace);
+        Group updatedGroup = new Group(activeGroup.getClassSpaceName(), updatedAssignments);
+        model.setClassSpace(activeGroup, updatedGroup);
 
         for (Person person : List.copyOf(model.getAddressBook().getPersonList())) {
-            if (!person.hasClassSpace(activeClassSpace.getClassSpaceName())) {
+            if (!person.hasClassSpace(activeGroup.getClassSpaceName())) {
                 continue;
             }
-            Person updatedPerson = person.withoutAssignmentGrade(activeClassSpace.getClassSpaceName(), assignmentName);
+            Person updatedPerson = person.withoutAssignmentGrade(activeGroup.getClassSpaceName(), assignmentName);
             if (!updatedPerson.equals(person)) {
                 model.setPerson(person, updatedPerson);
             }
         }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, assignmentName.value,
-                activeClassSpace.getClassSpaceName().value));
+                activeGroup.getClassSpaceName().value));
     }
 
     @Override

@@ -21,7 +21,7 @@ import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.commons.util.FileUtil;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.classspace.ClassSpace;
+import seedu.address.model.classspace.Group;
 import seedu.address.model.classspace.ClassSpaceName;
 import seedu.address.model.person.MatricNumber;
 import seedu.address.testutil.PersonBuilder;
@@ -101,7 +101,7 @@ public class JsonAddressBookStorageTest {
     public void readAndSaveAddressBook_personSessionFieldsPreserved_success() throws Exception {
         Path filePath = testFolder.resolve("TempAddressBookWithSessionFields.json");
         AddressBook original = new AddressBook();
-        original.addClassSpace(new ClassSpace(new ClassSpaceName("CS2103T-T01")));
+        original.addClassSpace(new Group(new ClassSpaceName("CS2103T-T01")));
         original.addPerson(new PersonBuilder()
                 .withName("Session Student")
                 .withMatricNumber("A1234567X")
