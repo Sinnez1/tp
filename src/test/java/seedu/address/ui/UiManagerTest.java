@@ -246,6 +246,16 @@ public class UiManagerTest {
         }
 
         @Override
+        public ReadOnlyObjectProperty<LocalDate> visibleSessionRangeStartProperty() {
+            return null;
+        }
+
+        @Override
+        public ReadOnlyObjectProperty<LocalDate> visibleSessionRangeEndProperty() {
+            return null;
+        }
+
+        @Override
         public GuiSettings getGuiSettings() {
             throw new UnsupportedOperationException();
         }
