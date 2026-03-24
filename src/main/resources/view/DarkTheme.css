@@ -29,6 +29,13 @@
     -fx-font-family: "Segoe UI Semibold";
 }
 
+.text-area,
+.text-area .scroll-pane,
+.text-area .scroll-pane .viewport,
+.text-area .content {
+    -fx-background-color: transparent;
+}
+
 .tab-pane {
     -fx-padding: 0 0 0 1;
 }
@@ -85,6 +92,18 @@
     -fx-border-radius: 1;
     -fx-border-width: 1;
     -fx-background-color: derive(#1d1d1d, 20%);
+}
+
+.split-pane-divider {
+    -fx-background-color: #4a4a4a;
+}
+
+.split-pane-divider:hover {
+    -fx-background-color: #555555; /* subtle hover feedback */
+}
+
+.split-pane-divider:pressed {
+    -fx-background-color: #777777;
 }
 
 .list-view {

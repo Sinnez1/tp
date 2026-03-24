@@ -2,9 +2,11 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -37,6 +39,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane commandBoxPlaceholder;
+
+    @FXML
+    private SplitPane mainSplitPane;
 
     @FXML
     private MenuItem helpMenuItem;
@@ -146,6 +151,8 @@ public class MainWindow extends UiPart<Stage> {
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+
+        Platform.runLater(() -> mainSplitPane.setDividerPositions(0.10, 0.25)); // Startup size of the resizeable pane
     }
 
     /**

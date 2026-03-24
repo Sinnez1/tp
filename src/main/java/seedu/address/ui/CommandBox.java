@@ -2,7 +2,10 @@ package seedu.address.ui;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+//import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -19,7 +22,7 @@ public class CommandBox extends UiPart<Region> {
     private final CommandExecutor commandExecutor;
 
     @FXML
-    private TextField commandTextField;
+    private TextArea commandTextField;
 
     /**
      * Creates a {@code CommandBox} with the given {@code CommandExecutor}.
@@ -37,7 +40,7 @@ public class CommandBox extends UiPart<Region> {
     @FXML
     private void handleCommandEntered() {
         String commandText = commandTextField.getText();
-        if (commandText.equals("")) {
+        if (commandText.isEmpty()) {
             return;
         }
 
@@ -47,6 +50,21 @@ public class CommandBox extends UiPart<Region> {
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         }
+    }
+
+    /**
+     * Handles the Enter button pressed event for TextArea,
+     * to handle migration from TextField to TextArea,
+     * to support resizeable panels.
+     */
+    @FXML
+    private void initialize() {
+        commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
+                event.consume(); // stop newline
+                handleCommandEntered();
+            }
+        });
     }
 
     /**
