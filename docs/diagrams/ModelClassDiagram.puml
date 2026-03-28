@@ -22,6 +22,7 @@ Class AssignmentName
 Class SessionList
 Class Session
 Class Attendance
+Class Participation
 Class Person
 Class MatricNumber
 Class Email
@@ -62,8 +63,8 @@ Person *-> " * " SessionList
 Person --> "*" AssignmentName
 SessionList *--> " * " Session
 Session *--> "1 " Attendance
-'Lucas can add Participation here
-'Kawai can add LocalDate here
+Session *--> "1 " Participation
+'Kawai can add LocalDate class here
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
