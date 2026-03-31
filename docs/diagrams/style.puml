@@ -34,9 +34,9 @@
 !define USER_COLOR #000000
 
 skinparam Package {
+    FontSize 16
     BackgroundColor #FFFFFF
     BorderThickness 1
-    FontSize 16
 }
 
 skinparam Class {
@@ -56,15 +56,21 @@ skinparam Actor {
 
 skinparam Sequence {
     MessageAlign center
-    BoxFontSize 15
+    BoxFontSize 16
     BoxPadding 0
-    BoxFontColor #FFFFFF
+    BoxFontColor #000000
     FontName Arial
 }
 
 skinparam Participant {
     FontColor #FFFFFFF
     Padding 20
+}
+
+skinparam Title {
+    FontSize 18
+    FontStyle Bold
+    Font Arial
 }
 
 skinparam ArrowFontStyle bold
@@ -74,8 +80,9 @@ skinparam Shadowing false
 skinparam DefaultTextAlignment center
 skinparam packageStyle Rectangle
 
+skinparam defaultFontSize 16
+skinparam dpi 300
+
 hide footbox
 hide members
 hide circle
-
-scale 5

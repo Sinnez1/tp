@@ -168,10 +168,7 @@ h5,
 h6 {
   color: #e46c0a;
 }
-
-img[src*=".png"], svg[src*=".puml"] {
-    max-width: 100%;
-    max-height: 55vh;
+img[src*=".png"] {
+    max-height: 60vh;
     object-fit: contain; /* Scales to fit without distortion */
-    height: auto;
 }
