@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -23,14 +24,18 @@
       </HBox>
       <Label fx:id="attendanceMatrixScrollHint" styleClass="attendance-matrix-scroll-hint"
              text="Tip: use the bottom scrollbar to browse session columns." managed="false" visible="false" />
-      <StackPane VBox.vgrow="ALWAYS">
+      <VBox spacing="8" VBox.vgrow="ALWAYS" alignment="TOP_CENTER">
+        <Label fx:id="attendanceMatrixEmptyState" managed="false" visible="false"
+               text="No recorded sessions yet. Mark attendance or participation first to create session columns.">
+          <VBox.margin>
+            <Insets top="12" />
+          </VBox.margin>
+        </Label>
         <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true"
                     styleClass="attendance-matrix-scroll" VBox.vgrow="ALWAYS">
           <GridPane fx:id="attendanceMatrixGrid" hgap="4" vgap="4" />
         </ScrollPane>
-        <Label fx:id="attendanceMatrixEmptyState" managed="false" visible="false"
-               text="No recorded sessions yet. Mark attendance or participation first to create session columns." />
-      </StackPane>
+      </VBox>
     </VBox>
   </StackPane>
   <ListView fx:id="personListView" VBox.vgrow="ALWAYS" />
