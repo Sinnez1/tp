@@ -71,101 +71,57 @@ public class AddressBookParser {
 
         switch (commandWord) {
 
-        case AddCommand.COMMAND_WORD:
-            return new AddCommandParser().parse(arguments);
+        case AddCommand.COMMAND_WORD: return new AddCommandParser().parse(arguments);
+        case ListCommand.COMMAND_WORD: return new ListCommand();
+        case EditCommand.COMMAND_WORD: return new EditCommandParser().parse(arguments);
+        case DeleteCommand.COMMAND_WORD: return new DeleteCommandParser().parse(arguments);
+        case ClearCommand.COMMAND_WORD: return new ClearCommand();
 
-        case AddSessionCommand.COMMAND_WORD:
-            return new AddSessionCommandParser().parse(arguments);
-
-        case ViewCommand.COMMAND_WORD:
-            return new ViewCommandParser().parse(arguments);
-
-        case EditCommand.COMMAND_WORD:
-            return new EditCommandParser().parse(arguments);
-
-        case EditSessionCommand.COMMAND_WORD:
-            return new EditSessionCommandParser().parse(arguments);
-
-        case DeleteCommand.COMMAND_WORD:
-            return new DeleteCommandParser().parse(arguments);
-
-        case ClearCommand.COMMAND_WORD:
-            return new ClearCommand();
-
-        case FindCommand.COMMAND_WORD:
-            return new FindCommandParser().parse(arguments);
-
-        case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+        case MarkCommand.COMMAND_WORD: return new MarkCommandParser().parse(arguments);
+        case UnmarkCommand.COMMAND_WORD: return new UnmarkCommandParser().parse(arguments);
+        case PartCommand.COMMAND_WORD: return new PartCommandParser().parse(arguments);
 
         case CreateAssignmentCommand.COMMAND_WORD:
         case CreateAssignmentCommand.SHORT_COMMAND_WORD:
             return new CreateAssignmentCommandParser().parse(arguments);
-
         case ListAssignmentsCommand.COMMAND_WORD:
         case ListAssignmentsCommand.SHORT_COMMAND_WORD:
             return new ListAssignmentsCommandParser().parse(arguments);
-
         case GradeAssignmentCommand.COMMAND_WORD:
         case GradeAssignmentCommand.SHORT_COMMAND_WORD:
             return new GradeAssignmentCommandParser().parse(arguments);
-
         case EditAssignmentCommand.COMMAND_WORD:
         case EditAssignmentCommand.SHORT_COMMAND_WORD:
             return new EditAssignmentCommandParser().parse(arguments);
-
         case DeleteAssignmentCommand.COMMAND_WORD:
         case DeleteAssignmentCommand.SHORT_COMMAND_WORD:
             return new DeleteAssignmentCommandParser().parse(arguments);
 
-        case CreateGroupCommand.COMMAND_WORD:
-            return new CreateGroupCommandParser().parse(arguments);
-
-        case DeleteGroupCommand.COMMAND_WORD:
-            return new DeleteGroupCommandParser().parse(arguments);
-
-        case DeleteSessionCommand.COMMAND_WORD:
-            return new DeleteSessionCommandParser().parse(arguments);
-
-        case ExportViewCommand.COMMAND_WORD:
-            return new ExportViewCommandParser().parse(arguments);
-
+        case CreateGroupCommand.COMMAND_WORD: return new CreateGroupCommandParser().parse(arguments);
         case ListGroupsCommand.COMMAND_WORD:
             if (!arguments.trim().isEmpty()) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListGroupsCommand.MESSAGE_USAGE));
             }
             return new ListGroupsCommand();
+        case RenameGroupCommand.COMMAND_WORD: return new RenameGroupCommandParser().parse(arguments);
+        case SwitchGroupCommand.COMMAND_WORD: return new SwitchGroupCommandParser().parse(arguments);
+        case AddToGroupCommand.COMMAND_WORD: return new AddToGroupCommandParser().parse(arguments);
+        case RemoveFromGroupCommand.COMMAND_WORD: return new RemoveFromGroupCommandParser().parse(arguments);
+        case DeleteGroupCommand.COMMAND_WORD: return new DeleteGroupCommandParser().parse(arguments);
 
-        case SwitchGroupCommand.COMMAND_WORD:
-            return new SwitchGroupCommandParser().parse(arguments);
+        // Session commands
+        case ViewCommand.COMMAND_WORD: return new ViewCommandParser().parse(arguments);
+        case AddSessionCommand.COMMAND_WORD: return new AddSessionCommandParser().parse(arguments);
+        case EditSessionCommand.COMMAND_WORD: return new EditSessionCommandParser().parse(arguments);
+        case UndoSessionCommand.COMMAND_WORD: return new UndoSessionCommand();
+        case DeleteSessionCommand.COMMAND_WORD: return new DeleteSessionCommandParser().parse(arguments);
+        case ExportViewCommand.COMMAND_WORD: return new ExportViewCommandParser().parse(arguments);
 
-        case AddToGroupCommand.COMMAND_WORD:
-            return new AddToGroupCommandParser().parse(arguments);
+        case FindCommand.COMMAND_WORD: return new FindCommandParser().parse(arguments);
 
-        case RemoveFromGroupCommand.COMMAND_WORD:
-            return new RemoveFromGroupCommandParser().parse(arguments);
-
-        case RenameGroupCommand.COMMAND_WORD:
-            return new RenameGroupCommandParser().parse(arguments);
-
-        case PartCommand.COMMAND_WORD:
-            return new PartCommandParser().parse(arguments);
-
-        case MarkCommand.COMMAND_WORD:
-            return new MarkCommandParser().parse(arguments);
-
-        case UnmarkCommand.COMMAND_WORD:
-            return new UnmarkCommandParser().parse(arguments);
-
-        case UndoSessionCommand.COMMAND_WORD:
-            return new UndoSessionCommand();
-
-        case ExitCommand.COMMAND_WORD:
-            return new ExitCommand();
-
-        case HelpCommand.COMMAND_WORD:
-            return new HelpCommand();
+        case HelpCommand.COMMAND_WORD: return new HelpCommand();
+        case ExitCommand.COMMAND_WORD: return new ExitCommand();
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

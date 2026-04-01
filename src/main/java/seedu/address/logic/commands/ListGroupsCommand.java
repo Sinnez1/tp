@@ -15,6 +15,7 @@ import seedu.address.model.group.Group;
 public class ListGroupsCommand extends Command {
 
     public static final String COMMAND_WORD = "listgroups";
+    public static final String COMMAND_PARAMETERS = "";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all groups.";
     public static final String MESSAGE_NO_GROUPS = "There are no groups yet.";

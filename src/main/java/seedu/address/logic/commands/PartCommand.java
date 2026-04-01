@@ -24,17 +24,15 @@ import seedu.address.model.person.Session;
 public class PartCommand extends Command {
 
     public static final String COMMAND_WORD = "part";
+    public static final String COMMAND_PARAMETERS = "i/INDEX pv/PARTICIPATION_VALUE d/YYYY-MM-DD"
+                    + " (PARTICIPATION_VALUE must be an integer from 0 to 5)\n";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Assigns participation to the person identified by the index number in the displayed person list.\n"
-            + "Parameters:\n"
-            + "i/INDEX pv/PARTICIPATION_VALUE d/YYYY-MM-DD"
-            + " (PARTICIPATION_VALUE must be an integer from 0 to 5)\n"
-            + "i/INDEX pv/PARTICIPATION_VALUE"
-            + " (after 'view d/YYYY-MM-DD')\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Examples:\n"
-            + COMMAND_WORD + " i/1 d/2026-03-16\n"
-            + COMMAND_WORD + " i/1 (after 'view d/YYYY-MM-DD')";
+            + COMMAND_WORD + " i/1 pv/5 d/2026-03-14\n"
+            + COMMAND_WORD + " i/1 pv/5 (after 'view d/2026-03-14')";
 
     public static final String MESSAGE_PARTICIPATION_SUCCESS =
             "Updated participation for Person: %1$s";

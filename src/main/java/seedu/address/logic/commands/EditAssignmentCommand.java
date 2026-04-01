@@ -23,10 +23,12 @@ public class EditAssignmentCommand extends ClassScopedAssignmentCommand {
 
     public static final String COMMAND_WORD = "editassignment";
     public static final String SHORT_COMMAND_WORD = "edita";
+    public static final String COMMAND_PARAMETERS =
+            "a/ASSIGNMENT_NAME [na/NEW_ASSIGNMENT_NAME] [d/NEW_DUE_DATE] [mm/NEW_MAX_MARKS]";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " (alias: " + SHORT_COMMAND_WORD + ")"
             + ": Edits an existing assignment in the current group.\n"
-            + "Parameters: a/ASSIGNMENT_NAME [na/NEW_ASSIGNMENT_NAME] [d/NEW_DUE_DATE] [mm/NEW_MAX_MARKS]\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + SHORT_COMMAND_WORD + " a/Quiz 1 na/Quiz 1 Revised d/2026-04-08 mm/25";
 
     public static final String MESSAGE_SUCCESS = "Edited assignment %1$s in %2$s.";

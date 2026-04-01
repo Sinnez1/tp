@@ -14,9 +14,10 @@ import seedu.address.model.person.Person;
 public class RenameGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "renamegroup";
+    public static final String COMMAND_PARAMETERS = "g/OLD_GROUP_NAME new/NEW_GROUP_NAME";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Renames a group.\n"
-            + "Parameters: g/OLD_GROUP_NAME new/NEW_GROUP_NAME\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " g/T01 new/Tutorial-01";
 
     public static final String MESSAGE_GROUP_NOT_FOUND = "This group does not exist.";

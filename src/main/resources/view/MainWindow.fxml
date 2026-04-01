@@ -34,7 +34,7 @@
         </MenuBar>
 
         <SplitPane fx:id="mainSplitPane" orientation="VERTICAL" VBox.vgrow="ALWAYS">
-          <StackPane fx:id="commandBoxPlaceholder" styleClass="pane-with-border" minHeight="40">
+          <StackPane fx:id="commandBoxPlaceholder" styleClass="pane-with-border" minHeight="45">
               <padding>
                   <Insets top="5" right="10" bottom="5" left="10"/>
               </padding>

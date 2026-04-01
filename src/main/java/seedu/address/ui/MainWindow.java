@@ -152,7 +152,13 @@ public class MainWindow extends UiPart<Stage> {
                 logic.currentViewProperty());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
-        CommandBox commandBox = new CommandBox(this::executeCommand);
+        CommandBox commandBox = new CommandBox(
+                this::executeCommand,
+
+                // for command autocompletion feature
+                resultDisplay::getResultText,
+                resultDisplay::setFeedbackToUser
+        );
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
         // Startup sizes of the 3 resizeable placeholders (commandBox, resultDisplay, personListPanel)

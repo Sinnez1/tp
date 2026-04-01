@@ -20,10 +20,11 @@ import seedu.address.model.person.Session;
 public class AddSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "addsession";
+    public static final String COMMAND_PARAMETERS = "d/YYYY-MM-DD [g/GROUP_NAME] [n/NOTE]";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a session for a group on a specific date.\n"
-            + "Parameters: d/YYYY-MM-DD [g/GROUP_NAME] [n/NOTE]\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " d/2026-03-16 g/T01 n/tutorial";
 
     public static final String MESSAGE_SUCCESS =

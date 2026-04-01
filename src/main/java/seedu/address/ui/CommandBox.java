@@ -1,6 +1,8 @@
 package seedu.address.ui;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,10 +23,15 @@ public class CommandBox extends UiPart<Region> {
 
     public static final String ERROR_STYLE_CLASS = "error";
     private static final String FXML = "CommandBox.fxml";
-    private static final List<String> COMMAND_SUGGESTIONS = CommandRegistry.COMMAND_WORDS;
-    // TODO: Use AddressBookParser.getCommandWords() instead to reduce duplication
+    private static final List<String> COMMAND_SUGGESTIONS = List.copyOf(CommandRegistry.COMMAND_ATTRIBUTES.keySet());
 
     private final CommandExecutor commandExecutor;
+    private final Supplier<String> resultDisplayGetter;
+    private final Consumer<String> resultDisplaySetter;
+
+    private String savedResultText = null; // text that was in display before help was shown
+    private String activeCommandWord = null; // which word triggered the save
+
 
     @FXML
     private TextArea commandTextField; // TODO: Rename this to Area without breaking downstream
@@ -33,14 +40,25 @@ public class CommandBox extends UiPart<Region> {
     private Label ghostTextLabel;
 
     /**
-     * Creates a {@code CommandBox} with the given {@code CommandExecutor}.
+     * Creates a {@code CommandBox} with the given {@code CommandExecutor} and result display callbacks.
+     *
+     * @param commandExecutor     the executor used to run commands entered by the user
+     * @param resultDisplayGetter a supplier that retrieves the current text shown in the result display,
+     *                            used to save and restore it when contextual help is shown or dismissed
+     * @param resultDisplaySetter a consumer that updates the result display text,
+     *                            used to show contextual parameter help when a recognised command word is typed
      */
-    public CommandBox(CommandExecutor commandExecutor) {
+    public CommandBox(CommandExecutor commandExecutor,
+                      Supplier<String> resultDisplayGetter,
+                      Consumer<String> resultDisplaySetter) {
         super(FXML);
         this.commandExecutor = commandExecutor;
+        this.resultDisplayGetter = resultDisplayGetter;
+        this.resultDisplaySetter = resultDisplaySetter;
         commandTextField.textProperty().addListener((unused1, unused2, newText) -> {
             setStyleToDefault();
             updateGhostText(newText);
+            updateContextualHelp(newText); // new
         });
     }
 
@@ -54,12 +72,49 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
+        // Reset before setText("") triggers the listener, otherwise the listener
+        // would try to restore savedResultText over the command's own result message
+        savedResultText = null;
+        activeCommandWord = null;
+
         try {
             commandExecutor.execute(commandText);
             commandTextField.setText("");
             clearGhostText();
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
+        }
+    }
+
+    private void updateContextualHelp(String input) {
+        if (input == null || input.isBlank()) {
+            restoreResultDisplay();
+            return;
+        }
+
+        String commandWord = input.stripLeading().split("\\s+")[0].toLowerCase();
+        String parameters = CommandRegistry.COMMAND_ATTRIBUTES.get(commandWord);
+
+        if (parameters != null && !parameters.isBlank()) {
+            if (!commandWord.equals(activeCommandWord)) {
+                if (activeCommandWord == null) {
+                    // Only save once — don't overwrite with a half-saved state
+                    savedResultText = resultDisplayGetter.get();
+                }
+                activeCommandWord = commandWord;
+                resultDisplaySetter.accept(commandWord + " " + parameters);
+            }
+            // if same command word as before, do nothing to avoid flickering
+        } else {
+            restoreResultDisplay();
+        }
+    }
+
+    private void restoreResultDisplay() {
+        if (activeCommandWord != null) {
+            resultDisplaySetter.accept(savedResultText != null ? savedResultText : "");
+            savedResultText = null;
+            activeCommandWord = null;
         }
     }
 
