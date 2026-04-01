@@ -80,7 +80,7 @@ public class Email {
     public Email(String email) {
         requireNonNull(email);
         checkArgument(isValidEmail(email), getDiagnosticMessage(email));
-        value = email;
+        value = email.toLowerCase();
         logger.fine("Created Email: " + value);
     }
 
@@ -279,12 +279,12 @@ public class Email {
         }
 
         Email otherEmail = (Email) other;
-        return value.equals(otherEmail.value);
+        return value.equalsIgnoreCase(otherEmail.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase().hashCode();
     }
 
 }

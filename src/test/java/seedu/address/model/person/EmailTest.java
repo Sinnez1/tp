@@ -200,12 +200,6 @@ public class EmailTest {
 
         // EP: different values -> returns false
         assertFalse(email.equals(new Email("other.valid@email")));
-
-        //EP: different cases in local part of email
-        assertFalse(email.equals(new Email("Valid@email")));
-
-        //EP: different case in domain of email
-        assertFalse(email.equals(new Email("valid@Email")));
     }
 
     @Test
@@ -229,5 +223,36 @@ public class EmailTest {
         // EP: calling hashCode twice on the same object should return the same value
         Email email = new Email("valid@email");
         assertEquals(email.hashCode(), email.hashCode());
+    }
+
+    @Test
+    public void constructor_mixedCaseEmail_normalisesToLowerCase() {
+        // EP: mixed case input — should be stored as lowercase
+        Email email = new Email("User@Example.COM");
+        assertEquals("user@example.com", email.value);
+    }
+
+    @Test
+    public void equals_sameAddressDifferentCase_returnsTrue() {
+        // EP: case-insensitive for local part
+        Email localPartLower = new Email("valid@email");
+        Email localPartUpper = new Email("Valid@email");
+        assertTrue(localPartLower.equals(localPartUpper));
+
+        // EP: case-insensitivity for domain
+        Email domainLower = new Email("valid@email");
+        Email domainUpper = new Email("Valid@EmaiL");
+        assertTrue(domainLower.equals(domainUpper));
+
+
+
+    }
+
+    @Test
+    public void hashCode_sameAddressDifferentCase_returnsSameHashCode() {
+        // EP: equal emails (case-insensitive) must produce the same hash code
+        Email lower = new Email("valid@email");
+        Email upper = new Email("Valid@Email");
+        assertEquals(lower.hashCode(), upper.hashCode());
     }
 }
