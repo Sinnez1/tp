@@ -7,7 +7,6 @@ import java.util.Map;
  */
 public class CommandRegistry {
 
-    // Commands are listed in alphabetical order
     public static final Map<String, String> COMMAND_ATTRIBUTES = Map.ofEntries(
             Map.entry(AddCommand.COMMAND_WORD, AddCommand.COMMAND_PARAMETERS),
             Map.entry(AddSessionCommand.COMMAND_WORD, AddSessionCommand.COMMAND_PARAMETERS),
