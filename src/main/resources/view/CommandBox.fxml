@@ -10,7 +10,7 @@
            minHeight="40"
            prefHeight="40">
 
-    <TextArea fx:id="commandTextField"
+    <TextArea fx:id="commandTextArea"
               minHeight="40"
               prefHeight="40"
               wrapText="true"/>

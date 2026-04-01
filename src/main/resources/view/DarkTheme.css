@@ -336,7 +336,7 @@
     -fx-text-fill: #F70D1A;
 }
 
-#commandTextField {
+#commandTextArea {
     -fx-background-color: transparent #383838 transparent #383838;
     -fx-background-insets: 0;
     -fx-border-color: #383838 #383838 #ffffff #383838;

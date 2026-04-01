@@ -23,7 +23,10 @@ public class CommandBox extends UiPart<Region> {
 
     public static final String ERROR_STYLE_CLASS = "error";
     private static final String FXML = "CommandBox.fxml";
-    private static final List<String> COMMAND_SUGGESTIONS = List.copyOf(CommandRegistry.COMMAND_ATTRIBUTES.keySet());
+    private static final List<String> COMMAND_SUGGESTIONS = CommandRegistry.COMMAND_ATTRIBUTES.keySet()
+            .stream()
+            .sorted()
+            .toList();
 
     private final CommandExecutor commandExecutor;
     private final Supplier<String> resultDisplayGetter;
@@ -34,7 +37,7 @@ public class CommandBox extends UiPart<Region> {
 
 
     @FXML
-    private TextArea commandTextField; // TODO: Rename this to Area without breaking downstream
+    private TextArea commandTextArea;
 
     @FXML
     private Label ghostTextLabel;
@@ -46,7 +49,7 @@ public class CommandBox extends UiPart<Region> {
      * @param resultDisplayGetter a supplier that retrieves the current text shown in the result display,
      *                            used to save and restore it when contextual help is shown or dismissed
      * @param resultDisplaySetter a consumer that updates the result display text,
-     *                            used to show contextual parameter help when a recognised command word is typed
+     *                            used to show contextual parameter help when a recognized command word is typed
      */
     public CommandBox(CommandExecutor commandExecutor,
                       Supplier<String> resultDisplayGetter,
@@ -55,7 +58,7 @@ public class CommandBox extends UiPart<Region> {
         this.commandExecutor = commandExecutor;
         this.resultDisplayGetter = resultDisplayGetter;
         this.resultDisplaySetter = resultDisplaySetter;
-        commandTextField.textProperty().addListener((unused1, unused2, newText) -> {
+        commandTextArea.textProperty().addListener((unused1, unused2, newText) -> {
             setStyleToDefault();
             updateGhostText(newText);
             updateContextualHelp(newText); // new
@@ -67,7 +70,7 @@ public class CommandBox extends UiPart<Region> {
      */
     @FXML
     private void handleCommandEntered() {
-        String commandText = commandTextField.getText();
+        String commandText = commandTextArea.getText();
         if (commandText.isBlank()) {
             return;
         }
@@ -79,7 +82,7 @@ public class CommandBox extends UiPart<Region> {
 
         try {
             commandExecutor.execute(commandText);
-            commandTextField.setText("");
+            commandTextArea.setText("");
             clearGhostText();
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
@@ -92,14 +95,14 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
-        String commandWord = input.stripLeading().split("\\s+")[0].toLowerCase();
+        String commandWord = extractCommandWord(input);
         String parameters = CommandRegistry.COMMAND_ATTRIBUTES.get(commandWord);
 
         if (parameters != null && !parameters.isBlank()) {
             if (!commandWord.equals(activeCommandWord)) {
                 if (activeCommandWord == null) {
-                    // Only save once — don't overwrite with a half-saved state
                     savedResultText = resultDisplayGetter.get();
+                    // We only save once and don't overwrite with a half-saved state
                 }
                 activeCommandWord = commandWord;
                 resultDisplaySetter.accept(commandWord + " " + parameters);
@@ -110,9 +113,16 @@ public class CommandBox extends UiPart<Region> {
         }
     }
 
+    static String extractCommandWord(String input) {
+        return input.stripLeading().split("\\s+")[0].toLowerCase();
+    }
+
     private void restoreResultDisplay() {
         if (activeCommandWord != null) {
-            resultDisplaySetter.accept(savedResultText != null ? savedResultText : "");
+            resultDisplaySetter.accept(savedResultText != null
+                            ? savedResultText
+                            : "");
+
             savedResultText = null;
             activeCommandWord = null;
         }
@@ -125,7 +135,7 @@ public class CommandBox extends UiPart<Region> {
      */
     @FXML
     private void initialize() {
-        commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        commandTextArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             // handle ENTER key
             if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
                 event.consume();
@@ -137,8 +147,8 @@ public class CommandBox extends UiPart<Region> {
                 event.consume(); // Prevent focus from shifting to another element
                 String suggestion = ghostTextLabel.getText();
                 if (!suggestion.isBlank()) {
-                    commandTextField.setText(suggestion + " ");
-                    commandTextField.positionCaret(commandTextField.getText().length());
+                    commandTextArea.setText(suggestion + " ");
+                    commandTextArea.positionCaret(commandTextArea.getText().length());
                     clearGhostText();
                 }
             }
@@ -149,14 +159,14 @@ public class CommandBox extends UiPart<Region> {
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {
-        commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
+        commandTextArea.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
     /**
      * Sets the command box style to indicate a failed command.
      */
     private void setStyleToIndicateCommandFailure() {
-        ObservableList<String> styleClass = commandTextField.getStyleClass();
+        ObservableList<String> styleClass = commandTextArea.getStyleClass();
 
         if (styleClass.contains(ERROR_STYLE_CLASS)) {
             return;
@@ -179,14 +189,14 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
-        String trimmedInput = input.stripLeading();
+        String trimmedInput = input.stripLeading().toLowerCase();
         if (trimmedInput.isEmpty() || trimmedInput.contains(" ")) {
             clearGhostText();
             return;
         }
 
-        String suggestion = findSuggestion(trimmedInput.toLowerCase());
-        if (suggestion == null || suggestion.equals(trimmedInput.toLowerCase())) {
+        String suggestion = findSuggestion(trimmedInput);
+        if (suggestion == null || suggestion.equals(trimmedInput)) {
             clearGhostText();
             return;
         }
@@ -199,7 +209,19 @@ public class CommandBox extends UiPart<Region> {
      * Returns the first matching command suggestion for the input.
      */
     private String findSuggestion(String input) {
-        for (String command : COMMAND_SUGGESTIONS) {
+        return findSuggestion(input, COMMAND_SUGGESTIONS);
+    }
+
+    /**
+     * Returns the first matching command suggestion for the given input.
+     * Static method for easy unit testing without JavaFX dependencies.
+     *
+     * @param input the user input (should be lowercase)
+     * @param suggestions list of available command suggestions
+     * @return the first matching suggestion, or null if no match found
+     */
+    static String findSuggestion(String input, List<String> suggestions) {
+        for (String command : suggestions) {
             if (command.startsWith(input)) {
                 return command;
             }
