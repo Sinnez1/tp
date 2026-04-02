@@ -26,8 +26,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
-    private static final double INPUT_PANE_SIZE_RATIO = 0; // set to minimum size
-    private static final double RESPONSE_PANE_SIZE_RATIO = 0.4;
+    private static final double COMMANDBOX_STARTUP_HEIGHT_PX = 45.0;
+    private static final double RESULTDISPLAY_STARTUP_HEIGHT_PX = 120.0;
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
@@ -137,32 +137,54 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList(),
-                logic.getAddressBook().getPersonList(),
-                logic.getAddressBook().getGroupList(), logic.attendanceViewActiveProperty(),
-                logic.activeGroupNameProperty(), logic.activeSessionDateProperty(),
-                logic.visibleSessionRangeStartProperty(), logic.visibleSessionRangeEndProperty(),
-                this::executeCommand);
-        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
-        StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath(),
-                logic.currentViewProperty());
-        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
-
         CommandBox commandBox = new CommandBox(
                 this::executeCommand,
-
-                // for command autocompletion feature
+                // For command autocompletion feature:
                 resultDisplay::getResultText,
                 resultDisplay::setFeedbackToUser
         );
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
-        // Startup sizes of the 3 resizeable placeholders (commandBox, resultDisplay, personListPanel)
-        Platform.runLater(() -> mainSplitPane.setDividerPositions(INPUT_PANE_SIZE_RATIO, RESPONSE_PANE_SIZE_RATIO));
+        personListPanel = new PersonListPanel(logic.getFilteredPersonList(),
+                logic.getAddressBook().getPersonList(),
+                logic.getAddressBook().getGroupList(),
+                logic.attendanceViewActiveProperty(),
+                logic.activeGroupNameProperty(),
+                logic.activeSessionDateProperty(),
+                logic.visibleSessionRangeStartProperty(),
+                logic.visibleSessionRangeEndProperty(),
+                this::executeCommand);
+        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+
+        StatusBarFooter statusBarFooter = new StatusBarFooter(
+                logic.getAddressBookFilePath(),
+                logic.currentViewProperty());
+        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
+
+        // Make commandBox and resultDisplay not resize when resizing app window:
+        SplitPane.setResizableWithParent(commandBoxPlaceholder, false);
+        SplitPane.setResizableWithParent(resultDisplayPlaceholder, false);
+        SplitPane.setResizableWithParent(personListPanelPlaceholder, true);
+        // exclude personListPanelPlaceholder so that it absorbs window resizes
+
+        // Calculate startup heights of the 2 resizeable placeholders (commandBox, resultDisplay):
+        Platform.runLater(() -> {
+            // Default to minimum height first
+            double commandBoxStartupHeightRatio = 0;
+            double resultDisplayStartupHeightRatio = 0;
+            double mainSplitPaneHeight = mainSplitPane.getHeight();
+            if (mainSplitPaneHeight > 0) {
+                commandBoxStartupHeightRatio = COMMANDBOX_STARTUP_HEIGHT_PX / mainSplitPaneHeight;
+                resultDisplayStartupHeightRatio = (COMMANDBOX_STARTUP_HEIGHT_PX + RESULTDISPLAY_STARTUP_HEIGHT_PX)
+                        / mainSplitPaneHeight;
+            }
+
+            mainSplitPane.setDividerPositions(commandBoxStartupHeightRatio, resultDisplayStartupHeightRatio);
+        });
     }
 
     /**

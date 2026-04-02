@@ -12,7 +12,6 @@
 
     <TextArea fx:id="commandTextArea"
               minHeight="40"
-              prefHeight="40"
               wrapText="true"/>
 
     <Label fx:id="ghostTextLabel"
