@@ -35,7 +35,7 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
             + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Examples:\n"
             + SHORT_COMMAND_WORD + " a/Quiz 1 i/1,3-5 gr/17\n"
-            + SHORT_COMMAND_WORD + " a/Quiz 1 m/A1234567X m/A2345678Y gr/17";
+            + SHORT_COMMAND_WORD + " a/Quiz 1 m/A1234567X m/A2345678L gr/17";
 
     public static final String MESSAGE_GRADE_OUT_OF_RANGE =
             "Grade must be between 0 and the assignment's max marks inclusive.";
