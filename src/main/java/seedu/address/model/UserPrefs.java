@@ -15,7 +15,7 @@ import seedu.address.commons.core.GuiSettings;
 public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
-    private Path addressBookFilePath = Paths.get("data" , "addressbook.json");
+    private Path addressBookFilePath = Paths.get("data" , "TAA_savefile.json");
     private String lastActiveGroupName;
     private String lastActiveSessionDate;
     private boolean attendanceViewActive;
