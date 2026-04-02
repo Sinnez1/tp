@@ -486,22 +486,26 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to add a wrong contact
-2.  User requests to list persons
-3.  AddressBook shows a list of persons
-4.  User requests to delete that contact in the list
-5.  AddressBook deletes the person
-6.  User requests to add the correct contact
+1.  User requests to list persons
+2.  AddressBook shows a list of persons
+3.  User requests to edit a specific contact in the list
+4.  AddressBook updates the contact and shows a confirmation message
 
     Use case ends.
 
 **Extensions**
 
-* 4a. The given index is invalid.
+* 3a. The given index is invalid.
 
-    * 4a1. AddressBook shows an error message.
+    * 3a1. AddressBook shows an error message.
 
-      Use case resumes at step 3.
+      Use case resumes at step 2.
+
+* 3b. No fields to edit are provided.
+
+    * 3b1. AddressBook shows an error message.
+
+      Use case resumes at step 2.
 
 ---
 
