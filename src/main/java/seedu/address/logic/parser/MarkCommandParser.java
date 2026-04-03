@@ -34,7 +34,6 @@ public class MarkCommandParser implements Parser<MarkCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INDEXES, PREFIX_DATE, PREFIX_GROUP);
-        
         try {
             Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEXES).get());
             Optional<LocalDate> date = Optional.empty();
