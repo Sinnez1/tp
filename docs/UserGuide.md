@@ -454,22 +454,245 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+Your data will be saved automatically as a JSON file `[JAR file location]/data/TAA_savefile.json` after any command that changes the data.
+You do not need to save any changes manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/TAA_savefile.json`. Advanced users are welcome to update data directly by editing that data file.
+You are welcome to update data directly by editing the `TAA_savefile.json` data file. 
+We recommend that you back up your data before beginning.
+
+<panel header="How do I back up my data?" type="seamless">
+
+1. Open the folder where `TAA.jar` is located.
+2. Locate the `data` folder, which contains `TAA_savefile.json`.
+3. Copy the `data` folder to another location of your choice.
+
+</panel>
 
 <box type="warning" seamless>
-
-**Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+You should follow the format below closely to prevent an invalid file.
 </box>
 
-### Archiving data files `[coming in v2.0]`
+```json
+{
+  "persons" : [ {
+    "name" : NAME,
+    "phone" : PHONE_NUMBER,
+    "email" : EMAIL,
+    "matricNumber" : MATRIC_NUMBER,
+    "attendance" : ATTENDANCE_STATUS,
+    "participation" : PARTICIPATION_VALUE,
+    "tags" : [ TAGS ],
+    "groups" : [ GROUP_NAME ],
+    "groupSessions" : {
+      GROUP_NAME : [ {
+        "date" : YYYY-MM-DD,
+        "attendance" : ATTENDANCE_STATUS,
+        "participation" : PARTICIPATION_VALUE,
+        "note" : NOTE
+      } ]
+    },
+    "assignmentGrades" : {
+      GROUP_NAME : {
+        ASSIGNMENT_NAME : ASSIGNMENT_MARKS (integer, must be less than or equal to MAX_MARKS)
+      }
+    }
+  } ],
+  "groups" : [ {
+    "name" : GROUP_NAME,
+    "assignments" : [ {
+      "name" : ASSIGNMENT_NAME,
+      "dueDate" : YYYY-MM-DD,
+      "maxMarks" : MAX_MARKS
+    } ]
+  } ]
+}
+```
+<panel header="Here's an example of how a manually edited `TAA_savefile.json` looks like!" type="seamless">
 
-_Details coming soon ..._
+The example below will load 1 contact, named `John`, belonging to the group `T02` with an assignment named `Assignment 1` where he has scored 100 / 100 marks. <br>
+`John` is present on the session on 2026-04-03, in which he has a participation value of 3.
+
+```json
+{
+  "persons" : [ {
+    "name" : "John",
+    "phone" : "12345678",
+    "email" : "example@gmail.com",
+    "matricNumber" : "A1234567X",
+    "attendance" : "PRESENT",
+    "participation" : 3,
+    "tags" : [ ],
+    "groups" : [ "T02" ],
+    "groupSessions" : {
+      "T02" : [ {
+        "date" : "2026-04-03",
+        "attendance" : "PRESENT",
+        "participation" : 3,
+        "note" : ""
+      } ]
+    },
+    "assignmentGrades" : {
+      "T02" : {
+        "Assignment 1" : 100
+      }
+    }
+  } ],
+  "groups" : [ {
+    "name" : "T02",
+    "assignments" : [ {
+      "name" : "Assignment 1",
+      "dueDate" : "2026-05-01",
+      "maxMarks" : 100
+    } ]
+  } ]
+}
+```
+</panel>
+
+<box type="tip" seamless>
+
+**Tip:**
+If your changes to the data file makes its format invalid, TAA will not overwrite your data file. You can close TAA and manually fix the data file.
+</box>
+
+<panel header="I see `preservedSkippedPersons`, `preservedSkippedGroups` and `loadWarnings` in my data file. What are they?" type="seamless" expanded>
+
+These sections will be loaded into your data file once you start TAA.
+
+```json
+  "preservedSkippedPersons" : [ ],
+  "preservedSkippedGroups" : [ ],
+  "loadWarnings" : [ ]
+```
+
+* `preservedSkippedPersons` holds all invalid person contacts.
+* `preservedSkippedGroups` holds all invalid groups.
+* `loadWarnings` holds warning messages, telling you why the respective person(s) or group(s) are invalid. <br>
+
+<box type="tip">
+
+**Tip:**
+You can read the <code>loadWarnings</code> as a reference to fix your data file. <br> These warnings will be regenerated once you rerun TAA to inform you of any errors remaining.
+</box>
+
+</panel>
+
+<panel header="What happens if my manually edited person contacts are invalid?" type="seamless" expanded>
+
+You will see an error message telling you how many contacts are invalid once TAA starts running.
+
+<box type="warning">
+
+**Warning:**
+Please close TAA before fixing the contacts, or your changes will be lost. <br>
+You can also refer to `loadWarnings` in the data file to see the errors for each contact.
+</box>
+You can fix the invalid contacts by editing them in the <code>preservedSkippedPersons</code> section of the data file.<br>
+Once these contacts are valid, TAA will automatically load these contacts on the next run and clear the <code>loadWarnings</code>.
+<panel header="Here's an example of how `preservedSkippedPersons` looks like with an invalid contact!" type="seamless" expanded>
+
+```json
+"preservedSkippedPersons" : [ {
+    "name" : "John",
+    "phone" : "12345678",
+    "email" : "example@gmail.com",
+    "matricNumber" : "A1234567Y",
+    "attendance" : "PRESENT",
+    "participation" : 3,
+    "tags" : [ ],
+    "groups" : [ "T02" ],
+    "groupSessions" : {
+      "T02" : [ {
+        "date" : "2026-03-06",
+        "attendance" : "PRESENT",
+        "participation" : 3,
+        "note" : ""
+      } ]
+    },
+    "assignmentGrades" : {
+      "T02" : {
+        "Assignment 1" : 100
+      }
+    }
+  } ]
+"loadWarnings" : [ "Skipped invalid contact 'John':\n- The matriculation number checksum letter is incorrect. For the given digits, it should be 'X'." ]
+```
+
+The `loadWarnings` tell us that `John` has an invalid matriculation number checksum and that it should be `X`. We can fix this by editing the matriculation number from `A1234567Y` to `A1234567X`. <br>
+Rerun TAA and `John` will now be loaded into the contact list!
+
+</panel>
+
+</panel>
+
+<panel header="What happens if my manually edited groups are invalid?" type="seamless" expanded>
+
+You will see an error message telling you how many groups are invalid once TAA starts running.
+
+<box type="warning">
+
+**Warning:**
+Please close TAA before fixing the groups, or your changes will be lost. <br>
+You can also refer to `loadWarnings` in the data file to see the errors for each group.
+
+</box>
+
+<box type="info">
+
+**Info:**
+Contacts that reference invalid groups will be considered invalid and moved to `preservedSkippedPersons`.<br>
+They will automatically be loaded back once the invalid group is fixed in `preservedSkippedGroups`.
+
+</box>
+
+You can fix the invalid groups by editing them in the <code>preservedSkippedGroups</code> section of the data file.<br>
+Once the groups are valid, TAA will automatically load these groups on the next run and clear the <code>loadWarnings</code>.
+
+<panel header="Here's an example of how `preservedSkippedGroups` looks like with an invalid group!" type="seamless" expanded>
+
+```json
+"preservedSkippedPersons" : [ {
+    "name" : "John",
+    "phone" : "12345678",
+    "email" : "example@gmail.com",
+    "matricNumber" : "A1234567X",
+    "attendance" : "PRESENT",
+    "participation" : 3,
+    "tags" : [ ],
+    "groups" : [ "T02" ],
+    "groupSessions" : {
+      "T02" : [ {
+        "date" : "2026-03-06",
+        "attendance" : "PRESENT",
+        "participation" : 3,
+        "note" : ""
+      } ]
+    },
+    "assignmentGrades" : {
+      "T02" : {
+        "Assignment 1" : 100
+      }
+    }
+  } ],
+  "preservedSkippedGroups" : [ {
+    "name" : "T02#",
+    "assignments" : [ {
+      "name" : "Assignment 1",
+      "dueDate" : "2026-05-01",
+      "maxMarks" : 100
+    } ]
+  } ],
+  "loadWarnings" : [ "Skipped invalid group 'T02#':\n- Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank.", "Skipped invalid contact 'John':\n- Person references group 'T02' which does not exist in the address book." ]
+```
+
+The `loadWarnings` tell us that the group `T02#` contains an illegal character, and `John` is invalid since group `T02` does not exist. We can fix this by fixing the group name to be `T02` in `preservedSkippedGroups`.<br>
+Rerun TAA and group `T02` will exist. `John` will also be loaded into the contact list and remains a part of `T02`!
+
+</panel>
+
+</panel>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -520,3 +743,20 @@ Action     | Format, Examples
 **Rename Group**   | `renamegroup g/OLD_GROUP_NAME new/NEW_GROUP_NAME` <br> e.g., `renamegroup g/T01 new/Tutorial-01`
 **Switch Group**   | `switchgroup g/GROUP_NAME` `switchgroup all` <br> e.g., `switchgroup g/T01`
 **Unmark Attendance**   | `unmark i/INDEX d/YYYY-MM-DD` <br> e.g., `unmark i/1 d/2026-03-16`
+
+## Troubleshooting
+
+### Manual editing
+
+#### Troubleshooting manual editing of persons
+ Problem                               | Error shown |                              How to fix                              |
+:--------------------------------------|:-----------:|:--------------------------------------------------------------------:|
+ Invalid or blank name                 |    TODO     |         Ensure that name follows the constraints given here.         
+ Invalid or blank phone                |    TODO     |        Ensure that phone follows the constraints given here.         
+ Invalid or blank matriculation number |    TODO     | Ensure that matriculation number follows the constraints given here. 
+ Invalid matriculation number number checksum        | TODO | Change the matriculation number checksum to the correct one as given in the error message |
+Person has
+
+
+
+
