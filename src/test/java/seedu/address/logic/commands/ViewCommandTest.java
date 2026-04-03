@@ -24,7 +24,7 @@ import seedu.address.testutil.PersonBuilder;
 /**
  * Contains integration tests (interaction with the Model) for {@code ViewCommand}.
  */
-public class AttViewCommandTest {
+public class ViewCommandTest {
     private static final GroupName T01 = new GroupName("T01");
     private static final GroupName T02 = new GroupName("T02");
     private static final LocalDate SESSION_DATE = LocalDate.of(2026, 3, 16);

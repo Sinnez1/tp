@@ -11,7 +11,7 @@ import seedu.address.logic.commands.ViewCommand;
 import seedu.address.model.group.GroupName;
 import seedu.address.model.person.Attendance;
 
-public class AttViewCommandParserTest {
+public class ViewCommandParserTest {
 
     private final ViewCommandParser parser = new ViewCommandParser();
 
