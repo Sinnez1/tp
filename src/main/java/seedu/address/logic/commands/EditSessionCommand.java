@@ -19,11 +19,12 @@ import seedu.address.model.person.Session;
 public class EditSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "editsession";
+    public static final String COMMAND_PARAMETERS =
+            "d/OLD_DATE (at least one of: nd/NEW_DATE, nn/NEW_NOTE) [g/GROUP_NAME]";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Changes a session date or note for a group.\n"
-            + "Parameters: d/OLD_DATE [nd/NEW_DATE] [nn/NEW_NOTE] [g/GROUP_NAME]\n"
-            + "At least one of nd/ or nn/ must be provided.\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " d/2026-03-16 nd/2026-03-23 nn/tutorial g/T01";
 
     public static final String MESSAGE_SUCCESS = "Updated session %1$s in group %2$s.";

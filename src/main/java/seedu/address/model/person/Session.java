@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -17,6 +18,9 @@ public class Session {
     public static final String MESSAGE_CONSTRAINTS =
             "Date must be a valid calendar date in the format yyyy-MM-dd.";
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final String MESSAGE_CONSTRAINTS = "Date should be in the format yyyy-MM-dd.";
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+            .withResolverStyle(ResolverStyle.STRICT); // ensures days must be valid for each month, not just in general
 
     private final LocalDate date;
     private final Attendance attendance;

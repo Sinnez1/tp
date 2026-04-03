@@ -8,6 +8,6 @@
     "name": "Person With Invalid Phone Field",
     "phone": "948asdf2424",
     "email": "hans@example.com",
-    "matricNumber": "A0123456J"
+    "matricNumber": "A0123456X"
   } ]
 }

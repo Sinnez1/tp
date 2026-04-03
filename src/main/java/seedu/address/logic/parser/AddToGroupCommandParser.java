@@ -18,6 +18,7 @@ import seedu.address.model.person.MatricNumber;
 /**
  * Parses input arguments and creates a new AddToGroupCommand object.
  */
+// @@author ongrussell
 public class AddToGroupCommandParser implements Parser<AddToGroupCommand> {
 
     @Override
@@ -58,3 +59,4 @@ public class AddToGroupCommandParser implements Parser<AddToGroupCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
+// @@author

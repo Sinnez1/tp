@@ -262,4 +262,42 @@ public class JsonAddressBookStorageTest {
         // so storage warnings should be empty after a fatal load failure
         assertEquals(0, storage.getLastLoadWarnings().size());
     }
+
+    @Test
+    public void readAddressBook_emptyFile_returnsEmptyAddressBook() throws Exception {
+        // BVA: zero-byte file → Optional.empty() (triggers sample data)
+        Path filePath = testFolder.resolve("emptyAddressBook.json");
+        java.nio.file.Files.createFile(filePath);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        java.util.Optional<ReadOnlyAddressBook> result = storage.readAddressBook(filePath);
+
+        assertFalse(result.isPresent(), "Empty file should return Optional.empty() to trigger sample data");
+    }
+
+    @Test
+    public void readAddressBook_blankFile_returnsEmptyAddressBook() throws Exception {
+        // EP: whitespace-only content → Optional.empty() (triggers sample data)
+        Path filePath = testFolder.resolve("blankAddressBook.json");
+        java.nio.file.Files.writeString(filePath, "   \n  \t  ");
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        java.util.Optional<ReadOnlyAddressBook> result = storage.readAddressBook(filePath);
+
+        assertFalse(result.isPresent(), "Blank file should return Optional.empty() to trigger sample data");
+    }
+
+    @Test
+    public void readAddressBook_clearedAddressBook_returnsEmptyNotSampleData() throws Exception {
+        // After clear, the saved JSON has empty arrays — must load as empty, not sample data.
+        Path filePath = testFolder.resolve("clearedAddressBook.json");
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        storage.saveAddressBook(new AddressBook(), filePath);
+
+        java.util.Optional<ReadOnlyAddressBook> result = storage.readAddressBook(filePath);
+
+        assertTrue(result.isPresent(), "Cleared address book should return empty book, not Optional.empty()");
+        assertEquals(0, new AddressBook(result.get()).getPersonList().size());
+        assertEquals(0, new AddressBook(result.get()).getGroupList().size());
+    }
 }

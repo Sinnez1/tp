@@ -72,6 +72,17 @@ public class AddSessionCommandTest {
     }
 
     @Test
+    public void execute_groupHasNoStudents_throwsHelpfulCommandException() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+
+        AddSessionCommand command = new AddSessionCommand(SESSION_DATE);
+        String expectedMessage = String.format(AddSessionCommand.MESSAGE_NO_STUDENTS_IN_GROUP, T01);
+        assertThrows(CommandException.class, expectedMessage, () -> command.execute(model));
+    }
+
+    @Test
     public void equals() {
         AddSessionCommand first = new AddSessionCommand(SESSION_DATE);
         AddSessionCommand second = new AddSessionCommand(LocalDate.of(2026, 3, 17));

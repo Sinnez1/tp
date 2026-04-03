@@ -250,6 +250,7 @@ public class ParserUtil {
             return LocalDate.parse(trimmedDate, Session.DATE_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new ParseException(Session.MESSAGE_CONSTRAINTS);
+            // TODO: Show specific and nicer error messages for user
         }
     }
 }

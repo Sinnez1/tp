@@ -1,0 +1,27 @@
+{
+  "persons": [],
+  "groups": [],
+  "preservedSkippedPersons": [
+    {
+      "name": "Alice Pauline",
+      "phone": "94351253",
+      "email": "alice@example.com",
+      "matricNumber": "A0102034E",
+      "attendance": "UNINITIALISED",
+      "participation": 0,
+      "tags": [],
+      "groups": [
+        "T01"
+      ],
+      "groupSessions": {},
+      "assignmentGrades": {}
+    }
+  ],
+  "preservedSkippedGroups": [
+    {
+      "name": "T01",
+      "assignments": []
+    }
+  ],
+  "loadWarnings": []
+}

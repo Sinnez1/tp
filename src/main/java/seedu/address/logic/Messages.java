@@ -39,7 +39,6 @@ public class Messages {
      * Uses the legacy person-level attendance and participation fields.
      */
     public static String format(Person person) {
-        // TODO: Remove. This is legacy from pre-Session class.
 
         final StringBuilder builder = new StringBuilder();
         builder.append(person.getName())
@@ -51,7 +50,7 @@ public class Messages {
                 .append(person.getEmail())
                 .append("; Matric Number: ")
                 .append(person.getMatricNumber())
-                .append("; Participation: ")
+                .append("; Participation: ") // TODO: Remove. This is legacy from pre-Session class.
                 .append(person.getParticipation())
                 .append("; Tags: ");
         return getString(person, builder);

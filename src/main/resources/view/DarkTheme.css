@@ -336,7 +336,7 @@
     -fx-text-fill: #F70D1A;
 }
 
-#commandTextField {
+#commandTextArea {
     -fx-background-color: transparent #383838 transparent #383838;
     -fx-background-insets: 0;
     -fx-border-color: #383838 #383838 #ffffff #383838;
@@ -345,6 +345,13 @@
     -fx-font-family: "Segoe UI Light";
     -fx-font-size: 13pt;
     -fx-text-fill: white;
+}
+
+#ghostTextLabel {
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-padding: 6 0 0 12; /* tweaked until aligned, don't change */
 }
 
 #filterField, #personListPanel, #personWebpage {

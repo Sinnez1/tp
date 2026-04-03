@@ -230,6 +230,49 @@ public class AttViewCommandTest {
     }
 
     @Test
+    public void execute_refocusDate_preservesExistingVisibleRange() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+        model.setVisibleSessionRange(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 4, 1));
+        model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 0).build());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(T01);
+        expectedModel.setVisibleSessionRange(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 4, 1));
+        expectedModel.setActiveSessionDate(SESSION_DATE);
+        expectedModel.setAttendanceViewActive(true);
+        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        ViewCommand command = new ViewCommand(SESSION_DATE);
+        assertCommandSuccess(command, model,
+                String.format(ViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE), expectedModel);
+    }
+
+    @Test
+    public void execute_plainView_clearsExistingVisibleRange() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+        model.setVisibleSessionRange(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 4, 1));
+        model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
+                .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(T01);
+        expectedModel.setAttendanceViewActive(true);
+        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        ViewCommand command = new ViewCommand();
+        assertCommandSuccess(command, model,
+                String.format(ViewCommand.MESSAGE_OVERVIEW_SUCCESS, 1, T01), expectedModel);
+        assertTrue(model.getVisibleSessionRangeStart().isEmpty());
+        assertTrue(model.getVisibleSessionRangeEnd().isEmpty());
+    }
+
+    @Test
     public void toStringMethod() {
         Attendance attendance = new Attendance("ABSENT");
         ViewCommand command = new ViewCommand(attendance, SESSION_DATE);

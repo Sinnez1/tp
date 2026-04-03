@@ -16,6 +16,7 @@ import seedu.address.model.assignment.UniqueAssignmentList;
  * This concept is purely internal to the codebase, and all user-facing strings should use the term
  * "{@code GROUP_NAME}".
  */
+// @@author ongrussell
 public class Group {
     private final GroupName groupName;
     private final UniqueAssignmentList assignments;
@@ -116,3 +117,4 @@ public class Group {
         return groupName.value;
     }
 }
+// @@author

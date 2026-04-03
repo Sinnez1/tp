@@ -19,9 +19,11 @@ public class DeleteAssignmentCommand extends ClassScopedAssignmentCommand {
 
     public static final String COMMAND_WORD = "deleteassignment";
     public static final String SHORT_COMMAND_WORD = "deletea";
+    public static final String COMMAND_PARAMETERS = "a/ASSIGNMENT_NAME";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " (alias: " + SHORT_COMMAND_WORD + ")"
             + ": Deletes an assignment from the current group.\n"
+            + "This command only works when viewing a specific group.\n"
             + "Parameters: a/ASSIGNMENT_NAME\n"
             + "Example: " + SHORT_COMMAND_WORD + " a/Quiz 1";
 

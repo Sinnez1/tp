@@ -19,9 +19,11 @@ public class CreateAssignmentCommand extends ClassScopedAssignmentCommand {
 
     public static final String COMMAND_WORD = "createassignment";
     public static final String SHORT_COMMAND_WORD = "createa";
+    public static final String COMMAND_PARAMETERS = "a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " (alias: " + SHORT_COMMAND_WORD + ")"
             + ": Creates an assignment in the current group.\n"
+            + "This command only works when viewing a specific group.\n"
             + "Parameters: a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS\n"
             + "Example: " + SHORT_COMMAND_WORD + " a/Quiz 1 d/2026-04-05 mm/20";
 

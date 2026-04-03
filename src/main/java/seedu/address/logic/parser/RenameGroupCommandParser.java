@@ -13,6 +13,7 @@ import seedu.address.model.group.GroupName;
 /**
  * Parses input arguments and creates a new RenameGroupCommand object.
  */
+// @@author ongrussell
 public class RenameGroupCommandParser implements Parser<RenameGroupCommand> {
 
     @Override
@@ -32,3 +33,4 @@ public class RenameGroupCommandParser implements Parser<RenameGroupCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
+// @@author

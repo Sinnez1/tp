@@ -7,6 +7,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  * Represents the name of a group.
  * Guarantees: immutable; is valid as declared in {@link #isValidGroupName(String)}.
  */
+// @@author ongrussell
 public class GroupName {
 
     public static final String MESSAGE_CONSTRAINTS = "Group names should only contain letters, numbers, "
@@ -56,3 +57,4 @@ public class GroupName {
         return value.toLowerCase().hashCode();
     }
 }
+// @@author

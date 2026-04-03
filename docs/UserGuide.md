@@ -67,6 +67,19 @@ Teacher Assistant's Assistant (TAA) is a **desktop app for Manage all student-re
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+### Managing assignments
+
+Assignments can only be managed when viewing a specific group using `switchgroup g/GROUP_NAME`.
+
+* `createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` creates an assignment in the current group.
+* `lista` lists all assignments in the current group, including due date, max marks, and graded count.
+* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER gr/GRADE` assigns grades to students in the current group.
+
+Examples:
+* `createa a/Quiz 1 d/2026-04-05 mm/20`
+* `lista`
+* `gradea a/Quiz 1 i/1,3-5 gr/17`
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -445,7 +458,7 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+AddressBook data are saved automatically as a JSON file `[JAR file location]/data/TAA_savefile.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 

@@ -12,6 +12,7 @@ import seedu.address.model.group.GroupName;
 /**
  * Parses input arguments and creates a new DeleteGroupCommand object.
  */
+// @@author ongrussell
 public class DeleteGroupCommandParser implements Parser<DeleteGroupCommand> {
 
     @Override
@@ -30,3 +31,4 @@ public class DeleteGroupCommandParser implements Parser<DeleteGroupCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
+// @@author

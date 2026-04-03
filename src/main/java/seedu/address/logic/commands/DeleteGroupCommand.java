@@ -14,12 +14,14 @@ import seedu.address.model.person.Person;
 /**
  * Deletes a group.
  */
+// @@author ongrussell
 public class DeleteGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "deletegroup";
+    public static final String COMMAND_PARAMETERS = "g/GROUP_NAME";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Deletes a group.\n"
-            + "Parameters: g/GROUP_NAME\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " g/T01";
 
     public static final String MESSAGE_SUCCESS = "Deleted group: %1$s";
@@ -72,3 +74,4 @@ public class DeleteGroupCommand extends Command {
         return groupName.equals(otherCommand.groupName);
     }
 }
+// @@author

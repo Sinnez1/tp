@@ -10,6 +10,8 @@ import seedu.address.model.Model;
  */
 public class UndoSessionCommand extends Command {
     public static final String COMMAND_WORD = "undosession";
+    public static final String COMMAND_PARAMETERS = "";
+
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undoes the last session-related change.";
     public static final String MESSAGE_NO_HISTORY = "There is no session change to undo.";
     public static final String MESSAGE_SUCCESS = "Undid session change: %1$s";

@@ -19,6 +19,7 @@ import seedu.address.model.person.Person;
 /**
  * Shared logic for commands that target students for group membership updates.
  */
+// @@author ongrussell
 abstract class GroupMembershipCommand extends Command {
 
     protected final GroupName groupName;
@@ -65,3 +66,4 @@ abstract class GroupMembershipCommand extends Command {
         return new ArrayList<>(resolvedPersons);
     }
 }
+// @@author

@@ -17,6 +17,7 @@ import seedu.address.model.person.MatricNumber;
 /**
  * Parses input arguments and creates a new RemoveFromGroupCommand object.
  */
+// @@author ongrussell
 public class RemoveFromGroupCommandParser implements Parser<RemoveFromGroupCommand> {
 
     @Override
@@ -59,3 +60,4 @@ public class RemoveFromGroupCommandParser implements Parser<RemoveFromGroupComma
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
+// @@author

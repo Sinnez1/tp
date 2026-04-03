@@ -12,12 +12,14 @@ import seedu.address.model.group.Group;
 /**
  * Creates a new group.
  */
+// @@author ongrussell
 public class CreateGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "creategroup";
+    public static final String COMMAND_PARAMETERS = "g/GROUP_NAME";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Creates a group.\n"
-            + "Parameters: g/GROUP_NAME\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " g/T01";
 
     public static final String MESSAGE_SUCCESS = "Created group: %1$s";
@@ -56,3 +58,4 @@ public class CreateGroupCommand extends Command {
         return group.equals(otherCommand.group);
     }
 }
+// @@author

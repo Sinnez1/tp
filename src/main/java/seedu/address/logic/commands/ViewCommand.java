@@ -23,16 +23,18 @@ import seedu.address.model.person.Session;
 public class ViewCommand extends Command {
 
     public static final String COMMAND_WORD = "view";
+    public static final String COMMAND_PARAMETERS =
+            "[g/GROUP_NAME] [PRESENT/ABSENT/UNINITIALISED] [d/YYYY-MM-DD] [from/YYYY-MM-DD] [to/YYYY-MM-DD]";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Shows attendance and participation view for a specific session or the whole class overview.\n"
-            + "Parameters: [STATUS] [d/YYYY-MM-DD] [g/GROUP_NAME] [from/YYYY-MM-DD] [to/YYYY-MM-DD]\n"
-            + "Allowed values: PRESENT, ABSENT, UNINITIALISED\n"
-            + "Examples: " + COMMAND_WORD + "\n"
-            + "          " + COMMAND_WORD + " PRESENT d/2026-03-16\n"
-            + "          " + COMMAND_WORD + " d/2026-03-16 g/T01\n"
-            + "          " + COMMAND_WORD + " ABSENT d/2026-03-16 g/T01\n"
-            + "          " + COMMAND_WORD + " from/2026-03-01 to/2026-03-31";
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
+            + "Examples:\n"
+            + COMMAND_WORD + "\n"
+            + COMMAND_WORD + " PRESENT d/2026-03-16\n"
+            + COMMAND_WORD + " d/2026-03-16 g/T01\n"
+            + COMMAND_WORD + " ABSENT d/2026-03-16 g/T01\n"
+            + COMMAND_WORD + " from/2026-03-01 to/2026-03-31";
 
     public static final String MESSAGE_SUCCESS =
             "Listed %1$d students with attendance %2$s in group %3$s for session %4$s";
@@ -148,7 +150,7 @@ public class ViewCommand extends Command {
         model.setAttendanceViewActive(true);
         if (rangeStartDate.isPresent() || rangeEndDate.isPresent()) {
             model.setVisibleSessionRange(rangeStartDate.orElse(null), rangeEndDate.orElse(null));
-        } else {
+        } else if (shouldResetVisibleRange()) {
             model.clearVisibleSessionRange();
         }
 
@@ -200,6 +202,10 @@ public class ViewCommand extends Command {
                 model.setPerson(person, updatedPerson);
             }
         }
+    }
+
+    private boolean shouldResetVisibleRange() {
+        return attendance.isEmpty() && groupName.isEmpty() && sessionDate.isEmpty();
     }
 
     @Override

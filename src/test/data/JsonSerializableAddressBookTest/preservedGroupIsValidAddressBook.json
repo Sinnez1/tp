@@ -1,0 +1,12 @@
+{
+  "persons": [],
+  "groups": [],
+  "preservedSkippedPersons": [],
+  "preservedSkippedGroups": [
+    {
+      "name": "T01-Fixed",
+      "assignments": []
+    }
+  ],
+  "loadWarnings": []
+}

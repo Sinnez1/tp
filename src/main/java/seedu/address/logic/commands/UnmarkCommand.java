@@ -23,16 +23,14 @@ import seedu.address.model.person.Session;
 public class UnmarkCommand extends Command {
 
     public static final String COMMAND_WORD = "unmark";
+    public static final String COMMAND_PARAMETERS = "i/INDEX d/YYYY-MM-DD";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Marks the person identified by the index number used in the displayed person list as ABSENT.\n"
-            + "Parameters:\n"
-            + "i/INDEX d/YYYY-MM-DD\n"
-            + "i/INDEX"
-            + " (after 'view d/YYYY-MM-DD')\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Examples:\n"
-            + COMMAND_WORD + " i/1 d/2026-03-16\n"
-            + COMMAND_WORD + " i/1 (after 'view d/YYYY-MM-DD')";
+            + COMMAND_WORD + " i/1 d/2026-03-14\n"
+            + COMMAND_WORD + " i/1 (after 'view d/2026-03-14')";
 
     public static final String MESSAGE_UNMARK_SUCCESS =
             "Marked Person as ABSENT: %1$s";

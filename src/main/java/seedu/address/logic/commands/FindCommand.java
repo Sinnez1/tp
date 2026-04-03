@@ -17,16 +17,16 @@ import seedu.address.model.person.PersonMatchesFieldsPredicate;
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
-
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all people whose fields match any of the "
-            + "specified parameters (case-insensitive) and displays them as a list with better matches "
-            + "first.\n"
-            + "Parameters: "
-            + "[n/NAME]... "
+    public static final String COMMAND_PARAMETERS =
+            "[n/NAME]... "
             + "[p/PHONE]... "
             + "[e/EMAIL]... "
             + "[m/MATRICULATION_NUMBER]... "
-            + "[t/TAG]...\n"
+            + "[t/TAG]...";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all people whose fields match any of the "
+            + "specified parameters (case-insensitive) and displays them as a list with better matches first.\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "At least one parameter must be provided.\n"
             + "Example: " + COMMAND_WORD + " "
             + "n/John Doe "

@@ -376,8 +376,7 @@ public class PersonListPanel extends UiPart<Region> {
                     + (sessionNote.isBlank() ? "" : "\nNote: " + sessionNote)
                     + "\nClick to focus this session";
             headerLabel.setTooltip(new Tooltip(fullDateText));
-            headerLabel.setOnMouseClicked(event -> executeUiCommand(
-                    "view d/" + sessionDate.format(COMMAND_DATE_FORMATTER)));
+            headerLabel.setOnMouseClicked(event -> executeUiCommand(buildViewCommandForSessionDate(sessionDate)));
         }
         headerLabel.setPadding(new Insets(8));
         headerLabel.setMinHeight(MATRIX_CELL_HEIGHT);
@@ -466,6 +465,20 @@ public class PersonListPanel extends UiPart<Region> {
                 .filter(note -> !note.isBlank())
                 .findFirst()
                 .orElse("");
+    }
+
+    private String buildViewCommandForSessionDate(LocalDate sessionDate) {
+        StringBuilder commandBuilder = new StringBuilder("view d/")
+                .append(sessionDate.format(COMMAND_DATE_FORMATTER));
+        if (currentVisibleRangeStart != null) {
+            commandBuilder.append(" from/")
+                    .append(currentVisibleRangeStart.format(COMMAND_DATE_FORMATTER));
+        }
+        if (currentVisibleRangeEnd != null) {
+            commandBuilder.append(" to/")
+                    .append(currentVisibleRangeEnd.format(COMMAND_DATE_FORMATTER));
+        }
+        return commandBuilder.toString();
     }
 
     private void executeUiCommand(String commandText) {

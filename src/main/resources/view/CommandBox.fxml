@@ -2,11 +2,23 @@
 
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Label?>
 
-<StackPane styleClass="stack-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-    <TextArea fx:id="commandTextField"
-              promptText="Enter command here..."
-              wrapText="true"
-              prefRowCount="2"
-              minHeight="35"/>
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           prefWidth="600"
+           minHeight="40"
+           prefHeight="40">
+
+    <TextArea fx:id="commandTextArea"
+              minHeight="40"
+              wrapText="true"/>
+
+    <Label fx:id="ghostTextLabel"
+           id="ghostTextLabel"
+           mouseTransparent="true"
+           focusTraversable="false"
+           visible="false"
+           maxWidth="Infinity"
+           StackPane.alignment="TOP_LEFT" />
 </StackPane>

@@ -19,14 +19,18 @@ import seedu.address.model.person.Person;
 /**
  * Adds one or more students to a group.
  */
+// @@author ongrussell
 public class AddToGroupCommand extends GroupMembershipCommand {
 
     public static final String COMMAND_WORD = "addtogroup";
+    public static final String COMMAND_PARAMETERS =
+            "g/GROUP_NAME (m/MATRIC_NUMBER [m/MATRIC_NUMBER]... | i/INDEX_EXPRESSION)";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds one or more students to a group.\n"
-            + "Parameters: g/GROUP_NAME (m/MATRIC_NUMBER [m/MATRIC_NUMBER]... | i/INDEX_EXPRESSION)\n"
-            + "Examples: " + COMMAND_WORD + " g/T01 m/A1234567B m/A2345678C\n"
-            + "          " + COMMAND_WORD + " g/T01 i/1,3-5";
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
+            + "Examples:\n"
+            + COMMAND_WORD + " g/T01 m/A1234567X m/A2345678L\n"
+            + COMMAND_WORD + " g/T01 i/1,3-5";
 
     public static final String MESSAGE_GROUP_NOT_FOUND = "This group does not exist.";
     private static final Logger logger = LogsCenter.getLogger(AddToGroupCommand.class);
@@ -105,3 +109,4 @@ public class AddToGroupCommand extends GroupMembershipCommand {
         return names.stream().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining(", "));
     }
 }
+// @@author

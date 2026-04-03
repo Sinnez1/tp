@@ -12,15 +12,18 @@ import seedu.address.model.group.GroupName;
 /**
  * Switches the current displayed view to all students or a group.
  */
+// @@author ongrussell
 public class SwitchGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "switchgroup";
     public static final String ALL_VIEW_KEYWORD = "all";
+    public static final String COMMAND_PARAMETERS = "g/GROUP_NAME | " + ALL_VIEW_KEYWORD;
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Switches the current displayed view.\n"
-            + "Parameters: all OR g/GROUP_NAME\n"
-            + "Examples: " + COMMAND_WORD + " all\n"
-            + "          " + COMMAND_WORD + " g/T01";
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
+            + "Examples:\n"
+            + COMMAND_WORD + " all\n"
+            + COMMAND_WORD + " g/T01";
 
     public static final String MESSAGE_SWITCHED_TO_ALL = "Switched to all students view.";
     public static final String MESSAGE_SWITCHED_TO_GROUP = "Switched to group: %1$s";
@@ -66,3 +69,4 @@ public class SwitchGroupCommand extends Command {
         return Objects.equals(groupName, otherCommand.groupName);
     }
 }
+// @@author

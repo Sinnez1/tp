@@ -13,6 +13,7 @@ import seedu.address.model.group.GroupName;
 /**
  * Parses input arguments and creates a new CreateGroupCommand object.
  */
+// @@author ongrussell
 public class CreateGroupCommandParser implements Parser<CreateGroupCommand> {
 
     @Override
@@ -31,3 +32,4 @@ public class CreateGroupCommandParser implements Parser<CreateGroupCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
+// @@author

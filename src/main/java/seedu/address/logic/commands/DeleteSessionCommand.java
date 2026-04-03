@@ -18,11 +18,12 @@ import seedu.address.model.person.Person;
 public class DeleteSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "deletesession";
+    public static final String COMMAND_PARAMETERS = "d/YYYY-MM-DD [g/GROUP_NAME]";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a session for a group on a specific date.\n"
             + "Warning: this removes attendance and participation records for every student in that group.\n"
-            + "Parameters: d/YYYY-MM-DD [g/GROUP_NAME]\n"
+            + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " d/2026-03-16 g/T01";
 
     public static final String MESSAGE_SUCCESS =

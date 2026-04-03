@@ -144,6 +144,27 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void switchToGroupView_clearsSessionSpecificContext() {
+        AddressBook addressBook = new AddressBookBuilder().build();
+        GroupName currentGroup = new GroupName("T01");
+        GroupName targetGroup = new GroupName("T02");
+        addressBook.addGroup(new Group(currentGroup));
+        addressBook.addGroup(new Group(targetGroup));
+        modelManager = new ModelManager(addressBook, new UserPrefs());
+
+        modelManager.switchToGroupView(currentGroup);
+        modelManager.setActiveSessionDate(LocalDate.of(2026, 3, 16));
+        modelManager.setVisibleSessionRange(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 3, 31));
+
+        modelManager.switchToGroupView(targetGroup);
+
+        assertEquals(targetGroup, modelManager.getActiveGroupName().orElseThrow());
+        assertTrue(modelManager.getActiveSessionDate().isEmpty());
+        assertTrue(modelManager.getVisibleSessionRangeStart().isEmpty());
+        assertTrue(modelManager.getVisibleSessionRangeEnd().isEmpty());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();

@@ -14,6 +14,7 @@ import seedu.address.model.group.exceptions.GroupNotFoundException;
 /**
  * A list of groups that enforces uniqueness between its elements and does not allow nulls.
  */
+// @@author ongrussell
 public class UniqueGroupList implements Iterable<Group> {
 
     private final ObservableList<Group> internalList = FXCollections.observableArrayList();
@@ -120,3 +121,4 @@ public class UniqueGroupList implements Iterable<Group> {
         return true;
     }
 }
+// @@author

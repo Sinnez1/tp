@@ -11,7 +11,10 @@
     "groupSessions" : { },
     "assignmentGrades" : { }
   } ],
-  "groups" : [ ],
+  "groups" : [ {
+    "name" : "T01",
+    "assignments" : [ ]
+  } ],
   "preservedSkippedPersons" : [ {
     "name" : "Alex Yeoh",
     "phone" : "87438807",
@@ -29,5 +32,5 @@
     }
   } ],
   "preservedSkippedGroups" : [ ],
-  "loadWarnings" : [ "Skipped invalid contact 'Alex Yeoh':\n- Person has a grade for assignment 'FakeAssignment' in group 'T01',but that assignment does not exist." ]
+  "loadWarnings" : [ ]
 }

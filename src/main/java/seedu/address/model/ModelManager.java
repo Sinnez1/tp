@@ -243,6 +243,8 @@ public class ModelManager implements Model {
     public void switchToGroupView(GroupName groupName) {
         requireNonNull(groupName);
         activeGroupName.set(groupName);
+        clearActiveSessionDate();
+        clearVisibleSessionRange();
         currentAdditionalPredicate = PREDICATE_SHOW_ALL_PERSONS;
         currentComparator = null;
         updateCurrentViewLabel();

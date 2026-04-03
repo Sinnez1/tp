@@ -10,6 +10,7 @@ import seedu.address.model.group.GroupName;
 /**
  * Parses input arguments and creates a new SwitchGroupCommand object.
  */
+// @@author ongrussell
 public class SwitchGroupCommandParser implements Parser<SwitchGroupCommand> {
 
     @Override
@@ -29,3 +30,4 @@ public class SwitchGroupCommandParser implements Parser<SwitchGroupCommand> {
         return new SwitchGroupCommand(groupName);
     }
 }
+// @@author

@@ -59,6 +59,12 @@ public class JsonSerializableAddressBookTest {
             TEST_DATA_FOLDER.resolve("invalidAssignmentNameAddressBook.json");
     private static final Path MISSING_NAME_GROUP_FILE =
             TEST_DATA_FOLDER.resolve("missingNameGroupAddressBook.json");
+    private static final Path PRESERVED_GROUP_IS_VALID =
+            TEST_DATA_FOLDER.resolve("preservedGroupIsValidAddressBook.json");
+    private static final Path PRESERVED_PERSON_IS_VALID =
+            TEST_DATA_FOLDER.resolve("preservedPersonIsValidAddressBook.json");
+    private static final Path PRESERVED_GROUP_AND_PERSON_IS_VALID =
+            TEST_DATA_FOLDER.resolve("preservedGroupAndPersonIsValidAddressBook.json");
 
     @Test
     public void toModelType_invalidPersonWithMultipleInvalidFields_formatsWarningAsBulletList() throws Exception {
@@ -391,15 +397,18 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
-    public void toModelType_loadWarningsInFile_survivesReload() throws Exception {
+    public void toModelType_preservedPersonStillInvalid_warningIsRegeneratedNotRestored() throws Exception {
+        // EP: warning exists in JSON file → must be regenerated from current state, not read from file
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(PRESERVED_SKIPPED_PERSONS_FILE,
                 JsonSerializableAddressBook.class).orElseThrow();
 
+        // Before toModelType(), warnings must be empty even though the JSON file has them.
+        assertEquals(0, dataFromFile.getLoadWarnings().size());
+
         dataFromFile.toModelType();
 
-        // The load warning from the file should still be present after toModelType().
-        assertTrue(dataFromFile.getLoadWarnings().stream()
-                .anyMatch(w -> w.contains("FakeAssignment")));
+        // Warning still appears because Alex still fails — but it was regenerated, not restored.
+        assertTrue(dataFromFile.getLoadWarnings().stream().anyMatch(w -> w.contains("FakeAssignment")));
     }
 
     @Test
@@ -481,5 +490,54 @@ public class JsonSerializableAddressBookTest {
 
         assertEquals(1, dataFromFile.getLoadWarnings().size());
         assertTrue(dataFromFile.getLoadWarnings().get(0).contains("entry #1 (missing name)"));
+    }
+
+    @Test
+    public void toModelType_preservedPersonNowValid_isMovedToValidPersonAndNoWarning() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(PRESERVED_PERSON_IS_VALID,
+                JsonSerializableAddressBook.class).orElseThrow();
+
+        AddressBook addressBook = dataFromFile.toModelType();
+
+        assertEquals(1, addressBook.getPersonList().size(), "Alice should be moved to valid person");
+        assertEquals("Alice Pauline", addressBook.getPersonList().get(0).getName().fullName);
+        assertEquals(0, dataFromFile.getPreservedSkippedPersons().size(), "Preserved list should be empty");
+        assertEquals(0, dataFromFile.getLoadWarnings().size(), "No warning for a valid entry");
+    }
+
+    @Test
+    public void toModelType_preservedGroupNowValid_isMovedToValidGroupAndNoWarning() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(PRESERVED_GROUP_IS_VALID,
+                JsonSerializableAddressBook.class).orElseThrow();
+
+        AddressBook addressBook = dataFromFile.toModelType();
+
+        assertEquals(1, addressBook.getGroupList().size(), "T01-Fixed should be promoted");
+        assertEquals("T01-Fixed", addressBook.getGroupList().get(0).getGroupName().value);
+        assertEquals(0, dataFromFile.getPreservedSkippedGroups().size());
+        assertEquals(0, dataFromFile.getLoadWarnings().size());
+    }
+
+    @Test
+    public void toModelType_preservedGroupAndPersonBothNowValid_bothMovedToValidSuccessfully() throws Exception {
+        // T01 was previously an invalid group — now fixed and in preservedSkippedGroups.
+        // Alice was previously skipped because T01 didn't exist — now in preservedSkippedPersons.
+        // On this load: T01 is revalidated and moved to valid group first, then Alice passes because T01 now exists.
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(
+                PRESERVED_GROUP_AND_PERSON_IS_VALID,
+                JsonSerializableAddressBook.class).orElseThrow();
+
+        AddressBook addressBook = dataFromFile.toModelType();
+
+        // Both should be moved to valid group.
+        assertEquals(1, addressBook.getGroupList().size(), "T01 should be moved from preserved groups");
+        assertEquals("T01", addressBook.getGroupList().get(0).getGroupName().value);
+        assertEquals(1, addressBook.getPersonList().size(), "Alice should be moved from preserved persons");
+        assertEquals("Alice Pauline", addressBook.getPersonList().get(0).getName().fullName);
+
+        // Nothing left in preserved lists and no warnings.
+        assertEquals(0, dataFromFile.getPreservedSkippedGroups().size());
+        assertEquals(0, dataFromFile.getPreservedSkippedPersons().size());
+        assertEquals(0, dataFromFile.getLoadWarnings().size());
     }
 }
