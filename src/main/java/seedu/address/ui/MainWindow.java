@@ -204,7 +204,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Returns true if the given window position/size is in the screen's visual bounds.
+     * Returns true if the given app window position/size is in the screen's visual bounds.
      */
     private boolean isWithinScreenBounds(int x, int y, double width, double height) {
         for (javafx.stage.Screen screen : javafx.stage.Screen.getScreens()) {
@@ -224,6 +224,8 @@ public class MainWindow extends UiPart<Stage> {
     public void handleHelp() {
         if (!helpWindow.isShowing()) {
             helpWindow.show();
+        } else if (helpWindow.isMinimized()) {
+            helpWindow.restoreAndFocus();
         } else {
             helpWindow.focus();
         }
