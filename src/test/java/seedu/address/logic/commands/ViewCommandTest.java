@@ -24,7 +24,7 @@ import seedu.address.testutil.PersonBuilder;
 /**
  * Contains integration tests (interaction with the Model) for {@code ViewCommand}.
  */
-public class AttViewCommandTest {
+public class ViewCommandTest {
     private static final GroupName T01 = new GroupName("T01");
     private static final GroupName T02 = new GroupName("T02");
     private static final LocalDate SESSION_DATE = LocalDate.of(2026, 3, 16);
@@ -192,7 +192,7 @@ public class AttViewCommandTest {
     }
 
     @Test
-    public void executeNoFilter_missingSession_persistsDefaultSession() {
+    public void executeNoFilter_missingSession_throwsCommandException() {
         Model model = new ModelManager();
         model.addGroup(new Group(T01));
         model.switchToGroupView(T01);
@@ -200,33 +200,15 @@ public class AttViewCommandTest {
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(matricNumber)
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.switchToGroupView(T01);
-        expectedModel.setActiveSessionDate(SESSION_DATE);
-        expectedModel.setAttendanceViewActive(true);
-        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
-
-        var expectedOriginalPerson = expectedModel.findPersonByMatricNumber(new MatricNumber(matricNumber))
-                .orElseThrow();
-        var expectedUpdatedPerson = expectedOriginalPerson.withUpdatedSession(
-                T01,
-                new seedu.address.model.person.Session(SESSION_DATE,
-                        new Attendance(Attendance.Status.UNINITIALISED),
-                        new seedu.address.model.person.Participation(0))
-        );
-        expectedModel.setPerson(expectedOriginalPerson, expectedUpdatedPerson);
-
         ViewCommand command = new ViewCommand(T01, SESSION_DATE);
-        assertCommandSuccess(command, model,
-                String.format(ViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE),
-                expectedModel);
+        String expectedMessage = String.format(ViewCommand.MESSAGE_SESSION_NOT_CREATED, SESSION_DATE, T01);
+        assertThrows(CommandException.class,
+                expectedMessage, () -> command.execute(model));
 
         assertTrue(model.findPersonByMatricNumber(new MatricNumber(matricNumber))
                 .orElseThrow()
                 .getGroupSessions()
-                .get(T01)
-                .getSession(SESSION_DATE)
-                .isPresent());
+                .get(T01) == null);
     }
 
     @Test

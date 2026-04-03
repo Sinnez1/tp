@@ -4,8 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -13,9 +11,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.group.GroupName;
 import seedu.address.model.person.Attendance;
-import seedu.address.model.person.Participation;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.Session;
 
 /**
  * Shows attendance and participation information for the current group.
@@ -48,6 +43,9 @@ public class ViewCommand extends Command {
             "This group does not exist.";
     public static final String MESSAGE_NO_ACTIVE_GROUP =
             "No group selected. Enter a group first or provide g/GROUP_NAME.";
+    public static final String MESSAGE_SESSION_NOT_CREATED =
+            "Session %1$s has not been created in group %2$s yet. "
+                    + "Use addsession to create it, or use mark, unmark, or part to create it implicitly.";
     public static final String MESSAGE_NO_ACTIVE_SESSION =
             "No session selected. Provide d/YYYY-MM-DD or mark attendance/participation for a session first.";
 
@@ -156,8 +154,10 @@ public class ViewCommand extends Command {
 
         if (resolvedSessionDate.isPresent()) {
             LocalDate targetSessionDate = resolvedSessionDate.get();
+            if (sessionDate.isPresent() && !sessionExistsForGroup(model, targetGroup, targetSessionDate)) {
+                throw new CommandException(String.format(MESSAGE_SESSION_NOT_CREATED, targetSessionDate, targetGroup));
+            }
             model.setActiveSessionDate(targetSessionDate);
-            initializeMissingSessionsForCurrentView(model, targetGroup, targetSessionDate);
         }
 
         if (attendance.isEmpty()) {
@@ -189,19 +189,12 @@ public class ViewCommand extends Command {
                 MESSAGE_SUCCESS, matchCount, targetAttendance, targetGroup, targetSessionDate));
     }
 
-    private void initializeMissingSessionsForCurrentView(Model model, GroupName groupName, LocalDate date) {
-        List<Person> personsInCurrentView = new ArrayList<>(model.getFilteredPersonList());
-        for (Person person : personsInCurrentView) {
-            boolean sessionExists = Optional.ofNullable(person.getGroupSessions().get(groupName))
-                    .flatMap(sessionList -> sessionList.getSession(date))
-                    .isPresent();
-            if (!sessionExists) {
-                Session defaultSession = new Session(date, new Attendance(Attendance.Status.UNINITIALISED),
-                        new Participation(0), "");
-                Person updatedPerson = person.withUpdatedSession(groupName, defaultSession);
-                model.setPerson(person, updatedPerson);
-            }
-        }
+    private boolean sessionExistsForGroup(Model model, GroupName groupName, LocalDate date) {
+        return model.getAddressBook().getPersonList().stream()
+                .filter(person -> person.hasGroup(groupName))
+                .map(person -> person.getGroupSessions().get(groupName))
+                .filter(sessionList -> sessionList != null)
+                .anyMatch(sessionList -> sessionList.getSession(date).isPresent());
     }
 
     private boolean shouldResetVisibleRange() {
