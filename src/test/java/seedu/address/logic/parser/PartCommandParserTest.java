@@ -13,6 +13,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.PartCommand;
 import seedu.address.model.group.GroupName;
 import seedu.address.model.person.Participation;
+import seedu.address.model.person.Session;
 
 public class PartCommandParserTest {
 
@@ -41,5 +42,10 @@ public class PartCommandParserTest {
     public void parse_missingIndex_failure() {
         assertParseFailure(parser, " pv/3",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, PartCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_invalidDate_failure() {
+        assertParseFailure(parser, " i/1 pv/3 d/2026-04-300", Session.MESSAGE_CONSTRAINTS);
     }
 }

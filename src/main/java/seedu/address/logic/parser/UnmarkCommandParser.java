@@ -35,24 +35,19 @@ public class UnmarkCommandParser implements Parser<UnmarkCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INDEXES, PREFIX_DATE, PREFIX_GROUP);
 
-        try {
-            Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEXES).get());
-            Optional<LocalDate> date = Optional.empty();
-            if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
-                date = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
-            }
-
-            Optional<GroupName> groupName = Optional.empty();
-            if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
-                groupName = Optional.of(
-                        ParserUtil.parseGroupName(argMultimap.getValue(PREFIX_GROUP).get())
-                );
-            }
-
-            return new UnmarkCommand(index, date, groupName);
-        } catch (ParseException e) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnmarkCommand.MESSAGE_USAGE), e);
+        Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEXES).get());
+        Optional<LocalDate> date = Optional.empty();
+        if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
+            date = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
         }
+
+        Optional<GroupName> groupName = Optional.empty();
+        if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
+            groupName = Optional.of(
+                    ParserUtil.parseGroupName(argMultimap.getValue(PREFIX_GROUP).get())
+            );
+        }
+
+        return new UnmarkCommand(index, date, groupName);
     }
 }

@@ -37,26 +37,25 @@ public class PartCommandParser implements Parser<PartCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INDEXES, PREFIX_DATE, PREFIX_GROUP, PREFIX_PARTICIPATION);
 
+        Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEXES).get());
+        Optional<LocalDate> date = Optional.empty();
+        if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
+            date = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
+        }
+
+        Optional<GroupName> groupName = Optional.empty();
+        if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
+            groupName = Optional.of(
+                    ParserUtil.parseGroupName(argMultimap.getValue(PREFIX_GROUP).get())
+            );
+        }
+
         try {
-            Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEXES).get());
-            Optional<LocalDate> date = Optional.empty();
-            if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
-                date = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
-            }
-
-            Optional<GroupName> groupName = Optional.empty();
-            if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
-                groupName = Optional.of(
-                        ParserUtil.parseGroupName(argMultimap.getValue(PREFIX_GROUP).get())
-                );
-            }
-
             Participation participation =
                     new Participation(argMultimap.getValue(PREFIX_PARTICIPATION).get());
-
             return new PartCommand(index, date, groupName, participation);
-        } catch (IllegalArgumentException | ParseException e) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, PartCommand.MESSAGE_USAGE), e);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getMessage(), e);
         }
     }
 }
