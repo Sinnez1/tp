@@ -13,6 +13,7 @@ import static seedu.address.testutil.TypicalPersons.AMY;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.group.Group;
+import seedu.address.model.group.GroupName;
 import seedu.address.model.person.Person;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
@@ -78,17 +81,41 @@ public class LogicManagerTest {
 
     @Test
     public void execute_malformedMarkCommandInAllStudentsView_throwsParseException() {
-        assertParseException("mark invalid", MarkCommand.MESSAGE_REQUIRES_GROUP_VIEW);
+        assertParseException("mark invalid input", MarkCommand.MESSAGE_REQUIRES_GROUP_VIEW);
     }
 
     @Test
     public void execute_malformedUnmarkCommandInAllStudentsView_throwsParseException() {
-        assertParseException("unmark invalid", UnmarkCommand.MESSAGE_REQUIRES_GROUP_VIEW);
+        assertParseException("unmark nonsense", UnmarkCommand.MESSAGE_REQUIRES_GROUP_VIEW);
     }
 
     @Test
     public void execute_malformedPartCommandInAllStudentsView_throwsParseException() {
-        assertParseException("part invalid", PartCommand.MESSAGE_REQUIRES_GROUP_VIEW);
+        assertParseException("part garbage", PartCommand.MESSAGE_REQUIRES_GROUP_VIEW);
+    }
+
+    @Test
+    public void execute_blankCommandInAllStudentsView_throwsParseException() {
+        assertParseException("   ", String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, seedu.address.logic.commands.HelpCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void execute_markCommandInGroupView_parsesNormally() {
+        GroupName tutorialGroup = new GroupName("CS2103T-T01");
+        model.addGroup(new Group(tutorialGroup));
+        model.switchToGroupView(tutorialGroup);
+        model.setActiveSessionDate(LocalDate.of(2026, 3, 14));
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(tutorialGroup);
+        expectedModel.setActiveSessionDate(LocalDate.of(2026, 3, 14));
+
+        assertCommandFailure(
+                "mark invalid input",
+                ParseException.class,
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE),
+                expectedModel
+        );
     }
 
     @Test
