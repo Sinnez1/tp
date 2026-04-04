@@ -1,6 +1,8 @@
 # Gradle build files
 /.gradle/
+/.gradle-local/
 /.gradle-user-home/
+/.gradle-user-home-coverage/
 /.gradle-user-home-attview/
 /build/
 /bin/

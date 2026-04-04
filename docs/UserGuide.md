@@ -375,19 +375,6 @@ Examples:
 * `exportview`
 * `exportview f/exports/t01-view.csv`
 
-### Undo the last session change : `undosession`
-
-Reverts the most recent session-related change.
-
-Format: `undosession`
-
-* Works for recent session changes such as `addsession`, `editsession`, confirmed `deletesession`, `mark`, `unmark`, and `part`.
-* Restores the previous session data, current class view, active highlighted date, and visible date range.
-* Only the latest session-related change can be undone.
-
-Examples:
-* `undosession`
-
 ### Create assignment : `createassignment`
 
 Creates an assignment for people in the group in current view with a due date and maximum marks.
@@ -497,7 +484,6 @@ Action     | Format, Examples
 **Edit Session**   | `editsession d/OLD_DATE [nd/NEW_DATE] [nn/NEW_NOTE] [g/GROUP_NAME]` <br> e.g., `editsession d/2026-03-16 nd/2026-03-23 nn/lab g/T01`
 **View Attendance/Participation**   | `view [STATUS] [d/YYYY-MM-DD] [g/GROUP_NAME] [from/YYYY-MM-DD] [to/YYYY-MM-DD]` <br> e.g., `view absent from/2026-03-01 to/2026-03-31`
 **Export View**   | `exportview [f/FILE_PATH]` <br> e.g., `exportview f/exports/t01-view.csv`
-**Undo Session Change**   | `undosession`
 **Clear**  | `clear`
 **Create Assignment**   | `createassignment a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` `createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` <br> e.g., `createassignment a/Quiz 1 d/2026-04-05 mm/20`
 **Create Group**   | `creategroup g/GROUP_NAME` <br> e.g., `creategroup g/T01`
