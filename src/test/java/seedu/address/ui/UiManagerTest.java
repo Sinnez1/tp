@@ -28,6 +28,7 @@ public class UiManagerTest {
 
     @Test
     public void buildStartUpMessage_fatalLoadError_displaysErrorMessage() {
+        // fatal message should be shown
         Logic logicStub = new LogicStub(0);
         UiManager uiManager = new UiManager(logicStub, List.of());
 
@@ -65,7 +66,7 @@ public class UiManagerTest {
 
     @Test
     public void buildStartUpMessage_noWarnings_returnsSuccessMessage() {
-        // Create a stub that has exactly 5 contacts loaded.
+        // EP: Create a stub that has exactly 5 contacts loaded.
         Logic logicStub = new LogicStub(5);
         UiManager uiManager = new UiManager(logicStub, List.of());
 
@@ -76,6 +77,7 @@ public class UiManagerTest {
 
     @Test
     public void buildStartUpMessage_contactAndGroupWarnings_formatsSeparateSections() {
+        //EP: invalid person contacts and groups appear in their own sections
         Logic logicStub = new LogicStub(10);
         UiManager uiManager = new UiManager(logicStub, List.of());
 
@@ -95,6 +97,7 @@ public class UiManagerTest {
 
     @Test
     public void buildStartUpMessage_multipleWarnings_formatsPluralCorrectly() {
+        // EP: error message shows "contacts" if more than 1 contact
         Logic logicStub = new LogicStub(5);
         UiManager uiManager = new UiManager(logicStub, List.of());
 
@@ -113,6 +116,7 @@ public class UiManagerTest {
 
     @Test
     public void buildWarningList_multilineWarnings_separatesContactsWithBlankLine() {
+        // invalid contacts are split by a new line
         Logic logicStub = new LogicStub(2);
         UiManager uiManager = new UiManager(logicStub, List.of());
 
@@ -134,6 +138,7 @@ public class UiManagerTest {
 
     @Test
     public void buildStartUpMessage_duplicateContactWarning_classifiedAsContactWarning() {
+        // duplicate contacts are skipped and should be considered as a contact issue, not group
         Logic logicStub = new LogicStub(1);
         UiManager uiManager = new UiManager(logicStub, List.of());
 

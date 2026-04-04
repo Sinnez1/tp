@@ -186,7 +186,7 @@ class JsonSerializableAddressBook {
             PersonLoadValidator.validateGroupSessions(person);
             addressBook.addPerson(person);
         } catch (IllegalValueException | JsonProcessingException e) {
-            skipInvalidPerson(rawPersonNode, index, e.getMessage());
+            skipInvalidPerson(rawPersonNode, index, getCleanErrorMessage(e));
         }
     }
 
@@ -229,7 +229,7 @@ class JsonSerializableAddressBook {
 
             addressBook.addGroup(group);
         } catch (IllegalValueException | JsonProcessingException e) {
-            skipInvalidGroup(rawGroupNode, index, e.getMessage());
+            skipInvalidGroup(rawGroupNode, index, getCleanErrorMessage(e));
         }
     }
 
@@ -247,6 +247,16 @@ class JsonSerializableAddressBook {
         logger.warning(formattedWarning);
         preservedSkippedGroups.add(rawGroupNode.deepCopy());
         loadWarnings.add(formattedWarning);
+    }
+
+    private static String getCleanErrorMessage(Exception e) {
+        if (e instanceof JsonProcessingException) {
+            // JSON messages are internal and not user-friendly.
+            // Produces a clean structural error instead.
+            return "Entry has invalid structure or an unrecognised field type. "
+                    + "Ensure it is a valid JSON object with the correct fields.";
+        }
+        return e.getMessage();
     }
 
     private static String getRawEntryIdentifier(JsonNode rawNode, int index) {
@@ -291,7 +301,7 @@ class JsonSerializableAddressBook {
                 addressBook.addGroup(group);
 
             } catch (IllegalValueException | JsonProcessingException e) {
-                skipInvalidGroup(rawGroupNode, i, e.getMessage());
+                skipInvalidGroup(rawGroupNode, i, getCleanErrorMessage(e));
             }
         }
     }
@@ -328,7 +338,7 @@ class JsonSerializableAddressBook {
                 addressBook.addPerson(person);
 
             } catch (IllegalValueException | JsonProcessingException e) {
-                skipInvalidPerson(rawPersonNode, i, e.getMessage());
+                skipInvalidPerson(rawPersonNode, i, getCleanErrorMessage(e));
             }
         }
     }

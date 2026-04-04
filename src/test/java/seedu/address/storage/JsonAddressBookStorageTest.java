@@ -59,14 +59,14 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void readAddressBook_invalidPersonAddressBook_returnsEmptyAddressBook() throws Exception {
-        // The file has 1 invalid person, so it skips them and loads an empty address book.
+        // EP: file has 1 invalid person, so it skips them and loads an empty address book.
         AddressBook addressBook = new AddressBook(readAddressBook("invalidPersonAddressBook.json").get());
         assertEquals(0, addressBook.getPersonList().size());
     }
 
     @Test
     public void readAddressBook_invalidAndValidPersonAddressBook_returnsOnlyValidPerson() throws Exception {
-        // The file has 1 valid person and 1 invalid person.
+        // EP: The file has 1 valid person and 1 invalid person.
         // It skips the invalid one and successfully loads the 1 valid person.
         AddressBook addressBook = new AddressBook(readAddressBook("invalidAndValidPersonAddressBook.json").get());
         assertEquals(1, addressBook.getPersonList().size());
@@ -148,6 +148,7 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void readAddressBook_invalidAndValidPersonAddressBook_populatesLoadWarnings() throws Exception {
+        // EP: invalid person has warnings generated in loadWarnings
         Path filePath = addToTestDataPathIfNotNull("invalidAndValidPersonAddressBook.json");
         JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
 
@@ -162,6 +163,7 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void readAndSaveAddressBook_invalidPersonPreserved_success() throws Exception {
+        // EP: invalid person is saved into preservedSkippedPersons
         Path originalFilePath = addToTestDataPathIfNotNull("invalidAndValidPersonAddressBook.json");
         JsonAddressBookStorage storage = new JsonAddressBookStorage(originalFilePath);
 
@@ -182,7 +184,8 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
-    public void readAddressBook_sequentialReads_resetsWarnings() throws Exception {
+    public void readAddressBook_subsequentReads_resetsWarnings() throws Exception {
+        // EP: warnings reset between subsequent reads
         Path invalidFilePath = addToTestDataPathIfNotNull("invalidPersonAddressBook.json");
         Path validFilePath = testFolder.resolve("TempAddressBook.json");
 
@@ -201,6 +204,7 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void readAddressBook_invalidGroupAddressBook_populatesLoadWarnings() throws Exception {
+        // EP: file has 1 invalid and 1 valid group, valid group is loaded and invalid group generates warning
         Path filePath = addToTestDataPathIfNotNull("invalidGroupAddressBook.json");
         JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
 
@@ -213,6 +217,7 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void saveAddressBook_afterFailedLoad_doesNotOverwriteOriginalFile() throws Exception {
+        // EP: fatal load does not overwrite save file
         Path sourceFilePath = addToTestDataPathIfNotNull("brokenAddressBook.json");
         Path tempFilePath = testFolder.resolve("brokenAddressBook.json");
 
@@ -231,8 +236,10 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void readAddressBook_illegalValueExceptionFile_setsSkipSaveFlag() throws Exception {
+        // EP : fatal load through malformed JSON
+
         // brokenAddressBook.json is malformed JSON — triggers DataLoadingException not IllegalValueException.
-        // This test documents that after a fatal load failure, a subsequent save is skipped.
+        // After a fatal load failure, a subsequent save is skipped.
         Path filePath = testFolder.resolve("TempAddressBook.json");
         JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
 
@@ -252,7 +259,8 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
-    public void readAddressBook_brokenFile_lastLoadWarningsIsEmpty() throws Exception {
+    public void readAddressBook_brokenFile_lastLoadWarningsIsEmpty() {
+        // EP: loadWarnings is empty if fatal load
         Path filePath = addToTestDataPathIfNotNull("notJsonFormatAddressBook.json");
         JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
 

@@ -1,0 +1,28 @@
+{
+  "persons": [ {
+    "name": "Hans Muster",
+    "phone": "9482424",
+    "email": "hans@example.com",
+    "matricNumber": "A0102034E",
+    "attendance": "UNINITIALISED",
+    "participation": 0,
+    "tags": [],
+    "groups": [],
+    "groupSessions": {},
+    "assignmentGrades": {}
+  } ],
+  "groups": [],
+  "preservedSkippedPersons": [ {
+    "name": "Alex Yeoh",
+    "phone": "87438807",
+    "email": "alexyeoh@example.com",
+    "matricNumber": "A0102035A",
+    "attendance": "UNINITIALISED",
+    "participation": 0,
+    "tags": [],
+    "groups": [ "T01" ],
+    "groupSessions": {},
+    "assignmentGrades": {}
+  } ],
+  "preservedSkippedGroups": []
+}
