@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names must start with a letter and it should not be blank. Characters like ; and <> are invalid.";
+            "Names cannot be blank. Characters like ; and <> are invalid.";
 
     /*
      * The first character of the name must start with a Unicode letter and
@@ -19,7 +19,7 @@ public class Name {
      * which prevents invalid names ending with separators or having repeated separators only.
      */
     public static final String VALIDATION_REGEX =
-            "[\\p{L}](?:[\\p{L}\\p{M}]|[ '\\-/](?=[\\p{L}\\p{M}]))*";
+            "[\\p{L}\\p{N}](?:[\\p{L}\\p{M}\\p{N}]|[ '/\\-](?=[\\p{L}\\p{M}\\p{N}]))*";
 
     public final String fullName;
 
