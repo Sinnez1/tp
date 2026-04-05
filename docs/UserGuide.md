@@ -173,7 +173,7 @@ Format: `creategroup g/GROUP_NAME`
 Examples:
 *  `creategroup g/T01` Creates the group `T01`
 
-**Recommendation**: Use a consistent group-naming format that matches how you organise your classes, for example 2024-S1-T02or2025-S2-T02.
+**Recommendation**: Use a consistent group-naming format that matches how you organise your classes, for example 2024-S1-T02 or 2025-S2-T02.
 
 ### Deleting a group : `deletegroup`
 
