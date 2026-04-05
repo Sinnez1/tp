@@ -514,24 +514,24 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 
 ---
 
-**Use case: Switch to a class space**
+**Use case: UC4 - Switch to a group view**
 
 **MSS**
 
-1.  User requests to switch to a class space.
-2.  AddressBook switches the active class space and shows a confirmation message.
+1.  User requests to switch to a group view.
+2.  AddressBook switches the active group view and shows a confirmation message.
 
     Use case ends.
 
 **Extensions**
 
-* 1a. The class space identifier is missing or invalid.
+* 1a. The group view identifier is missing or invalid.
 
     * 1a1. AddressBook shows an error message.
 
       Use case ends.
 
-* 2a. The specified class space does not exist.
+* 2a. The specified group view does not exist.
 
     * 2a1. AddressBook shows an error message.
 
@@ -539,7 +539,7 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 
 ---
 
-**Use case: Record class participation**
+**Use case: UC5 - Record class participation**
 
 **MSS**
 
@@ -566,7 +566,7 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 
 ---
 
-**Use case: Record assignment submission**
+**Use case: UC6 - Record assignment submission**
 
 **MSS**
 
@@ -603,7 +603,7 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 
 ---
 
-**Use case: Mark attendance**
+**Use case: UC7 - Mark attendance**
 
 **MSS**
 
@@ -632,6 +632,87 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 
       Use case resumes at step 2.
 
+**Use case: UC8 - Create a session for a group**  
+
+**MSS**
+1. User switches to a group.
+2. AddressBook shows the students in that group.
+3. User requests to create a session for a specific date.
+4. AddressBook creates the session for the group and shows a confirmation message.
+
+**Extensions**
+* 1a. The group does not exist.
+
+  * 1a1. AddressBook shows an error message.
+
+        Use case ends.
+
+* 3a. The date is invalid.
+
+  * 3a1. AddressBook shows an error message.
+
+        Use case ends.
+
+* 3b. A session already exists on that date.
+
+  * 3b1. AddressBook shows an error message.
+
+        Use case ends.    
+
+**Use case: UC7 - View attendance matrix for a group**
+
+**MSS**
+1. User requests to switch to a tutorial group.
+2. AddressBook switches to the specified group view.
+3. User requests to view attendance for the group.
+4. AddressBook displays the attendance matrix for the students in the group.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. The specified group does not exist.
+
+    * 1a1. AddressBook shows an error message.
+
+      Use case ends.
+
+* 3a. The group has no students.
+
+    * 3a1. AddressBook displays an empty attendance matrix or an appropriate empty-state message.
+
+      Use case ends.
+
+* 3b. The group has students but no recorded sessions.
+
+    * 3b1. AddressBook displays the attendance matrix without session columns, together with an appropriate empty-state message.
+
+      Use case ends.
+
+**Use case: UC8 - Export current view to CSV**
+
+Preconditions: A group is currently active (via UC01).
+
+MSS
+
+1. User requests to export the current attendance and participation view, optionally specifying a file path.
+2. TAA writes the data to the specified file (or a default filename) and shows a confirmation message with the path.
+
+   Use case ends.
+
+Extensions
+
+* 1a. No group is currently active.
+
+    * 1a1. TAA shows an error message.
+
+      Use case ends.
+
+* 1b. The file cannot be written (e.g., invalid path or insufficient permissions).
+
+    * 1b1. TAA shows an error message.
+
+      Use case ends.
 ---
 
 ### Non-Functional Requirements
@@ -718,8 +799,29 @@ testers are expected to do more *exploratory* testing.
 
 ### Difficulties & Challenges
 
+One major challenge was evolving AddressBook into a domain-specific application for TAs while still keeping the codebase maintainable. In particular, extending the model to support tutorial groups, per-group sessions, attendance, participation, and assignment grades required careful design to avoid tightly coupling unrelated features.
+
+Another challenge was preserving a smooth CLI workflow while introducing richer group-based and date-based operations. Commands such as attendance marking, participation recording, session management, and view filtering required additional parser and model logic, while still needing to remain intuitive for users.
+
+The team also had to ensure that invalid or partially corrupted saved data would not cause the entire application to fail. This required additional validation and recovery logic during loading, together with meaningful warnings for the user.
+
 ### Effort & Achievements
 
+The project required substantial effort in both feature development and adaptation of the original architecture. Compared to the original AB3 codebase, TAA now supports tutorial-group management, attendance and participation tracking by session date, assignment management within groups, and filtered class views for teaching workflows.
+
+The team also improved robustness by validating saved data during loading, preserving skipped invalid entries, and surfacing warnings to the user instead of failing silently. On the UI side, the app was adapted to support attendance-oriented views and clearer group/session context.
+
+Overall, our team successfully transformed a generic contact-management application into a more task-focused teaching assistant management tool while preserving the strengths of the original CLI-based workflow.
+
 ## Appendix: Planned Enhancements
+
+1. Add undo/redo support for data-changing commands.
+2. Improve the attendance and participation UI further for better readability across long academic timelines.
+3. Support importing and exporting data in more convenient formats such as CSV.
+4. Add recurring-session support for tutorial groups so weekly schedules can be created more efficiently.
+5. Improve accessibility through additional colour themes and colour-blind-friendly display options.
+6. Add more powerful search and filtering, such as combined filters for group, attendance, and assignment progress.
+7. Provide command shortcuts or aliases for frequently used workflows.
+8. Expand support for per-student notes and reminders.
 
 Team size: 5
