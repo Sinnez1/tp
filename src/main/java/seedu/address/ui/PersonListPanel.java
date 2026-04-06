@@ -51,7 +51,9 @@ public class PersonListPanel extends UiPart<Region> {
     private static final double STUDENT_COLUMN_WIDTH = 180;
     private static final double DATE_COLUMN_WIDTH = 96;
     private static final double MATRIX_GRID_GAP = 4;
+    private static final double YEAR_HEADER_HEIGHT = 36;
     private static final double MATRIX_CELL_HEIGHT = 64;
+    private static final double STUDENT_HEADER_HEIGHT = YEAR_HEADER_HEIGHT + MATRIX_GRID_GAP + MATRIX_CELL_HEIGHT;
     private final ObservableList<Person> allPersons;
     private final CommandBox.CommandExecutor commandExecutor;
     private final ReadOnlyObjectProperty<LocalDate> visibleSessionRangeStart;
@@ -411,9 +413,10 @@ public class PersonListPanel extends UiPart<Region> {
             headerLabel.setOnMouseClicked(event -> executeUiCommand(buildViewCommandForSessionDate(sessionDate)));
         }
         headerLabel.setPadding(new Insets(8));
-        headerLabel.setMinHeight(MATRIX_CELL_HEIGHT);
-        headerLabel.setPrefHeight(MATRIX_CELL_HEIGHT);
-        headerLabel.setMaxHeight(MATRIX_CELL_HEIGHT);
+        double headerHeight = studentColumn ? STUDENT_HEADER_HEIGHT : MATRIX_CELL_HEIGHT;
+        headerLabel.setMinHeight(headerHeight);
+        headerLabel.setPrefHeight(headerHeight);
+        headerLabel.setMaxHeight(headerHeight);
         return headerLabel;
     }
 
@@ -426,9 +429,9 @@ public class PersonListPanel extends UiPart<Region> {
         }
         headerLabel.setTooltip(new Tooltip(buildYearHeaderTooltip(year, startColumn, columnSpan, sessionDates)));
         headerLabel.setPadding(new Insets(6, 8, 6, 8));
-        headerLabel.setMinHeight(36);
-        headerLabel.setPrefHeight(36);
-        headerLabel.setMaxHeight(36);
+        headerLabel.setMinHeight(YEAR_HEADER_HEIGHT);
+        headerLabel.setPrefHeight(YEAR_HEADER_HEIGHT);
+        headerLabel.setMaxHeight(YEAR_HEADER_HEIGHT);
         double headerWidth = computeYearHeaderWidth(columnSpan);
         headerLabel.setMinWidth(headerWidth);
         headerLabel.setPrefWidth(headerWidth);
