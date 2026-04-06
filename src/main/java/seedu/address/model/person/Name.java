@@ -9,8 +9,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Name {
 
+    public static final int MAX_LENGTH = 300;
+
     public static final String MESSAGE_CONSTRAINTS =
-            "Names cannot be blank. Characters like semicolons and <> are invalid.";
+            "Name cannot be blank, must be at most 300 characters long "
+                    + "and characters like semicolons and <> are invalid.";
 
     /*
      * The first character of the name must start with a Unicode letter and
@@ -39,7 +42,7 @@ public class Name {
      */
     public static boolean isValidName(String test) {
         requireNonNull(test);
-        return test.matches(VALIDATION_REGEX);
+        return test.length() <= MAX_LENGTH && test.matches(VALIDATION_REGEX);
     }
 
 

@@ -1,4 +1,4 @@
----
+li---
 layout: default.md
 title: "User Guide"
 pageNav: 3
@@ -29,7 +29,7 @@ Teacher Assistant's Assistant (TAA) is a **desktop app for Manage all student-re
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all contacts in the current view.
 
    * `add n/John Doe p/98765432 e/johnd@example.com m/A1234567X t/friends t/owesMoney` : Adds a contact named `John Doe` to the Address Book.
 
@@ -95,6 +95,11 @@ Adds a person to the address book.
 
 Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
 
+* Name cannot contain symbols like `;` and `<>`.
+* Name can only be up to 300 characters long.
+* Email must be in the format local-part@domain.
+* Matriculation number must start with `A` followed by 7 digits and end with a valid checksum letter.
+
 <box type="tip" seamless>
 
 **Tip:** A person can have any number of tags (including 0)
@@ -103,11 +108,15 @@ Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com m/A1234567X t/friends t/owesMoney`
 
-### Listing all persons : `list`
+### Listing all persons in the current view: `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all persons in the current view.
 
 Format: `list`
+
+Examples:
+* `list` when `current view: T01` shows a list of all the persons in group `T01`.
+* `list` when `current view: All Students` shows a list of all the persons in the address book.
 
 ### Editing a person : `edit`
 
