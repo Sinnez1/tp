@@ -1,6 +1,8 @@
 package seedu.address.ui;
 
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -33,11 +35,9 @@ public class MainWindow extends UiPart<Stage> {
     private static final double RESULTDISPLAY_STARTUP_HEIGHT_PX = 170.0;
 
     /** Fraction of screen size used when the saved/default size is too large. */
-    private static final double SCREEN_FIT_RATIO = 0.9;
+    private static final double SCREEN_FIT_RATIO = WindowLayoutCalculator.SCREEN_FIT_RATIO;
 
     private final Logger logger = LogsCenter.getLogger(getClass());
-
-    private record WindowSize(double width, double height) {}
 
     private Stage primaryStage;
     private Logic logic;
@@ -206,34 +206,33 @@ public class MainWindow extends UiPart<Stage> {
      * size, an error dialog is shown via {@code Platform.runLater} after startup.
      */
     private void setWindowSizeAndPosition(GuiSettings guiSettings) {
-        WindowSize effectiveWindowSize = calculateEffectiveWindowSize(guiSettings);
+        WindowLayoutCalculator.Size effectiveWindowSize = calculateEffectiveWindowSize(guiSettings);
         setWindowSize(effectiveWindowSize);
         setWindowPosition(guiSettings);
     }
 
-    private WindowSize calculateEffectiveWindowSize(GuiSettings guiSettings) {
+    private WindowLayoutCalculator.Size calculateEffectiveWindowSize(GuiSettings guiSettings) {
         final double requestedWidth = guiSettings.getWindowWidth();
         final double requestedHeight = guiSettings.getWindowHeight();
         Rectangle2D screenBounds = getScreenBoundsForWindow(guiSettings);
-        final double screenBoundsWidth = screenBounds.getWidth();
-        final double screenBoundsHeight = screenBounds.getHeight();
 
-        if (requestedWidth > screenBoundsWidth || requestedHeight > screenBoundsHeight) {
-            final double effectiveWidth = screenBoundsWidth * SCREEN_FIT_RATIO;
-            final double effectiveHeight = screenBoundsHeight * SCREEN_FIT_RATIO;
+        WindowLayoutCalculator.Size effective = WindowLayoutCalculator.calculateEffectiveSize(
+                requestedWidth, requestedHeight,
+                screenBounds.getWidth(), screenBounds.getHeight());
 
+        if (effective.width() != requestedWidth || effective.height() != requestedHeight) {
             logger.warning(String.format(
                     "Window size (%.0f x %.0f) exceeds screen bounds (%.0f x %.0f). "
                             + "Resizing to %.0f%% of screen: %.0f x %.0f.",
                     requestedWidth, requestedHeight,
-                    screenBoundsWidth, screenBoundsHeight,
-                    SCREEN_FIT_RATIO * 100, effectiveWidth, effectiveHeight)
+                    screenBounds.getWidth(), screenBounds.getHeight(),
+                    SCREEN_FIT_RATIO * 100, effective.width(), effective.height())
             );
 
             final double minimumWidth = getMinimumWindowWidth();
             final double minimumHeight = getMinimumWindowHeight();
 
-            if (effectiveWidth < minimumWidth || effectiveHeight < minimumHeight) {
+            if (effective.width() < minimumWidth || effective.height() < minimumHeight) {
                 Platform.runLater(() -> showScreenTooSmallError(screenBounds));
 
                 logger.warning(String.format(
@@ -241,16 +240,14 @@ public class MainWindow extends UiPart<Stage> {
                         screenBounds.getWidth(), screenBounds.getHeight(), minimumWidth, minimumHeight)
                 );
             }
-
-            return new WindowSize(effectiveWidth, effectiveHeight);
         }
 
-        return new WindowSize(requestedWidth, requestedHeight);
+        return effective;
     }
 
-    private void setWindowSize(WindowSize effectiveWindowSize) {
-        primaryStage.setWidth(effectiveWindowSize.width);
-        primaryStage.setHeight(effectiveWindowSize.height);
+    private void setWindowSize(WindowLayoutCalculator.Size effectiveWindowSize) {
+        primaryStage.setWidth(effectiveWindowSize.width());
+        primaryStage.setHeight(effectiveWindowSize.height());
     }
 
     private void setWindowPosition(GuiSettings guiSettings) {
@@ -324,14 +321,13 @@ public class MainWindow extends UiPart<Stage> {
      * Returns true if the given app window position is in the screen's visual bounds.
      */
     private boolean isWithinScreenBounds(int x, int y) {
-        for (Screen screen : Screen.getScreens()) {
-            Rectangle2D bounds = screen.getVisualBounds();
-            // Require that at least the top-left corner is within this screen
-            if (bounds.contains(x, y)) {
-                return true;
-            }
-        }
-        return false;
+        // Require that at least the top-left corner is within this screen
+        List<WindowLayoutCalculator.ScreenBounds> bounds = Screen.getScreens().stream()
+                .map(s -> new WindowLayoutCalculator.ScreenBounds(
+                        s.getVisualBounds().getMinX(), s.getVisualBounds().getMinY(),
+                        s.getVisualBounds().getWidth(), s.getVisualBounds().getHeight()))
+                .collect(Collectors.toList());
+        return WindowLayoutCalculator.isWithinAnyBounds(x, y, bounds);
     }
 
     /**
