@@ -100,7 +100,7 @@ cd ~/Downloads/TAA && java -jar TAA.jar
 
 ## Features
 
-<box type="info" seamless>
+<box type="info">
 
 **Notes about the command format:**<br>
 
@@ -122,19 +122,6 @@ cd ~/Downloads/TAA && java -jar TAA.jar
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
-### Managing assignments
-
-Assignments can only be managed when viewing a specific group using `switchgroup g/GROUP_NAME`.
-
-* `createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` creates an assignment in the current group.
-* `lista` lists all assignments in the current group, including due date, max marks, and graded count.
-* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER gr/GRADE` assigns grades to students in the current group.
-
-Examples:
-* `createa a/Quiz 1 d/2026-04-05 mm/20`
-* `lista`
-* `gradea a/Quiz 1 i/1,3-5 gr/17`
-
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -143,10 +130,11 @@ Shows a message explaining how to access the help page.
 
 Format: `help`
 
+## Managing contacts
 
-### Adding a person: `add`
+### Adding a contact: `add`
 
-Adds a person to the address book.
+Adds a student contact to TAA.
 
 Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
 
@@ -155,9 +143,9 @@ Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
 * Email must be in the format local-part@domain.
 * Matriculation number must start with `A` followed by 7 digits and end with a valid checksum letter.
 
-<box type="tip" seamless>
+<box type="tip">
 
-**Tip:** A person can have any number of tags (including 0)
+**Tip:** A contact can have any number of tags (including 0).
 </box>
 
 **Related FAQs:**
@@ -167,32 +155,32 @@ Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com m/A1234567X t/friends t/owesMoney`
 
-### Listing all persons : `list`
+### Listing all contacts : `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all contacts in the current view.
 
 Format: `list`
 
 Examples:
-* `list` when `current view: T01` shows a list of all the persons in group `T01`.
-* `list` when `current view: All Students` shows a list of all the persons in the address book.
+* `list` when `current view: T01` shows a list of all the contacts in group `T01`.
+* `list` when `current view: All Students` shows a list of all the contacts in TAA.
 
-### Editing a person : `edit`
+### Editing a contact : `edit`
 
-Edits an existing person in the address book.
+Edits an existing contact in the TAA.
 
 Format: `edit i/INDEX [n/NAME] [p/PHONE] [e/EMAIL] [m/MATRICULATION_NUMBER] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
+* When editing tags, the existing tags of the contact will be removed i.e adding of tags is not cumulative.
+* You can remove all the contact’s tags by typing `t/` without
     specifying any tags after it.
 
 Examples:
-*  `edit i/1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit i/2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit i/1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
+*  `edit i/2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 
 **Related FAQs:**
 * [What are the valid formats for the fields of an `add` or `edit` command?](#faq-add_edit_valid_formats)
@@ -218,49 +206,59 @@ Examples:
 * `find n/alex n/david` returns the people `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
-### Deleting a person : `delete`
+### Deleting a contact : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified contact from the TAA.
 
 Format: `delete i/INDEX`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* Deletes the contact at the specified `INDEX`.
+* The index refers to the index number shown in the displayed contact list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete i/2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete i/1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete i/2` deletes the 2nd contact in TAA.
+* `find Betsy` followed by `delete i/1` deletes the 1st contact in the results of the `find` command.
 
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all entries from TAA. This includes all contacts and groups.
 
 Format: `clear`
 
 ### Creating a group : `creategroup`
 
-Adds a tutorial group to the address book.
+Adds a tutorial group to TAA.
 
 Format: `creategroup g/GROUP_NAME`
 
 Examples:
 *  `creategroup g/T01` Creates the group `T01`
 
-**Recommendation**: Use a consistent group-naming format that matches how you organise your classes, for example 2024-S1-T02 or 2025-S2-T02.
+<box type="tip">
+
+**Tip:** Use a consistent group-naming format that matches how you organize your classes.<br> For example: 2024-S1-T02 or 2025-S2-T02.
+</box>
 
 ### Deleting a group : `deletegroup`
 
-Deletes a tutorial group from the address book.
+Deletes a tutorial group from TAA.
 
 Format: `deletegroup g/GROUP_NAME`
 
 Examples:
 *  `deletegroup g/T01` Deletes the group `T01`
 
+<box type="info">
+
+**Info:** 
+This only deletes the group. Your contacts that were in the group will still remain in TAA, but will no longer be part of that group.
+
+</box>
+
 ### Listing all groups : `listgroups`
 
-Shows a list of all groups in the address book.
+Shows a list of all groups in TAA.
 
 Format: `listgroups`
 
@@ -292,7 +290,7 @@ Examples:
 
 ### Remove student from group : `removefromgroup`
 
-Removes one or more students from a group. Students can be identified either by matriculation number or index expression. This only removes the student’s membership from the group, not the student from the address book.
+Removes one or more students from a group. Students can be identified either by matriculation number or index expression. This only removes the student’s membership from the group, not the student from the TAA.
 
 Format: `removefromgroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]` `removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]`
 
@@ -315,9 +313,9 @@ Format: `renamegroup g/OLD_GROUP_NAME new/NEW_GROUP_NAME`
 Examples:
 *  `renamegroup g/T01 new/Tutorial-01` Renames group `T01` to `Tutorial-01`.
 
-### Assign participation to person : `part`
+### Assign participation to a contact : `part`
 
-Assigns participation level of a particular date for a tutorial group to person with the index in the list for current view.
+Assigns participation level of a particular date for a tutorial group to contact with the index in the list for current view.
 
 Format: `part i/INDEX d/YYYY-MM-DD pv/PARTICIPATION_VALUE`
 
@@ -327,11 +325,11 @@ Format: `part i/INDEX d/YYYY-MM-DD pv/PARTICIPATION_VALUE`
 * PARTICIPATION_VALUE **must be an integer from 0 to 5.**
 
 Examples:
-*  `part i/1 d/2026-03-16 pv/4` Assigns a participation level of 4 on the 16 of March 2026 for the person of index 1 for the list in the current view.
+*  `part i/1 d/2026-03-16 pv/4` Assigns a participation level of 4 on the 16 of March 2026 for the contact of index 1 for the list in the current view.
 
-### Mark attendance for person : `mark`
+### Mark attendance for contact : `mark`
 
-Mark the attendance for a person (with the index of the list in current view) in a group as PRESENT for a particular date.
+Mark the attendance for a contact (with the index of the list in current view) in a group as PRESENT for a particular date.
 
 Format: `mark i/INDEX d/YYYY-MM-DD`
 
@@ -340,11 +338,11 @@ Format: `mark i/INDEX d/YYYY-MM-DD`
 * The attendance will be assigned for the group in current view. Please enter a group using `switchgroup` before using this command.
 
 Examples:
-*  `mark i/1 d/2026-03-16` Mark the attendance of the person in index 1 of the list in current view as PRESENT for the 16 of March 2026.
+*  `mark i/1 d/2026-03-16` Mark the attendance of the contact in index 1 of the list in current view as PRESENT for the 16 of March 2026.
 
-### Unmark attendance for person : `unmark`
+### Unmark attendance for a contact : `unmark`
 
-Mark the attendance for a person (with the index of the list in current view) in a group as ABSENT for a particular date.
+Mark the attendance for a contact (with the index of the list in current view) in a group as ABSENT for a particular date.
 
 Format: `unmark i/INDEX d/YYYY-MM-DD`
 
@@ -353,7 +351,7 @@ Format: `unmark i/INDEX d/YYYY-MM-DD`
 * The attendance will be assigned for the group in current view. Please enter a group using `switchgroup` before using this command.
 
 Examples:
-*  `unmark i/1 d/2026-03-16` Mark the attendance of the person in index 1 of the list in current view as ABSENT for the 16 of March 2026.
+*  `unmark i/1 d/2026-03-16` Mark the attendance of the contact in index 1 of the list in current view as ABSENT for the 16 of March 2026.
 
 ### View attendance and participation : `view`
 
@@ -451,6 +449,20 @@ Examples:
 * `exportview`
 * `exportview f/exports/t01-view.csv`
 
+### Managing assignments
+
+Assignments can only be managed when viewing a specific group using `switchgroup g/GROUP_NAME`. 
+<br> You will not be able to run assignment-related commands outside the specific group.
+
+* `createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` creates an assignment in the current group.
+* `lista` lists all assignments in the current group, including due date, max marks, and graded count.
+* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER gr/GRADE` assigns grades to students in the current group.
+
+Examples:
+* `createa a/Quiz 1 d/2026-04-05 mm/20`
+* `lista`
+* `gradea a/Quiz 1 i/1,3-5 gr/17`
+
 ### Create assignment : `createassignment`
 
 Creates an assignment for people in the group in current view with a due date and maximum marks.
@@ -520,12 +532,12 @@ Format: `exit`
 Your data will be saved automatically as a JSON file `[JAR file location]/data/TAA_savefile.json` after any command that changes the data.
 You do not need to save any changes manually.
 
-### Editing the data file
+### Editing the save file
 
-You are welcome to update data directly by editing the `TAA_savefile.json` data file. 
+You are welcome to update data directly by editing the `TAA_savefile.json` save file. 
 We recommend that you back up your data before beginning.
 
-You can edit the data file using pre-installed text editors found on your computer:
+You can edit the save file using pre-installed text editors found on your computer:
 * **Windows:** Notepad
 * **MacOS:** TextEdit
 * **Linux:** gedit
@@ -533,7 +545,7 @@ You can edit the data file using pre-installed text editors found on your comput
 <box type="warning">
 
 **WARNING:** 
-You should follow the format below closely to prevent an invalid data file.
+You should follow the format below closely to prevent an invalid save file.
 
 </box>
 
@@ -544,8 +556,6 @@ You should follow the format below closely to prevent an invalid data file.
     "phone" : "PHONE_NUMBER",
     "email" : "EMAIL",
     "matricNumber" : "MATRIC_NUMBER",
-    "attendance" : "ATTENDANCE_STATUS",
-    "participation" : PARTICIPATION_VALUE,
     "tags" : [ "TAGS" ],
     "groups" : [ "GROUP_NAME" ],
     "groupSessions" : {
@@ -584,8 +594,6 @@ The example below will load 1 contact, named `John`, belonging to the group `T02
     "phone" : "12345678",
     "email" : "example@gmail.com",
     "matricNumber" : "A1234567X",
-    "attendance" : "PRESENT",
-    "participation" : 3,
     "tags" : [ ],
     "groups" : [ "T02" ],
     "groupSessions" : {
@@ -617,17 +625,17 @@ The example below will load 1 contact, named `John`, belonging to the group `T02
 <box type="tip" seamless>
 
 **Tip:**
-If your changes to the data file makes its format invalid, TAA will not load your contacts and will not overwrite your data file. This means that any changes you make will not be saved.
-<br>You should close TAA and manually fix the data file before continuing your use of the app.
+If your changes to the save file makes its format invalid, TAA will not load your contacts and will not overwrite your save file. This means that any changes you make will not be saved.
+<br>You should close TAA and manually fix the save file before continuing your use of the app.
 </box>
 
 **Related FAQs:**
 
 * [How do I back up my data?](#faq-backup)
 * [How do I transfer my data to another computer?](#faq-transfer)
-* [I edited the data file manually and TAA no longer works. What should I do?](#faq-not_working)
-* [I see `preservedSkippedPersons`, `preservedSkippedGroups` and `loadWarnings` in my data file. What are they?](#faq-unknown_sections)
-* [What happens if my manually edited person contacts are invalid?](#faq-invalid_persons)
+* [I edited the save file manually and TAA no longer works. What should I do?](#faq-not_working)
+* [I see `preservedSkippedPersons`, `preservedSkippedGroups` and `loadWarnings` in my save file. What are they?](#faq-unknown_sections)
+* [What happens if my manually edited contacts are invalid?](#faq-invalid_persons)
 * [What happens if my manually edited groups are invalid?](#faq-invalid_groups)
 * [What is considered a duplicate contact?](#faq-duplicate)
 
@@ -737,25 +745,25 @@ When you first launch TAA, a `data` folder should be created containing `TAA_sav
 
 </panel>
 
-<panel id="faq-not_working" header="I edited the data file manually and TAA no longer works. What should I do?" type="seamless" expanded>
+<panel id="faq-not_working" header="I edited the save file manually and TAA no longer works. What should I do?" type="seamless" expanded>
 
 You should refer to the following FAQs for help on how to fix invalid contacts or groups:
-* [What happens if my manually edited person contacts are invalid?](#faq-invalid_persons)
+* [What happens if my manually edited contacts are invalid?](#faq-invalid_persons)
 * [What happens if my manually edited groups are invalid?](#faq-invalid_groups)
 
-You can also refer to the section on [editing your data file](#editing-the-data-file) to see if there is any mismatch in format of your data file.
+You can also refer to the section on [editing your save file](#editing-the-save-file) to see if there is any mismatch in format of your save file.
 
 Alternatively, you can do the following:
-* Restore from your previous backup: If you made a backup of your data file before editing, you can restore your work by replacing the `data` folder with the backup.
-* Start with a new data file: If no backup was made, you can delete the existing `data` folder, or choose to copy it to another location while you try to fix the `TAA_savefile.json`.
-  This will create a new data file when you launch TAA, allowing you to continue using it.
+* Restore from your previous backup: If you made a backup of your save file before editing, you can restore your work by replacing the `data` folder with the backup.
+* Start with a new save file: If no backup was made, you can delete the existing `data` folder, or choose to copy it to another location while you try to fix the `TAA_savefile.json`.
+  This will create a new save file when you launch TAA, allowing you to continue using it.
 
 </panel>
 
-<panel id="faq-unknown_sections" header="I see `preservedSkippedPersons`, `preservedSkippedGroups` and `loadWarnings` in my data file. What are they?" type="seamless" expanded>
+<panel id="faq-unknown_sections" header="I see `preservedSkippedPersons`, `preservedSkippedGroups` and `loadWarnings` in my save file. What are they?" type="seamless" expanded>
 
-These sections will be loaded into your data file once you start TAA.
-<br> You can safely ignore these sections unless you want to start manually [editing your data file](#editing-the-data-file).
+These sections will be loaded into your save file once you start TAA.
+<br> You can safely ignore these sections unless you want to start manually [editing your save file](#editing-the-save-file).
 
 ```json
   "preservedSkippedPersons" : [ ],
@@ -763,21 +771,21 @@ These sections will be loaded into your data file once you start TAA.
   "loadWarnings" : [ ]
 ```
 
-* `preservedSkippedPersons` holds all invalid person contacts.
+* `preservedSkippedPersons` holds all invalid contacts.
 * `preservedSkippedGroups` holds all invalid groups.
-* `loadWarnings` holds warning messages, telling you why the respective person(s) or group(s) are invalid. <br>
+* `loadWarnings` holds warning messages, telling you why the respective contact(s) or group(s) are invalid. <br>
 
 <box type="tip">
 
 **Tip:**
-You can read the <code>loadWarnings</code> as a reference to fix your data file.
+You can read the <code>loadWarnings</code> as a reference to fix your save file.
 <br> If you fix all errors and rerun TAA, the warnings will be cleared. 
 <br> If errors remain, you will see updated warnings reflecting any outstanding issues.
 </box>
 
 </panel>
 
-<panel id="faq-invalid_persons" header="What happens if my manually edited person contacts are invalid?" type="seamless" expanded>
+<panel id="faq-invalid_persons" header="What happens if my manually edited contacts are invalid?" type="seamless" expanded>
 
 You will see an error message telling you how many contacts are invalid once TAA starts running. 
 
@@ -785,11 +793,11 @@ You will see an error message telling you how many contacts are invalid once TAA
 
 **Warning:**
 Please close TAA before fixing the contacts, or your changes will be lost. <br>
-You can also refer to `loadWarnings` in the data file to see the errors for each contact.
+You can also refer to `loadWarnings` in the save file to see the errors for each contact.
 
 </box>
 
-You can fix the invalid contacts by editing them in the <code>preservedSkippedPersons</code> section of the data file.<br>
+You can fix the invalid contacts by editing them in the <code>preservedSkippedPersons</code> section of the save file.<br>
 Once these contacts are valid, TAA will automatically load these contacts on the next run and clear the <code>loadWarnings</code>.
 
 <panel header="Here's an example of how `preservedSkippedPersons` looks like if you run TAA with an invalid contact!" type="seamless" expanded>
@@ -802,8 +810,6 @@ Once these contacts are valid, TAA will automatically load these contacts on the
       "phone": "12345678",
       "email": "example@gmail.com",
       "matricNumber": "A1234567Y",
-      "attendance": "PRESENT",
-      "participation": 3,
       "tags": [],
       "groups": [],
       "groupSessions": {
@@ -831,7 +837,7 @@ You will see an error message telling you how many groups are invalid once TAA s
 
 **Warning:**
 Please close TAA before fixing the groups, or your changes will be lost. <br>
-You can also refer to `loadWarnings` in the data file to see the errors for each group.
+You can also refer to `loadWarnings` in the save file to see the errors for each group.
 
 </box>
 
@@ -843,7 +849,7 @@ They will automatically be loaded back once the invalid group is fixed in `prese
 
 </box>
 
-You can fix the invalid groups by editing them in the <code>preservedSkippedGroups</code> section of the data file.<br>
+You can fix the invalid groups by editing them in the <code>preservedSkippedGroups</code> section of the save file.<br>
 Once the groups are valid, TAA will automatically load these groups on the next run and clear the <code>loadWarnings</code>.
 
 <panel header="Here's an example of how `preservedSkippedGroups` looks if you run TAA with an invalid group!" type="seamless" expanded>
@@ -856,8 +862,6 @@ Once the groups are valid, TAA will automatically load these groups on the next 
       "phone": "12345678",
       "email": "example@gmail.com",
       "matricNumber": "A1234567X",
-      "attendance": "PRESENT",
-      "participation": 3,
       "tags": [],
       "groups": [
         "T02"
@@ -893,7 +897,7 @@ Once the groups are valid, TAA will automatically load these groups on the next 
   ],
   "loadWarnings": [
     "Skipped invalid group 'T02#':\n- Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank.",
-    "Skipped invalid contact 'John':\n- Person references group 'T02' which does not exist in the address book."
+    "Skipped invalid contact 'John':\n- Contact references group 'T02' which does not exist yet."
   ]
 }
 ```
@@ -934,7 +938,7 @@ You can remove all tags from a contact by running `edit i/INDEX t/`, without spe
 
 ### Manual editing
 
-You should refer to this section to find out more about some common errors faced when manually editing the data file.
+You should refer to this section to find out more about some common errors faced when manually editing the save file.
 
 #### Troubleshooting manual editing of persons
 | Problem                                                              | Error shown                                                                                                                      | How to fix                                                                                                                                        |
@@ -943,15 +947,18 @@ You should refer to this section to find out more about some common errors faced
 | Invalid or blank phone                                               | `Phone numbers should not be blank, should only contain numbers, and should be at least 3 digits long`                           | Ensure that `Phone` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats).        |
 | Invalid or blank matriculation number                                | `Matriculation number should not be blank and should start with 'A', followed by 7 digits and end with a valid checksum letter.` | Ensure that `matricNumber` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats). |
 | Invalid matriculation number number checksum                         | `The matriculation number checksum letter is incorrect. For the given digits, it should be 'X'.`                                 | Change the last character of the `matricNumber` (checksum) to the correct one as given in the error message.                                      |
-| Person has grades for a group they are not part of                   | `Person has grades for group 'X' but is not a member of it`                                                                      | Add the respective group into `"groups": [ ]` for that person under `"persons": [ ]`.                                                             |
-| Person has grades for an assignment that does not exist in the group | `Person has a grade for assignment 'X' in group 'Y', but that assignment does not exist`                                         | Add the assignment into `"groups": [ ]`.<br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`.                           |
-| Person has grades for an assignment that exceeds the max marks       | `Grade 'A' for assignment 'X' in group 'Y' exceeds max marks of 'B'`                                                             | Ensure that grade is below max marks for the assignment.                                                                                          |
-| Person has session for a group they are not a part of                | `Person has sessions for group 'X' but is not a member of it`                                                                    | Ensure that person has matching groups in `"groups": [ ]` and `"groupSessions": { }` in `"persons": [ ]`.                                         |
+| Duplicate contact                                                    | `Skipped duplicate contact: NAME (Matric: AXXXXXXXA)`                                                                            | Delete the duplicate from `"preservedSkippedPersons": [ ]`, or change their matriculation number to a unique one not currently in TAA.            |
+| Contact references a group that does not exist yet                   | `Contact references group 'Y' which does not exist yet.`                                                                         | Ensure that the group exists in `"groups": [ ]` of the save file. <br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`. |                                                                                                                                                   |
+| Contact has grades for a group they are not part of                   | `Contact has grades for group 'X' but is not a member of it`                                                                     | Add the respective group into `"groups": [ ]` for that contact under `"persons": [ ]`.                                                            |
+| Contact has grades for an assignment that does not exist in the group | `Contact has a grade for assignment 'X' in group 'Y', but that assignment does not exist`                                        | Add the assignment into `"groups": [ ]`.<br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`.                           |
+| Contact has grades for an assignment that exceeds the max marks       | `Grade A for assignment 'X' in group 'Y' exceeds max marks of B`                                                                | Ensure that grade is below max marks for the assignment.                                                                                          |
+| Contact has session for a group they are not a part of                | `Contact has sessions for group 'X' but is not a member of it`                                                                   | Ensure that contact has matching groups in `"groups": [ ]` and `"groupSessions": { }` in `"persons": [ ]`.                                        |
 
 ### Troubleshooting manual editing of groups
-| Problem                               | Error shown                                                                                                      | How to fix                                                                                                                     |
-|:--------------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
-| Invalid or blank group name           | `Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank` | Ensure that the group name follows the constraints given in the error message.                                                 |
-| Duplicate group name                  | `Skipped duplicate group: 'X'`                                                                                   | Delete the group by deleting `{ "name": "X", "assignments": [ ] }` from `"preservedSkippedGroups": [ ]` , or rename the group. |
-| Invalid or blank assignment name      | `Assignment names should only contain alphanumeric characters and spaces, and should not be blank`               | Ensure that the assignment name follows the constraints given in the error message.                                            |
-| Assignment has non-positive max marks | `Max marks should be a positive integer`                                                                         | Ensure that max marks is a positive integer.                                                                                   |
+| Problem                               | Error shown                                                                                                                                           | How to fix                                                                                                                     |
+|:--------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
+| Invalid or blank group name           | `Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank`                                      | Ensure that the group name follows the constraints given in the error message.                                                 |
+| Duplicate group name                  | `Skipped duplicate group: 'X'`                                                                                                                        | Delete the group by deleting `{ "name": "X", "assignments": [ ] }` from `"preservedSkippedGroups": [ ]` , or rename the group. |
+| Invalid or blank assignment name      | `Assignment names should only contain alphanumeric characters and spaces, and should not be blank`                                                    | Ensure that the assignment name follows the constraints given in the error message.                                            |
+| Assignment has non-positive max marks | `Max marks should be a positive integer`                                                                                                              | Ensure that max marks is a positive integer.                                                                                   |
+

@@ -16,18 +16,18 @@ import seedu.address.model.person.Person;
 public class PersonLoadValidator {
 
     private static final String GROUP_DOES_NOT_EXIST =
-            "Person references group '%s' which does not exist in the address book.";
+            "Contact references group '%s' which does not exist yet.";
 
     private static final String HAS_SESSION_BUT_NOT_IN_GROUP =
-            "Person has sessions for group '%s' but is not a member of it.";
+            "Contact has sessions for group '%s' but is not a member of it.";
     private static final String GRADE_EXCEEDS_MAX_MARKS =
             "Grade %d for assignment '%s' in group '%s' exceeds max marks of %d.";
 
     private static final String ASSIGNMENT_DOES_NOT_EXIST =
-            "Person has a grade for assignment '%s' in group '%s', but that assignment does not exist.";
+            "Contact has a grade for assignment '%s' in group '%s', but that assignment does not exist.";
 
     private static final String HAS_GRADES_BUT_NOT_IN_GROUP =
-            "Person has grades for group '%s' but is not a member of it.";
+            "Contact has grades for group '%s' but is not a member of it.";
 
     private PersonLoadValidator() {}
 
