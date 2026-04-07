@@ -435,7 +435,6 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("matricNumber", matricNumber)
-                //.add("participation", participation) // TODO: Remove after Participation is removed from Person
                 .add("tags", tags)
                 .add("groups", groups)
                 .toString();

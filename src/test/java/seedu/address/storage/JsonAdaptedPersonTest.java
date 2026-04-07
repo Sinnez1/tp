@@ -1,8 +1,6 @@
 package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.address.storage.JsonAdaptedPerson.LEGACY_FIELD_ATTENDANCE_MESSAGE; // TODO: Remove
-import static seedu.address.storage.JsonAdaptedPerson.LEGACY_FIELD_PARTICIPATION_MESSAGE; // TODO: Remove
 import static seedu.address.storage.JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -34,8 +32,8 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_TAG = "#friend";
     private static final List<String> INVALID_GROUPS = List.of(" ");
     private static final Map<String, List<JsonAdaptedSession>> NULL_GROUP_SESSIONS = null;
-    private static final String INVALID_ATTENDANCE = "LATE"; // TODO: Remove?
-    private static final int INVALID_PARTICIPATION = 999; // TODO: Remove?
+    private static final String INVALID_ATTENDANCE = "LATE";
+    private static final int INVALID_PARTICIPATION = 999;
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_PHONE = BENSON.getPhone().toString();
@@ -150,22 +148,6 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_legacyAttendanceField_throwsIllegalValueException() { // TODO: Remove?
-        JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, INVALID_ATTENDANCE, null, VALID_TAGS,
-                VALID_GROUPS, NULL_GROUP_SESSIONS);
-        assertThrows(IllegalValueException.class, LEGACY_FIELD_ATTENDANCE_MESSAGE, person::toModelType);
-    }
-
-    @Test
-    public void toModelType_legacyParticipationField_throwsIllegalValueException() { // TODO: Remove?
-        JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, INVALID_PARTICIPATION, VALID_TAGS,
-                VALID_GROUPS, NULL_GROUP_SESSIONS);
-        assertThrows(IllegalValueException.class, LEGACY_FIELD_PARTICIPATION_MESSAGE, person::toModelType);
-    }
-
-    @Test
     public void toModelType_invalidAttendanceInSession_throwsIllegalValueException() {
         // EP: attendance now lives inside sessions — invalid session attendance propagates up
         Map<String, List<JsonAdaptedSession>> invalidSessionMap = Map.of(
@@ -174,7 +156,7 @@ public class JsonAdaptedPersonTest {
                         "2026-01-01", INVALID_ATTENDANCE, VALID_PARTICIPATION, VALID_SESSION_NOTE))
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, null, VALID_TAGS,
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
                 VALID_GROUPS, invalidSessionMap);
         assertThrows(IllegalValueException.class, Attendance.MESSAGE_CONSTRAINTS, person::toModelType);
     }
@@ -188,7 +170,7 @@ public class JsonAdaptedPersonTest {
                         "2026-01-01", VALID_ATTENDANCE, INVALID_PARTICIPATION, VALID_SESSION_NOTE))
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, null, VALID_TAGS,
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
                 VALID_GROUPS, invalidSessionMap);
         assertThrows(IllegalValueException.class, Participation.MESSAGE_CONSTRAINTS, person::toModelType);
     }
@@ -196,7 +178,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidGroup_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, null, VALID_TAGS,
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
                 INVALID_GROUPS, NULL_GROUP_SESSIONS);
         assertThrows(IllegalValueException.class, GroupName.MESSAGE_CONSTRAINTS, person::toModelType);
     }
@@ -220,7 +202,7 @@ public class JsonAdaptedPersonTest {
                 " ", Map.of("Assignment 1", 50) // invalid group name
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, null, VALID_TAGS,
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
                 VALID_GROUPS, NULL_GROUP_SESSIONS, invalidGrades);
         assertThrows(IllegalValueException.class, person::toModelType);
     }
@@ -232,7 +214,7 @@ public class JsonAdaptedPersonTest {
                 "CS2103T-T01", Map.of(" ", 50) // invalid assignment name
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, null, VALID_TAGS,
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
                 VALID_GROUPS, NULL_GROUP_SESSIONS, invalidGrades);
         assertThrows(IllegalValueException.class, person::toModelType);
     }
@@ -244,7 +226,7 @@ public class JsonAdaptedPersonTest {
                 "CS2103T-T01", Map.of("Assignment 1", -1)
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, null, null, VALID_TAGS,
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
                 VALID_GROUPS, NULL_GROUP_SESSIONS, invalidGrades);
         assertThrows(IllegalValueException.class, person::toModelType);
     }
