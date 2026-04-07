@@ -290,8 +290,7 @@ public class UiManager implements Ui {
     }
 
     private static Rectangle2D getScreenBounds(Stage owner) {
-        return Screen.getScreensForRectangle(
-                        owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight())
+        return Screen.getScreensForRectangle(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight())
                 .stream()
                 .findFirst()
                 .orElse(Screen.getPrimary())

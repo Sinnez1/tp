@@ -37,6 +37,8 @@ public class MainWindow extends UiPart<Stage> {
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
+    private record WindowSize(double width, double height) {}
+
     private Stage primaryStage;
     private Logic logic;
 
@@ -75,8 +77,8 @@ public class MainWindow extends UiPart<Stage> {
         this.logic = logic;
 
         // UiPart loads MainWindow.fxml during super(), so the Stage already has
-        // the minWidth/minHeight declared in FXML when we size it here.
-        setWindowDefaultSize(logic.getGuiSettings());
+        // the minWidth/minHeight declared in FXML when we use its size here:
+        setWindowSizeAndPosition(logic.getGuiSettings());
 
         setAccelerators();
 
@@ -176,22 +178,25 @@ public class MainWindow extends UiPart<Stage> {
         // Make commandBox and resultDisplay not resize when resizing app window:
         SplitPane.setResizableWithParent(commandBoxPlaceholder, false);
         SplitPane.setResizableWithParent(resultDisplayPlaceholder, false);
-        SplitPane.setResizableWithParent(personListPanelPlaceholder, true); // make it absorb window resizes
+        SplitPane.setResizableWithParent(personListPanelPlaceholder, true); // TRUE to absorb window resizes
 
         // Calculate startup heights of the 2 resizeable placeholders (commandBox, resultDisplay):
-        Platform.runLater(() -> {
-            // Default to minimum height first
-            double commandBoxStartupHeightRatio = 0;
-            double resultDisplayStartupHeightRatio = 0;
-            double mainSplitPaneHeight = mainSplitPane.getHeight();
-            if (mainSplitPaneHeight > 0) {
-                commandBoxStartupHeightRatio = COMMANDBOX_STARTUP_HEIGHT_PX / mainSplitPaneHeight;
-                resultDisplayStartupHeightRatio = (COMMANDBOX_STARTUP_HEIGHT_PX + RESULTDISPLAY_STARTUP_HEIGHT_PX)
-                        / mainSplitPaneHeight;
-            }
+        Platform.runLater(this::calculateSplitPaneStartupHeights);
+    }
 
-            mainSplitPane.setDividerPositions(commandBoxStartupHeightRatio, resultDisplayStartupHeightRatio);
-        });
+    private void calculateSplitPaneStartupHeights() {
+        // Default to minimum height first
+        double commandBoxStartupHeightRatio = 0;
+        double resultDisplayStartupHeightRatio = 0;
+
+        final double mainSplitPaneHeight = mainSplitPane.getHeight();
+        if (mainSplitPaneHeight > 0) {
+            commandBoxStartupHeightRatio = COMMANDBOX_STARTUP_HEIGHT_PX / mainSplitPaneHeight;
+            resultDisplayStartupHeightRatio = (COMMANDBOX_STARTUP_HEIGHT_PX + RESULTDISPLAY_STARTUP_HEIGHT_PX)
+                    / mainSplitPaneHeight;
+        }
+
+        mainSplitPane.setDividerPositions(commandBoxStartupHeightRatio, resultDisplayStartupHeightRatio);
     }
 
     /**
@@ -200,47 +205,58 @@ public class MainWindow extends UiPart<Stage> {
      * If even 90 % of the screen is smaller than the application's minimum window
      * size, an error dialog is shown via {@code Platform.runLater} after startup.
      */
-    private void setWindowDefaultSize(GuiSettings guiSettings) {
-        double requestedWidth = guiSettings.getWindowWidth();
-        double requestedHeight = guiSettings.getWindowHeight();
-        double minimumWidth = getMinimumWindowWidth();
-        double minimumHeight = getMinimumWindowHeight();
+    private void setWindowSizeAndPosition(GuiSettings guiSettings) {
+        WindowSize effectiveWindowSize = calculateEffectiveWindowSize(guiSettings);
+        setWindowSize(effectiveWindowSize);
+        setWindowPosition(guiSettings);
+    }
 
+    private WindowSize calculateEffectiveWindowSize(GuiSettings guiSettings) {
+        final double requestedWidth = guiSettings.getWindowWidth();
+        final double requestedHeight = guiSettings.getWindowHeight();
         Rectangle2D screenBounds = getScreenBoundsForWindow(guiSettings);
+        final double screenBoundsWidth = screenBounds.getWidth();
+        final double screenBoundsHeight = screenBounds.getHeight();
 
-        double effectiveWidth = requestedWidth;
-        double effectiveHeight = requestedHeight;
+        if (requestedWidth > screenBoundsWidth || requestedHeight > screenBoundsHeight) {
+            final double effectiveWidth = screenBoundsWidth * SCREEN_FIT_RATIO;
+            final double effectiveHeight = screenBoundsHeight * SCREEN_FIT_RATIO;
 
-        if (requestedWidth > screenBounds.getWidth() || requestedHeight > screenBounds.getHeight()) {
-            double targetWidth = screenBounds.getWidth() * SCREEN_FIT_RATIO;
-            double targetHeight = screenBounds.getHeight() * SCREEN_FIT_RATIO;
+            logger.warning(String.format(
+                    "Window size (%.0f x %.0f) exceeds screen bounds (%.0f x %.0f). "
+                            + "Resizing to %.0f%% of screen: %.0f x %.0f.",
+                    requestedWidth, requestedHeight,
+                    screenBoundsWidth, screenBoundsHeight,
+                    SCREEN_FIT_RATIO * 100, effectiveWidth, effectiveHeight)
+            );
 
-            if (targetWidth < minimumWidth || targetHeight < minimumHeight) {
-                // 90 % of the screen is still smaller than the minimum window size.
+            final double minimumWidth = getMinimumWindowWidth();
+            final double minimumHeight = getMinimumWindowHeight();
+
+            if (effectiveWidth < minimumWidth || effectiveHeight < minimumHeight) {
+                Platform.runLater(() -> showScreenTooSmallError(screenBounds));
+
                 logger.warning(String.format(
                         "Screen resolution (%.0f x %.0f) is too small for the minimum window size (%.0f x %.0f).",
-                        screenBounds.getWidth(), screenBounds.getHeight(), minimumWidth, minimumHeight));
-                // Show the error dialog once the stage is visible.
-                final Rectangle2D bounds = screenBounds;
-                Platform.runLater(() -> showScreenTooSmallError(bounds));
-            } else {
-                effectiveWidth = targetWidth;
-                effectiveHeight = targetHeight;
-                logger.warning(String.format(
-                        "Window size (%.0f x %.0f) exceeds screen bounds (%.0f x %.0f). "
-                                + "Resizing to %.0f%% of screen: %.0f x %.0f.",
-                        requestedWidth, requestedHeight,
-                        screenBounds.getWidth(), screenBounds.getHeight(),
-                        SCREEN_FIT_RATIO * 100, effectiveWidth, effectiveHeight));
+                        screenBounds.getWidth(), screenBounds.getHeight(), minimumWidth, minimumHeight)
+                );
             }
+
+            return new WindowSize(effectiveWidth, effectiveHeight);
         }
 
-        primaryStage.setWidth(effectiveWidth);
-        primaryStage.setHeight(effectiveHeight);
+        return new WindowSize(requestedWidth, requestedHeight);
+    }
 
+    private void setWindowSize(WindowSize effectiveWindowSize) {
+        primaryStage.setWidth(effectiveWindowSize.width);
+        primaryStage.setHeight(effectiveWindowSize.height);
+    }
+
+    private void setWindowPosition(GuiSettings guiSettings) {
         if (guiSettings.getWindowCoordinates() != null) {
-            int x = (int) guiSettings.getWindowCoordinates().getX();
-            int y = (int) guiSettings.getWindowCoordinates().getY();
+            final int x = (int) guiSettings.getWindowCoordinates().getX();
+            final int y = (int) guiSettings.getWindowCoordinates().getY();
             if (isWithinScreenBounds(x, y)) {
                 primaryStage.setX(x);
                 primaryStage.setY(y);
@@ -286,7 +302,7 @@ public class MainWindow extends UiPart<Stage> {
      *
      * @param screenBounds Visual bounds of the screen the window would open on.
      */
-    private void showScreenTooSmallError(Rectangle2D screenBounds) {
+    private void showScreenTooSmallError(final Rectangle2D screenBounds) {
         double minimumWidth = getMinimumWindowWidth();
         double minimumHeight = getMinimumWindowHeight();
 
