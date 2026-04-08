@@ -130,12 +130,12 @@ cd ~/Downloads/TAA && java -jar TAA.jar
 
 Adds a student contact to TAA.
 
-Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
+Format: `add n/NAME p/PHONE e/EMAIL m/MATRIC_NUMBER [t/TAG]…​`
 
 * Name cannot contain symbols like `;` and `<>`.
 * Name can only be up to 300 characters long.
 * Email must be in the format local-part@domain.
-* Matriculation number must start with `A` followed by 7 digits and end with a valid checksum letter.
+* Matric number must start with `A` followed by 7 digits and end with a valid checksum letter.
 
 <box type="tip">
 
@@ -163,7 +163,7 @@ Examples:
 
 Edits an existing contact in the TAA.
 
-Format: `edit i/INDEX [n/NAME] [p/PHONE] [e/EMAIL] [m/MATRICULATION_NUMBER] [t/TAG]…​`
+Format: `edit i/INDEX [n/NAME] [p/PHONE] [e/EMAIL] [m/MATRIC_NUMBER] [t/TAG]…​`
 
 * Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -186,7 +186,7 @@ Examples:
 
 Finds and lists people whose fields match any of the given parameters.
 
-Format: `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRICULATION_NUMBER]... [t/TAG]...`
+Format: `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRIC_NUMBER]... [t/TAG]...`
 
 * The search is case-insensitive. e.g `n/john` will match the name `John`
 * At least one parameter must be provided.
@@ -196,7 +196,7 @@ Format: `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRICULATION_NUMBER]... 
 
 Examples:
 * `find n/john` returns people with the names `john` and `John Doe`
-* `find n/john p/987 e/example.com m/123 t/friend` returns people with a name containing `john`, a phone number containing `987`, an email containing `example.com`, a matriculation number containing `123` or a tag containing `friend`
+* `find n/john p/987 e/example.com m/123 t/friend` returns people with a name containing `john`, a phone number containing `987`, an email containing `example.com`, a matric number containing `123` or a tag containing `friend`
 * `find n/alex n/david` returns the people `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
@@ -260,10 +260,10 @@ Format: `listgroups`
 
 ### Add student to group : `addtogroup`
 
-Adds one or more students to a group. Students can be identified either by matriculation number or index expression.
+Adds one or more students to a group. Students can be identified either by matric number or index expression.
 
 Format: 
-* `addtogroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]`
+* `addtogroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]`
 * `addtogroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]`
 
 For index expressions, TAA supports forms like:
@@ -273,15 +273,15 @@ For index expressions, TAA supports forms like:
 * i/1,3-5 
 
 Examples:
-*  `addtogroup g/T01 m/A1234567X m/A2345678L` Adds students with matriculation number `A1234567X` and `A2345678L` to group `T01`.
+*  `addtogroup g/T01 m/A1234567X m/A2345678L` Adds students with matric number `A1234567X` and `A2345678L` to group `T01`.
 *  `addtogroup g/Project Team i/1,3,5,7` Adds students with the index 1, 3, 5, 7 from the list in the current view to group `Project Team`.
 
 ### Remove student from group : `removefromgroup`
 
-Removes one or more students from a group. Students can be identified either by matriculation number or index expression. This only removes the student’s membership from the group, not the student from the TAA.
+Removes one or more students from a group. Students can be identified either by matric number or index expression. This only removes the student’s membership from the group, not the student from the TAA.
 
 Format:
-* `removefromgroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]`
+* `removefromgroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]`
 * `removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]`
 
 For index expressions, TAA supports forms like:
@@ -291,7 +291,7 @@ For index expressions, TAA supports forms like:
 * i/1,3-5
 
 Examples:
-*  `removefromgroup g/T01 m/A1234567X m/A2345678L` Removes students with matriculation number `A1234567X` and `A2345678L` from group `T01`.
+*  `removefromgroup g/T01 m/A1234567X m/A2345678L` Removes students with matric number `A1234567X` and `A2345678L` from group `T01`.
 *  `removefromgroup g/Project Team i/1,3,5,7` Removes students with the index 1, 3, 5, 7 from the list in the current view from group `Project Team`.
 
 ### Rename group : `renamegroup`
@@ -422,7 +422,7 @@ Assignments can only be managed when viewing a specific group using `switchgroup
 
 * `createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` creates an assignment in the current group.
 * `lista` lists all assignments in the current group, including due date, max marks, and graded count.
-* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER gr/GRADE` assigns grades to students in the current group.
+* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER gr/GRADE` assigns grades to students in the current group.
 
 Examples:
 * `createa a/Quiz 1 d/2026-04-05 mm/20`
@@ -489,16 +489,16 @@ Grades an assignment for people in the group in current view.
 
 Format:
 * `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`
-* `gradeassignment a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE`
+* `gradeassignment a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`
 * `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`
-* `gradea a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE`
+* `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`
 
 Note: 
 * Grade must be between 0 and max marks.
 * Grading again overwrites the old grade
 
 Examples:
-*  `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` Assigns a grade of 17 for the assignment `Quiz 1` to the students with matriculation number A1234567X and A2345678L for the group in current view.
+*  `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` Assigns a grade of 17 for the assignment `Quiz 1` to the students with matric number A1234567X and A2345678L for the group in current view.
 
 ## Managing sessions
 
@@ -618,7 +618,7 @@ You should follow the format below closely to prevent an invalid save file.
     "name" : "NAME",
     "phone" : "PHONE_NUMBER",
     "email" : "EMAIL",
-    "matricNumber" : "MATRICULATION_NUMBER",
+    "matricNumber" : "MATRIC_NUMBER",
     "tags" : [ "TAGS" ],
     "groups" : [ "GROUP_NAME" ],
     "groupSessions" : {
@@ -708,8 +708,8 @@ If your changes to the save file makes its format invalid, TAA will not load you
 
 | Action                            | Formats and Examples                                                                                                                                                                                                                                                                                                                                                                                                    |
 |-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**                           | `add n/NAME p/PHONE_NUMBER e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com m/A1234567X t/friend`                                                                                                                                                                                                                                                           |
-| **Add to Group**                  | `addtogroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]` <br/>`addtogroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `addtogroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                                  |
+| **Add**                           | `add n/NAME p/PHONE_NUMBER e/EMAIL m/MATRIC_NUMBER [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com m/A1234567X t/friend`                                                                                                                                                                                                                                                           |
+| **Add to Group**                  | `addtogroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]` <br/>`addtogroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `addtogroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                                  |
 | **Add Session**                   | `addsession d/YYYY-MM-DD [g/GROUP_NAME] [n/NOTE]` <br> e.g., `addsession d/2026-03-16 g/T01 n/tutorial`                                                                                                                                                                                                                                                                                                                 |
 | **Edit Session**                  | `editsession d/OLD_DATE [nd/NEW_DATE] [nn/NEW_NOTE] [g/GROUP_NAME]` <br> e.g., `editsession d/2026-03-16 nd/2026-03-23 nn/lab g/T01`                                                                                                                                                                                                                                                                                    |
 | **View Attendance/Participation** | `view [STATUS] [d/YYYY-MM-DD] [g/GROUP_NAME] [from/YYYY-MM-DD] [to/YYYY-MM-DD]` <br> e.g., `view absent from/2026-03-01 to/2026-03-31`                                                                                                                                                                                                                                                                                  |
@@ -724,15 +724,15 @@ If your changes to the save file makes its format invalid, TAA will not load you
 | **Edit**                          | `edit i/INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit i/2 n/James Lee e/jameslee@example.com`                                                                                                                                                                                                                                                                                                     |
 | **Edit Assignment**               | `editassignment a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS` <br/>`edita a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS` <br> e.g., `editassignment a/Quiz 1 na/Test d/2026-04-08 mm/25`                                                                                                                                                                         |
 | **Exit**                          | `exit`                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **Find**                          | `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRICULATION_NUMBER]... [t/TAG]...`<br> e.g., `find n/john p/987 e/example.com m/123 t/friend`                                                                                                                                                                                                                                                                                                     |
-| **Grade Assignment**              | `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE` <br/>`gradeassignment a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE` <br> e.g., `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` |
+| **Find**                          | `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRIC_NUMBER]... [t/TAG]...`<br> e.g., `find n/john p/987 e/example.com m/123 t/friend`                                                                                                                                                                                                                                                                                                     |
+| **Grade Assignment**              | `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE` <br/>`gradeassignment a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE` <br> e.g., `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` |
 | **Help**                          | `help`                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **List**                          | `list`                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **List Assignment**               | `listassignments` <br/>`lista`                                                                                                                                                                                                                                                                                                                                                                                          |
 | **List Groups**                   | `listgroups`                                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Mark Attendance**               | `mark i/INDEX d/YYYY-MM-DD` <br> e.g., `mark i/1 d/2026-03-16`                                                                                                                                                                                                                                                                                                                                                          |
 | **Participation**                 | `part i/INDEX d/YYYY-MM-DD pv/PARTICIPATION_VALUE` <br> e.g., `part i/1 d/2026-03-16 pv/4`                                                                                                                                                                                                                                                                                                                              |
-| **Remove from Group**             | `removefromgroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]` <br/>`removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `removefromgroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                   |
+| **Remove from Group**             | `removefromgroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]` <br/>`removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `removefromgroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                   |
 | **Rename Group**                  | `renamegroup g/OLD_GROUP_NAME new/NEW_GROUP_NAME` <br> e.g., `renamegroup g/T01 new/Tutorial-01`                                                                                                                                                                                                                                                                                                                        |
 | **Switch Group**                  | `switchgroup g/GROUP_NAME` <br/>`switchgroup all` <br> e.g., `switchgroup g/T01`                                                                                                                                                                                                                                                                                                                                        |
 | **Unmark Attendance**             | `unmark i/INDEX d/YYYY-MM-DD` <br> e.g., `unmark i/1 d/2026-03-16`                                                                                                                                                                                                                                                                                                                                                      |
@@ -765,7 +765,7 @@ If your changes to the save file makes its format invalid, TAA will not load you
     * Have each domain label start and end with alphanumeric characters
     * Have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
   * Examples: `example@gmail.com`, `e1111111@u.nus.edu.sg`, `jack_neo@u.nus.edu.sg`
-* **Matriculation number:** Must be a valid NUS matriculation number, starting with `A`, followed by 7 digits, and end with a letter.
+* **Matric number:** Must be a valid NUS matric number, starting with `A`, followed by 7 digits, and end with a letter.
   * Examples:`A0123456J`, `A0308440M`, `A0308676R`
 * **Tags:** Must only contain alphanumeric characters and cannot contain spaces.
   * Examples:`groupB`, `exchangeStudent`, `bestFriends` 
@@ -872,12 +872,12 @@ Once these contacts are valid, TAA will automatically load these contacts on the
     }
   ],
   "loadWarnings": [
-    "Skipped invalid contact 'John':\n- The matriculation number checksum letter is incorrect. For the given digits, it should be 'X'."
+    "Skipped invalid contact 'John':\n- The matric number checksum letter is incorrect. For the given digits, it should be 'X'."
   ]
 }
 ```
 
-The `loadWarnings` tell us that `John` has an invalid matriculation number checksum and that it should be `X`. We can fix this by editing the matriculation number from `A1234567Y` to `A1234567X`. <br>
+The `loadWarnings` tell us that `John` has an invalid matric number checksum and that it should be `X`. We can fix this by editing the matric number from `A1234567Y` to `A1234567X`. <br>
 Rerun TAA and `John` will now be loaded into the contact list!
 
 </panel>
@@ -964,13 +964,13 @@ Rerun TAA and group `T02` will exist. `John` will also be loaded into the contac
 
 <panel id="faq-duplicate" header="What is considered a duplicate contact?" type="seamless" expanded>
 
-TAA considers 2 contacts to be duplicates if they share the same matriculation number (case-insensitive).
+TAA considers 2 contacts to be duplicates if they share the same matric number (case-insensitive).
 
 This means that:
-- Two contacts with the same name but different matriculation numbers **are not** duplicates and can both exist. 
-- Two contacts with different names but the same matriculation number **are** duplicates.
+- Two contacts with the same name but different matric numbers **are not** duplicates and can both exist. 
+- Two contacts with different names but the same matric number **are** duplicates.
 
-If you try to `add` a contact whose matriculation number already exists, or `edit` a contact such that its matriculation number would match an existing contact, TAA will reject it and not make any changes to the app.
+If you try to `add` a contact whose matric number already exists, or `edit` a contact such that its matric number would match an existing contact, TAA will reject it and not make any changes to the app.
 
 </panel>
 
@@ -996,24 +996,24 @@ You can remove all tags from a contact by running `edit i/INDEX t/`, without spe
 You should refer to this section to find out more about some common errors faced when manually editing the save file.
 
 #### Troubleshooting manual editing of contacts
-| Problem                                                              | Error shown                                                                                                                      | How to fix                                                                                                                                        |
-|:---------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|
-| Invalid or blank name                                                | `Name cannot be blank, must be at most 300 characters long and characters like semicolons and <> are invalid.`                   | Ensure that `Name` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats).         |
-| Invalid or blank phone                                               | `Phone numbers should not be blank, should only contain numbers, and should be at least 3 digits long`                           | Ensure that `Phone` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats).        |
-| Invalid or blank matriculation number                                | `Matriculation number should not be blank and should start with 'A', followed by 7 digits and end with a valid checksum letter.` | Ensure that `matricNumber` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats). |
-| Invalid matriculation number number checksum                         | `The matriculation number checksum letter is incorrect. For the given digits, it should be 'X'.`                                 | Change the last character of the `matricNumber` (checksum) to the correct one as given in the error message.                                      |
-| Duplicate contact                                                    | `Skipped duplicate contact: NAME (Matric: AXXXXXXXA)`                                                                            | Delete the duplicate from `"preservedSkippedPersons": [ ]`, or change their matriculation number to a unique one not currently in TAA.            |
-| Contact references a group that does not exist yet                   | `Contact references group 'Y' which does not exist yet.`                                                                         | Ensure that the group exists in `"groups": [ ]` of the save file. <br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`. |                                                                                                                                                   |
-| Contact has grades for a group they are not part of                   | `Contact has grades for group 'X' but is not a member of it`                                                                     | Add the respective group into `"groups": [ ]` for that contact under `"persons": [ ]`.                                                            |
-| Contact has grades for an assignment that does not exist in the group | `Contact has a grade for assignment 'X' in group 'Y', but that assignment does not exist`                                        | Add the assignment into `"groups": [ ]`.<br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`.                           |
-| Contact has grades for an assignment that exceeds the max marks       | `Grade A for assignment 'X' in group 'Y' exceeds max marks of B`                                                                | Ensure that grade is below max marks for the assignment.                                                                                          |
-| Contact has session for a group they are not a part of                | `Contact has sessions for group 'X' but is not a member of it`                                                                   | Ensure that contact has matching groups in `"groups": [ ]` and `"groupSessions": { }` in `"persons": [ ]`.                                        |
+| Error shown                                                                                                                                                                                   | How to fix                                                                                                                                        |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name cannot be blank, must be at most 300 characters long and characters like semicolons and <> are invalid.`                                                                                | Ensure that `Name` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats).         |
+| `Phone numbers should not be blank, should only contain numbers, and should be at least 3 digits long`                                                                                        | Ensure that `Phone` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats).        |
+| `Matric number should not be blank and should start with 'A', followed by 7 digits and end with a valid checksum letter.`                                                                     | Ensure that `matricNumber` follows the constraints given in the error message. <br>You can also refer to [this FAQ](#faq-add_edit_valid_formats). |
+| `The matric number checksum letter is incorrect. For the given digits, it should be 'X'.`                                                                                                     | Change the last character of the `matricNumber` (checksum) to the correct one as given in the error message.                                      |
+| `Skipped duplicate contact: NAME (Matric: AXXXXXXXA)`                                                                                                                                         | Delete the duplicate from `"preservedSkippedPersons": [ ]`, or change their matric number to a unique one not currently in TAA.                   |
+| `Contact references group 'Y' which does not exist yet.`                                                                                                                                      | Ensure that the group exists in `"groups": [ ]` of the save file. <br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`. |                                                                                                                                                   |
+| `Contact has grades for group 'X' but is not a member of it`                                                                                                                                  | Add the respective group into `"groups": [ ]` for that contact under `"persons": [ ]`.                                                            |
+| `Contact has a grade for assignment 'X' in group 'Y', but that assignment does not exist`                                                                                                     | Add the assignment into `"groups": [ ]`.<br> This is not the same `"groups": [ ]` as the one found in `"persons": [ ]`.                           |
+| `Grade A for assignment 'X' in group 'Y' exceeds max marks of B`                                                                                                                              | Ensure that grade is below max marks for the assignment.                                                                                          |
+| `Contact has sessions for group 'X' but is not a member of it`                                                                                                                                | Ensure that contact has matching groups in `"groups": [ ]` and `"groupSessions": { }` in `"persons": [ ]`.                                        |
 
 ### Troubleshooting manual editing of groups
-| Problem                               | Error shown                                                                                                                                           | How to fix                                                                                                                     |
-|:--------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
-| Invalid or blank group name           | `Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank`                                      | Ensure that the group name follows the constraints given in the error message.                                                 |
-| Duplicate group name                  | `Skipped duplicate group: 'X'`                                                                                                                        | Delete the group by deleting `{ "name": "X", "assignments": [ ] }` from `"preservedSkippedGroups": [ ]` , or rename the group. |
-| Invalid or blank assignment name      | `Assignment names should only contain alphanumeric characters and spaces, and should not be blank`                                                    | Ensure that the assignment name follows the constraints given in the error message.                                            |
-| Assignment has non-positive max marks | `Max marks should be a positive integer`                                                                                                              | Ensure that max marks is a positive integer.                                                                                   |
+| Error shown                                                                                                                                           | How to fix                                                                                                                     |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
+| `Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank`                                      | Ensure that the group name follows the constraints given in the error message.                                                 |
+| `Skipped duplicate group: 'X'`                                                                                                                        | Delete the group by deleting `{ "name": "X", "assignments": [ ] }` from `"preservedSkippedGroups": [ ]` , or rename the group. |
+| `Assignment names should only contain alphanumeric characters and spaces, and should not be blank`                                                    | Ensure that the assignment name follows the constraints given in the error message.                                            |
+| `Max marks should be a positive integer`                                                                                                              | Ensure that max marks is a positive integer. <br> Marks is an integer from 1 to 2147483647 due to technical limits.            |
 

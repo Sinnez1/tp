@@ -203,11 +203,11 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Matriculation number validation
+### Matric number validation
 
 The algorithm can be found [here](http://interrobeng.com/2014/01/19/nus-matriculation-number-check-digit-algorithm/).
 
-Format: Valid matriculation number has form of `A`, followed by 7 digits ($d_1 d_2 d_3 d_4 d_5 d_6 d_7$) , and ending with a checksum letter.
+Format: Valid matric number has form of `A`, followed by 7 digits ($d_1 d_2 d_3 d_4 d_5 d_6 d_7$) , and ending with a checksum letter.
 
 The checksum calculation is done by `MatricNumber#calculateChecksum(String matricNumber)`. <br>
 The checksum letter is one of the following 13 letters: `Y X W U R N M L J H E A B`.
@@ -216,9 +216,9 @@ Step 1. Extract digits $d_2 d_3 d_4 d_5 d_6 d_7$. <br>
 Step 2. Compute the `sum` of the 6 digits above.<br>
 Step 3. Map the `remainder` to a checksum letter by computing `remainder = sum % 13`.
 
-|    r    | 0  | 1  |  2 |  3 |  4 |  5 |  6 |  7 |  8 | 9  | 10 | 11 | 12 |
-|:-------:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| Letter  | Y  | X  |  W |  U |  R |  N |  M |  L |  J | H  |  E |  A |  B |
+| remainder | 0  | 1  |  2 |  3 |  4 |  5 |  6 |  7 |  8 | 9  | 10 | 11 | 12 |
+|:---------:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|  Letter   | Y  | X  |  W |  U |  R |  N |  M |  L |  J | H  |  E |  A |  B |
 
 **Examples:**
 
@@ -373,59 +373,59 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 
 </box>
 
-| Priority | As a …​           | I want to …​                                                         | So that I can…​                                                                               |
-|----------|-------------------|----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `* * *`  | user              | add basic contact details                                            | add students to my app                                                                        |
-| `* * *`  | user              | delete contacts                                                      | remove students from my app                                                                   |
-| `* * *`  | user              | list contact details within a tutorial group                         | see all contacts within a tutorial group                                                      |
-| `* * *`  | user              | find contacts based on a search field within a tutorial group        | filter and narrow my search space to certain fields                                           |
-| `* * *`  | user              | unmark attendance of a student for a tutorial session                | correct mistakes in attendance records                                                        |
-| `* * *`  | user              | verify whether a matriculation number is valid                       | enter correct matriculation numbers                                                           |
-| `* * *`  | user              | create a tutorial group                                              | keep track of new tutorial groups I am teaching                                               |
-| `* * *`  | user              | switch between different tutorial groups                             | view different tutorial groups                                                                |
-| `* * *`  | user              | delete a tutorial group                                              | delete tutorial groups I am no longer teaching                                                |
-| `* * *`  | user              | list tutorial groups                                                 | see all tutorial groups I am teaching                                                         |
-| `* * *`  | user              | rename tutorial groups                                               | update the tutorial group if it changes                                                       |
-| `* * *`  | user              | add students to tutorial groups                                      | sort students into their respective tutorial groups                                           |
-| `* * *`  | user              | remove students from tutorial groups                                 | remove students that are no longer in a specified tutorial group                              |
-| `* * *`  | user              | add a participation score for a student for a tutorial session       | keep track of student participation in tutorials                                              |
-| `* * *`  | user              | delete a participation score for a student for a tutorial session    | delete unwanted participation scores                                                          |
-| `* * *`  | user              | edit participation scores for a student for a tutorial session       | amend a participation score if it is wrong                                                    |
-| `* * *`  | user              | create a tutorial session                                            | mark attendance and add participation scores for a tutorial session                           |
-| `* * *`  | user              | add matriculation numbers of students                                | differentiate and add students with the same name                                             |
-| `* *`    | user              | edit contacts                                                        | avoid wasting time recreating contacts if there’s a typo                                      |
-| `* *`    | user              | enter information partially (e.g., only name without email)          | add information progressively as I get it                                                     |
-| `* *`    | user              | mark attendance using ID and date of a tutorial session              | keep track of attendance for tutorials                                                        |
-| `* *`    | user              | create new assignments for a tutorial group                          | keep track of assignments given to a tutorial group                                           |
-| `* *`    | user              | mark an assignment as completed or uncompleted                       | keep track of the assignment progress of students                                             |
-| `* *`    | user              | delete assignments for a tutorial group                              | remove assignments I no longer need to track                                                  |
-| `* *`    | user              | edit assignments for a tutorial group                                | update assignment information                                                                 |
-| `* *`    | user              | view attendance for a tutorial session of a tutorial group           | keep track of attendance for a tutorial session of a tutorial group                           |
+| Priority | As a …​           | I want to …​                                                  | So that I can…​                                                                               |
+|----------|-------------------|---------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `* * *`  | user              | add basic contact details                                     | add students to my app                                                                        |
+| `* * *`  | user              | delete contacts                                               | remove students from my app                                                                   |
+| `* * *`  | user              | list contact details within a tutorial group                  | see all contacts within a tutorial group                                                      |
+| `* * *`  | user              | find contacts based on a search field within a tutorial group | filter and narrow my search space to certain fields                                           |
+| `* * *`  | user              | unmark attendance of a student for a tutorial session         | correct mistakes in attendance records                                                        |
+| `* * *`  | user              | verify whether a matric number is valid                       | enter correct matric numbers                                                           |
+| `* * *`  | user              | create a tutorial group                                       | keep track of new tutorial groups I am teaching                                               |
+| `* * *`  | user              | switch between different tutorial groups                      | view different tutorial groups                                                                |
+| `* * *`  | user              | delete a tutorial group                                       | delete tutorial groups I am no longer teaching                                                |
+| `* * *`  | user              | list tutorial groups                                          | see all tutorial groups I am teaching                                                         |
+| `* * *`  | user              | rename tutorial groups                                        | update the tutorial group if it changes                                                       |
+| `* * *`  | user              | add students to tutorial groups                               | sort students into their respective tutorial groups                                           |
+| `* * *`  | user              | remove students from tutorial groups                          | remove students that are no longer in a specified tutorial group                              |
+| `* * *`  | user              | add a participation score for a student for a tutorial session | keep track of student participation in tutorials                                              |
+| `* * *`  | user              | delete a participation score for a student for a tutorial session | delete unwanted participation scores                                                          |
+| `* * *`  | user              | edit participation scores for a student for a tutorial session | amend a participation score if it is wrong                                                    |
+| `* * *`  | user              | create a tutorial session                                     | mark attendance and add participation scores for a tutorial session                           |
+| `* * *`  | user              | add matric numbers of students                                | differentiate and add students with the same name                                             |
+| `* *`    | user              | edit contacts                                                 | avoid wasting time recreating contacts if there’s a typo                                      |
+| `* *`    | user              | enter information partially (e.g., only name without email)   | add information progressively as I get it                                                     |
+| `* *`    | user              | mark attendance using ID and date of a tutorial session       | keep track of attendance for tutorials                                                        |
+| `* *`    | user              | create new assignments for a tutorial group                   | keep track of assignments given to a tutorial group                                           |
+| `* *`    | user              | mark an assignment as completed or uncompleted                | keep track of the assignment progress of students                                             |
+| `* *`    | user              | delete assignments for a tutorial group                       | remove assignments I no longer need to track                                                  |
+| `* *`    | user              | edit assignments for a tutorial group                         | update assignment information                                                                 |
+| `* *`    | user              | view attendance for a tutorial session of a tutorial group    | keep track of attendance for a tutorial session of a tutorial group                           |
 | `* *`    | user              | view participation scores for a tutorial session of a tutorial group | keep track of participation scores for a tutorial session of a tutorial group                 |
-| `* *`    | first-time user   | list the possible commands easily                                    | use the product without worrying about remembering commands before jumping into it            |
-| `* *`    | first-time user   | mass delete contacts                                                 | play around with the app using dummy data and easily clear it when I want to put in real data |
-| `* *`    | long-term user    | import existing contact data from this app                           | restore my previous backups                                                                   |
-| `*`      | user              | have notes for certain contacts                                      | pay specific attention to certain people                                                      |
-| `*`      | user              | track operation history                                              | remember when things happen and amend previous mistakes                                       |
-| `*`      | user              | identify unfinished contacts with a tag                              | ensure I remember to finish adding their details later                                        |
-| `*`      | user              | view large amounts of information in an organised and clear way      | easily find specific information at a glance                                                  |
-| `*`      | user              | do a fuzzy search for names                                          | find information even if I do not remember their names fully                                  |
-| `*`      | user              | autocorrect incomplete commands                                      | save time typing and correcting mistakes                                                      |
-| `*`      | user              | view an individual student's attendance records                      | monitor their attendance history                                                              |
-| `*`      | user              | mark attendance with date and time                                   | detect if students are late for class                                                         |
-| `*`      | user              | sort students alphabetically                                         | view my student contacts in alphabetical order                                                |
-| `*`      | user              | sort students by tutorial groups                                     | view student contacts based on what tutorial group they are in                                |
-| `*`      | user              | view my students in a paginated list of 40 students per page         | view students page by page without having to keep scrolling down                              |
-|   `*`    | user              | undo my previous action                                              | undo my most recent command                                                                   |
-|   `*`    | user              | redo my previous action                                              | redo my most recent undo                                                                      |
-| `*`      | busy user         | set a recurring weekly schedule for a tutorial group                 | be reminded of when my tutorial sessions are                                                  |
-| `*`      | busy user         | add a temporary tutorial session                                     | keep track of additional tutorials like consultations or make-up classes                      |
-| `*`      | busy user         | view a list of my upcoming tutorials for the week                    | view how many remaining tutorial sessions I have for the week                                 |
-| `*`      | colour-blind user | change the colour scheme of the UI                                   | use the app easily and accessibly                                                             |
-| `*`      | first-time user   | import existing contact data from elsewhere                          | migrate easily from a different app                                                           |
-| `*`      | forgetful user    | add profile pictures for each contact                                | remember and identify students better                                                         |
-| `*`      | long-term user    | export the program data as a backup                                  | prevent losing all my data if I switch devices                                                |
-| `*`      | long-term user    | make new shortcuts for commands or strings                           | use the app more efficiently                                                                  |
+| `* *`    | first-time user   | list the possible commands easily                             | use the product without worrying about remembering commands before jumping into it            |
+| `* *`    | first-time user   | mass delete contacts                                          | play around with the app using dummy data and easily clear it when I want to put in real data |
+| `* *`    | long-term user    | import existing contact data from this app                    | restore my previous backups                                                                   |
+| `*`      | user              | have notes for certain contacts                               | pay specific attention to certain people                                                      |
+| `*`      | user              | track operation history                                       | remember when things happen and amend previous mistakes                                       |
+| `*`      | user              | identify unfinished contacts with a tag                       | ensure I remember to finish adding their details later                                        |
+| `*`      | user              | view large amounts of information in an organised and clear way | easily find specific information at a glance                                                  |
+| `*`      | user              | do a fuzzy search for names                                   | find information even if I do not remember their names fully                                  |
+| `*`      | user              | autocorrect incomplete commands                               | save time typing and correcting mistakes                                                      |
+| `*`      | user              | view an individual student's attendance records               | monitor their attendance history                                                              |
+| `*`      | user              | mark attendance with date and time                            | detect if students are late for class                                                         |
+| `*`      | user              | sort students alphabetically                                  | view my student contacts in alphabetical order                                                |
+| `*`      | user              | sort students by tutorial groups                              | view student contacts based on what tutorial group they are in                                |
+| `*`      | user              | view my students in a paginated list of 40 students per page  | view students page by page without having to keep scrolling down                              |
+|   `*`    | user              | undo my previous action                                       | undo my most recent command                                                                   |
+|   `*`    | user              | redo my previous action                                       | redo my most recent undo                                                                      |
+| `*`      | busy user         | set a recurring weekly schedule for a tutorial group          | be reminded of when my tutorial sessions are                                                  |
+| `*`      | busy user         | add a temporary tutorial session                              | keep track of additional tutorials like consultations or make-up classes                      |
+| `*`      | busy user         | view a list of my upcoming tutorials for the week             | view how many remaining tutorial sessions I have for the week                                 |
+| `*`      | colour-blind user | change the colour scheme of the UI                            | use the app easily and accessibly                                                             |
+| `*`      | first-time user   | import existing contact data from elsewhere                   | migrate easily from a different app                                                           |
+| `*`      | forgetful user    | add profile pictures for each contact                         | remember and identify students better                                                         |
+| `*`      | long-term user    | export the program data as a backup                           | prevent losing all my data if I switch devices                                                |
+| `*`      | long-term user    | make new shortcuts for commands or strings                    | use the app more efficiently                                                                  |
 
 ---
 
@@ -463,10 +463,10 @@ The term `contacts` and `students` are used interchangeably in user stories and 
        
         Use case resumes from step 1.
 
-* 1c. TAA detects a duplicate matriculation number in existing contacts.
+* 1c. TAA detects a duplicate matric number in existing contacts.
 
     * 1c1. TAA rejects the command.
-    * 1c2. User re-enters the matriculation number field.
+    * 1c2. User re-enters the matric number field.
   
         Steps 1c1-1c2 are repeated until contact is no longer a duplicate.
 
@@ -535,7 +535,7 @@ The term `contacts` and `students` are used interchangeably in user stories and 
 * 3d. The edit would result in a duplicate contact.
 
     * 3d1. TAA rejects the command. 
-    * 3d2. User re-enters command with a different matriculation number.
+    * 3d2. User re-enters command with a different matric number.
 
         Steps 3d1-3d2 are repeated until the contact is no longer a duplicate.     
 

@@ -20,7 +20,7 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_PARAMETERS = "i/INDEX (positive integer)";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person identified by the index number used in the displayed person list.\n"
+            + ": Deletes the person identified by the index number in the displayed person list.\n"
             + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " i/1";
 

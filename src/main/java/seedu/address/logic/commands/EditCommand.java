@@ -40,11 +40,11 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_MATRIC_NUMBER + "MATRICULATION_NUMBER] "
+            + "[" + PREFIX_MATRIC_NUMBER + "MATRIC_NUMBER] "
             + "[" + PREFIX_TAG + "TAG]...";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
+            + "by the index number in the displayed person list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " "
@@ -54,8 +54,8 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "A person with the same matriculation number"
-            + " already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_PERSON = "A person with the same matric number"
+            + " already exists.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;

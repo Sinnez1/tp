@@ -23,10 +23,10 @@ public class AddCommand extends Command {
             PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
-            + PREFIX_MATRIC_NUMBER + "MATRICULATION NUMBER "
+            + PREFIX_MATRIC_NUMBER + "MATRIC_NUMBER "
             + "[" + PREFIX_TAG + "TAG]...";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to TAA. "
             + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
@@ -37,8 +37,8 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "owesMoney";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "A person with the same matriculation number"
-            + " already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_PERSON = "A person with the same matric number"
+            + " already exists.";
 
     private final Person toAdd;
 
