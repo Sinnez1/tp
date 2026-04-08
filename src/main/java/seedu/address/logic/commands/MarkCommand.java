@@ -26,7 +26,7 @@ public class MarkCommand extends Command {
     public static final String COMMAND_PARAMETERS = "i/INDEX d/YYYY-MM-DD";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Marks the person identified by the index number used in the displayed person list as PRESENT.\n"
+            + ": Marks the person identified by the index number in the displayed person list as PRESENT.\n"
             + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Examples:\n"
             + COMMAND_WORD + " i/1 d/2026-03-14\n"

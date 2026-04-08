@@ -130,7 +130,7 @@ cd ~/Downloads/TAA && java -jar TAA.jar
 
 Adds a student contact to TAA.
 
-Format: `add n/NAME p/PHONE e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​`
+Format: `add n/NAME p/PHONE e/EMAIL m/MATRIC_NUMBER [t/TAG]…​`
 
 * Name cannot contain symbols like `;` and `<>`.
 * Name can only be up to 300 characters long.
@@ -163,7 +163,7 @@ Examples:
 
 Edits an existing contact in the TAA.
 
-Format: `edit i/INDEX [n/NAME] [p/PHONE] [e/EMAIL] [m/MATRICULATION_NUMBER] [t/TAG]…​`
+Format: `edit i/INDEX [n/NAME] [p/PHONE] [e/EMAIL] [m/MATRIC_NUMBER] [t/TAG]…​`
 
 * Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -186,7 +186,7 @@ Examples:
 
 Finds and lists people whose fields match any of the given parameters.
 
-Format: `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRICULATION_NUMBER]... [t/TAG]...`
+Format: `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRIC_NUMBER]... [t/TAG]...`
 
 * The search is case-insensitive. e.g `n/john` will match the name `John`
 * At least one parameter must be provided.
@@ -263,7 +263,7 @@ Format: `listgroups`
 Adds one or more students to a group. Students can be identified either by matriculation number or index expression.
 
 Format: 
-* `addtogroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]`
+* `addtogroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]`
 * `addtogroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]`
 
 For index expressions, TAA supports forms like:
@@ -281,7 +281,7 @@ Examples:
 Removes one or more students from a group. Students can be identified either by matriculation number or index expression. This only removes the student’s membership from the group, not the student from the TAA.
 
 Format:
-* `removefromgroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]`
+* `removefromgroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]`
 * `removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]`
 
 For index expressions, TAA supports forms like:
@@ -422,7 +422,7 @@ Assignments can only be managed when viewing a specific group using `switchgroup
 
 * `createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` creates an assignment in the current group.
 * `lista` lists all assignments in the current group, including due date, max marks, and graded count.
-* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER gr/GRADE` assigns grades to students in the current group.
+* `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` or `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER gr/GRADE` assigns grades to students in the current group.
 
 Examples:
 * `createa a/Quiz 1 d/2026-04-05 mm/20`
@@ -489,9 +489,9 @@ Grades an assignment for people in the group in current view.
 
 Format:
 * `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`
-* `gradeassignment a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE`
+* `gradeassignment a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`
 * `gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`
-* `gradea a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE`
+* `gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`
 
 Note: 
 * Grade must be between 0 and max marks.
@@ -618,7 +618,7 @@ You should follow the format below closely to prevent an invalid save file.
     "name" : "NAME",
     "phone" : "PHONE_NUMBER",
     "email" : "EMAIL",
-    "matricNumber" : "MATRICULATION_NUMBER",
+    "matricNumber" : "MATRIC_NUMBER",
     "tags" : [ "TAGS" ],
     "groups" : [ "GROUP_NAME" ],
     "groupSessions" : {
@@ -708,8 +708,8 @@ If your changes to the save file makes its format invalid, TAA will not load you
 
 | Action                            | Formats and Examples                                                                                                                                                                                                                                                                                                                                                                                                    |
 |-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**                           | `add n/NAME p/PHONE_NUMBER e/EMAIL m/MATRICULATION_NUMBER [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com m/A1234567X t/friend`                                                                                                                                                                                                                                                           |
-| **Add to Group**                  | `addtogroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]` <br/>`addtogroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `addtogroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                                  |
+| **Add**                           | `add n/NAME p/PHONE_NUMBER e/EMAIL m/MATRIC_NUMBER [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com m/A1234567X t/friend`                                                                                                                                                                                                                                                           |
+| **Add to Group**                  | `addtogroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]` <br/>`addtogroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `addtogroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                                  |
 | **Add Session**                   | `addsession d/YYYY-MM-DD [g/GROUP_NAME] [n/NOTE]` <br> e.g., `addsession d/2026-03-16 g/T01 n/tutorial`                                                                                                                                                                                                                                                                                                                 |
 | **Edit Session**                  | `editsession d/OLD_DATE [nd/NEW_DATE] [nn/NEW_NOTE] [g/GROUP_NAME]` <br> e.g., `editsession d/2026-03-16 nd/2026-03-23 nn/lab g/T01`                                                                                                                                                                                                                                                                                    |
 | **View Attendance/Participation** | `view [STATUS] [d/YYYY-MM-DD] [g/GROUP_NAME] [from/YYYY-MM-DD] [to/YYYY-MM-DD]` <br> e.g., `view absent from/2026-03-01 to/2026-03-31`                                                                                                                                                                                                                                                                                  |
@@ -724,15 +724,15 @@ If your changes to the save file makes its format invalid, TAA will not load you
 | **Edit**                          | `edit i/INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit i/2 n/James Lee e/jameslee@example.com`                                                                                                                                                                                                                                                                                                     |
 | **Edit Assignment**               | `editassignment a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS` <br/>`edita a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS` <br> e.g., `editassignment a/Quiz 1 na/Test d/2026-04-08 mm/25`                                                                                                                                                                         |
 | **Exit**                          | `exit`                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **Find**                          | `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRICULATION_NUMBER]... [t/TAG]...`<br> e.g., `find n/john p/987 e/example.com m/123 t/friend`                                                                                                                                                                                                                                                                                                     |
-| **Grade Assignment**              | `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE` <br/>`gradeassignment a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER] gr/GRADE` <br> e.g., `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` |
+| **Find**                          | `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRIC_NUMBER]... [t/TAG]...`<br> e.g., `find n/john p/987 e/example.com m/123 t/friend`                                                                                                                                                                                                                                                                                                     |
+| **Grade Assignment**              | `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE` <br/>`gradeassignment a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE` <br> e.g., `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` |
 | **Help**                          | `help`                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **List**                          | `list`                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **List Assignment**               | `listassignments` <br/>`lista`                                                                                                                                                                                                                                                                                                                                                                                          |
 | **List Groups**                   | `listgroups`                                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Mark Attendance**               | `mark i/INDEX d/YYYY-MM-DD` <br> e.g., `mark i/1 d/2026-03-16`                                                                                                                                                                                                                                                                                                                                                          |
 | **Participation**                 | `part i/INDEX d/YYYY-MM-DD pv/PARTICIPATION_VALUE` <br> e.g., `part i/1 d/2026-03-16 pv/4`                                                                                                                                                                                                                                                                                                                              |
-| **Remove from Group**             | `removefromgroup g/GROUP_NAME m/MATRICULATION_NUMBER [m/MATRICULATION_NUMBER]` <br/>`removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `removefromgroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                   |
+| **Remove from Group**             | `removefromgroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]` <br/>`removefromgroup g/GROUP_NAME i/INDEX_EXPRESSION [i/INDEX_EXPRESSION]` <br> e.g., `removefromgroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                                   |
 | **Rename Group**                  | `renamegroup g/OLD_GROUP_NAME new/NEW_GROUP_NAME` <br> e.g., `renamegroup g/T01 new/Tutorial-01`                                                                                                                                                                                                                                                                                                                        |
 | **Switch Group**                  | `switchgroup g/GROUP_NAME` <br/>`switchgroup all` <br> e.g., `switchgroup g/T01`                                                                                                                                                                                                                                                                                                                                        |
 | **Unmark Attendance**             | `unmark i/INDEX d/YYYY-MM-DD` <br> e.g., `unmark i/1 d/2026-03-16`                                                                                                                                                                                                                                                                                                                                                      |

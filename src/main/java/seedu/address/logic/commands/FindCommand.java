@@ -21,7 +21,7 @@ public class FindCommand extends Command {
             "[n/NAME]... "
             + "[p/PHONE]... "
             + "[e/EMAIL]... "
-            + "[m/MATRICULATION_NUMBER]... "
+            + "[m/MATRIC_NUMBER]... "
             + "[t/TAG]...";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all people whose fields match any of the "
