@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
@@ -264,7 +266,7 @@ public class UiManager implements Ui {
      * Shows an alert dialog on {@code owner} with the given parameters.
      * This method only returns after the user has closed the alert dialog.
      */
-    private static void showAlertDialogAndWait(Stage owner, AlertType type, String title, String headerText,
+    public static void showAlertDialogAndWait(Stage owner, AlertType type, String title, String headerText,
                                                String contentText) {
         final Alert alert = new Alert(type);
         alert.getDialogPane().getStylesheets().add("view/DarkTheme.css");
@@ -273,7 +275,26 @@ public class UiManager implements Ui {
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.getDialogPane().setId(ALERT_DIALOG_PANE_FIELD_ID);
+
+        alert.setOnShown(event -> centerAlertWindow(alert, owner));
         alert.showAndWait();
+    }
+
+    private static void centerAlertWindow(Alert alert, Stage owner) {
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.setOnShown(e -> {
+            Rectangle2D screenBounds = getScreenBounds(owner);
+            alertStage.setX(screenBounds.getMinX() + (screenBounds.getWidth() - alertStage.getWidth()) / 2);
+            alertStage.setY(screenBounds.getMinY() + (screenBounds.getHeight() - alertStage.getHeight()) / 2);
+        });
+    }
+
+    private static Rectangle2D getScreenBounds(Stage owner) {
+        return Screen.getScreensForRectangle(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight())
+                .stream()
+                .findFirst()
+                .orElse(Screen.getPrimary())
+                .getVisualBounds();
     }
 
     /**

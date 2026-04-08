@@ -137,6 +137,26 @@ public class UiManagerTest {
     }
 
     @Test
+    public void buildWarningList_noWarnings_returnsEmptyString() {
+        Logic logicStub = new LogicStub(0);
+        UiManager uiManager = new UiManager(logicStub, List.of());
+
+        String result = uiManager.buildWarningList(List.of());
+
+        assertEquals("", result);
+    }
+
+    @Test
+    public void buildWarningList_singleWarning_formatsOneEntryWithTrailingNewline() {
+        Logic logicStub = new LogicStub(1);
+        UiManager uiManager = new UiManager(logicStub, List.of());
+
+        String result = uiManager.buildWarningList(List.of("Skipped duplicate contact 'Alice' (Matric: A1234567X)"));
+
+        assertEquals("1. Skipped duplicate contact 'Alice' (Matric: A1234567X)\n", result);
+    }
+
+    @Test
     public void buildStartUpMessage_duplicateContactWarning_classifiedAsContactWarning() {
         // duplicate contacts are skipped and should be considered as a contact issue, not group
         Logic logicStub = new LogicStub(1);
@@ -169,6 +189,65 @@ public class UiManagerTest {
         String result = uiManager.buildStartUpMessage(warnings);
 
         assertFalse(result.contains("could not be loaded"));
+    }
+
+    @Test
+    public void buildStartUpMessage_multipleFatalWarnings_onlyFirstFatalDisplayedAndPrefixTrimmed() {
+        Logic logicStub = new LogicStub(0);
+        UiManager uiManager = new UiManager(logicStub, List.of());
+
+        List<String> warnings = List.of(
+                "FATAL:   First fatal message shown.   ",
+                "FATAL: Second fatal message should not appear"
+        );
+
+        String result = uiManager.buildStartUpMessage(warnings);
+
+        assertTrue(result.contains("First fatal message shown."));
+        assertFalse(result.contains("FATAL:"));
+        assertFalse(result.contains("Second fatal message should not appear"));
+    }
+
+    @Test
+    public void buildStartUpMessage_fatalContactAndGroupWarnings_ordersSectionsCorrectly() {
+        Logic logicStub = new LogicStub(2);
+        UiManager uiManager = new UiManager(logicStub, List.of());
+
+        List<String> warnings = List.of(
+                "Skipped duplicate group 'T01'",
+                "FATAL: Save file is unreadable.",
+                "Skipped invalid contact 'Alice':\n- invalid email"
+        );
+
+        String result = uiManager.buildStartUpMessage(warnings);
+
+        int fatalIndex = result.indexOf("Save file is unreadable.");
+        int contactSectionIndex = result.indexOf("contact could not be loaded and was skipped:");
+        int groupSectionIndex = result.indexOf("group could not be loaded and was skipped:");
+
+        assertTrue(fatalIndex >= 0);
+        assertTrue(contactSectionIndex > fatalIndex);
+        assertTrue(groupSectionIndex > contactSectionIndex);
+    }
+
+    @Test
+    public void buildStartUpMessage_knownAndUnknownWarnings_includesOnlyKnownSections() {
+        Logic logicStub = new LogicStub(3);
+        UiManager uiManager = new UiManager(logicStub, List.of());
+
+        List<String> warnings = List.of(
+                "Some unknown warning",
+                "Skipped invalid contact 'Bob':\n- invalid email",
+                "Another unknown warning",
+                "Skipped duplicate group 'T01'"
+        );
+
+        String result = uiManager.buildStartUpMessage(warnings);
+
+        assertTrue(result.contains("1 contact could not be loaded and was skipped:"));
+        assertTrue(result.contains("1 group could not be loaded and was skipped:"));
+        assertFalse(result.contains("Some unknown warning"));
+        assertFalse(result.contains("Another unknown warning"));
     }
 
     @Test
