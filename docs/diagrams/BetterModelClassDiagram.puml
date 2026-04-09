@@ -4,32 +4,45 @@ skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
-AddressBook *-left-> "1" UniquePersonList
-AddressBook *-down-> "1" UniqueGroupList
+Package Model as ModelPackage <<Rectangle>> {
+Class AddressBook
+Class ModelManager
+Class UserPrefs
 
-UniquePersonList -right-> Person
-UniqueGroupList -right-> "*" Group
+Class UniquePersonList
+Class UniqueGroupList
+Class UniqueAssignmentList
+Class UniqueTagList
+Class Group
+Class GroupName
+Class Assignment
+Class AssignmentName
+Class SessionList
+Class Person
 
-Group *--> GroupName
-Group *-down-> "1" UniqueAssignmentList
-UniqueAssignmentList -right-> "*" Assignment
-Assignment *--> AssignmentName
+Class I #FFFFFF
+}
 
-Person --up> "*" Tag
-Person -right-> "*" GroupName
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> MatricNumber
-Person *-down-> "*" SessionList
+Class HiddenOutside #FFFFFF
 
-SessionList -right-> "*" Session
-Session *--> LocalDate
-Session *--> Attendance
-Session *--> Participation
+ModelManager -left-> "1" AddressBook
+ModelManager -right-> "1" UserPrefs
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Email
-Email -[hidden]right-> MatricNumber
-GroupName -[hidden]down-> Assignment
+AddressBook *--> "1  " UniquePersonList
+AddressBook *--> " 1" UniqueGroupList
+AddressBook *--left> "1 " UniqueTagList
+UniquePersonList ----> " ~* all \n\n\n" Person
+UniqueGroupList  *--> "~* all" Group
+Group *-> "1 " GroupName
+Group *--> "1 " UniqueAssignmentList
+UniqueAssignmentList *--> " *" Assignment
+Assignment *--> "1 " AssignmentName
+Person -> "*" GroupName
+Person *-> " * " SessionList
+Person --> "*" AssignmentName
+
+Person -[hidden]up--> I
+UniquePersonList -[hidden]right-> I
+
+ModelManager --> "        ~* filtered\n\n\n" Person
 @enduml
