@@ -9,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,8 @@ public class MarkCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        MarkCommand command = new MarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty());
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty());
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
                 Messages.format(updatedPerson, T01, SESSION_DATE));
 
@@ -85,7 +87,8 @@ public class MarkCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(OTHER_DATE);
 
-        MarkCommand command = new MarkCommand(Index.fromOneBased(1), Optional.of(OTHER_DATE), Optional.empty());
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(OTHER_DATE), Optional.empty());
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
                 Messages.format(updatedPerson, T01, OTHER_DATE));
 
@@ -115,8 +118,8 @@ public class MarkCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        MarkCommand command = new MarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(T02));
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(T02));
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
                 Messages.format(updatedPerson, T02, SESSION_DATE));
 
@@ -150,7 +153,8 @@ public class MarkCommandTest {
         expectedModel.setPerson(bob, updatedBob);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        MarkCommand command = new MarkCommand(Index.fromOneBased(2), Optional.empty(), Optional.empty());
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.empty(), Optional.empty());
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
                 Messages.format(updatedBob, T01, SESSION_DATE));
 
@@ -166,7 +170,8 @@ public class MarkCommandTest {
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(VALID_MATRIC_NUMBER_AMY)
                 .withEmail("alice@example.com").withPhone("91234567").build());
 
-        MarkCommand command = new MarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE), Optional.empty());
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty());
         assertThrows(CommandException.class, MarkCommand.MESSAGE_REQUIRES_GROUP_VIEW, () -> command.execute(model));
     }
 
@@ -179,7 +184,8 @@ public class MarkCommandTest {
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(VALID_MATRIC_NUMBER_AMY)
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
-        MarkCommand command = new MarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty());
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty());
         assertThrows(CommandException.class, MarkCommand.MESSAGE_NO_ACTIVE_SESSION, () -> command.execute(model));
     }
 
@@ -193,8 +199,8 @@ public class MarkCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
         GroupName nonExistentGroup = new GroupName("T99");
-        MarkCommand command = new MarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(nonExistentGroup));
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(nonExistentGroup));
         assertThrows(CommandException.class, MarkCommand.MESSAGE_GROUP_NOT_FOUND, () -> command.execute(model));
     }
 
@@ -209,7 +215,8 @@ public class MarkCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
         // List has 1 person; index 2 is one past the boundary
-        MarkCommand command = new MarkCommand(Index.fromOneBased(2), Optional.empty(), Optional.empty());
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.empty(), Optional.empty());
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
@@ -217,15 +224,18 @@ public class MarkCommandTest {
 
     @Test
     public void equals() {
-        MarkCommand commandA = new MarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE), Optional.empty());
-        MarkCommand commandB = new MarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE), Optional.empty());
-        MarkCommand commandDiffIndex = new MarkCommand(Index.fromOneBased(2), Optional.of(SESSION_DATE),
-                Optional.empty());
-        MarkCommand commandDiffDate = new MarkCommand(Index.fromOneBased(1), Optional.of(OTHER_DATE),
-                Optional.empty());
-        MarkCommand commandDiffGroup = new MarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(T01));
-        MarkCommand commandNoDate = new MarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty());
+        MarkCommand commandA = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty());
+        MarkCommand commandB = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty());
+        MarkCommand commandDiffIndex = new MarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.of(SESSION_DATE), Optional.empty());
+        MarkCommand commandDiffDate = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(OTHER_DATE), Optional.empty());
+        MarkCommand commandDiffGroup = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(T01));
+        MarkCommand commandNoDate = new MarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty());
 
         // EP: same object -> equal
         assertEquals(commandA, commandA);

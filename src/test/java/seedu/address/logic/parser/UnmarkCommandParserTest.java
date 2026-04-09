@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -23,14 +24,18 @@ public class UnmarkCommandParserTest {
     @Test
     public void parse_allFieldsPresent_success() {
         assertParseSuccess(parser, " i/1 d/2026-03-16 g/T01",
-                new UnmarkCommand(Index.fromOneBased(1), Optional.of(LocalDate.of(2026, 3, 16)),
+                new UnmarkCommand(
+                        List.of(Index.fromOneBased(1)),
+                        Optional.of(LocalDate.of(2026, 3, 16)),
                         Optional.of(new GroupName("T01"))));
     }
 
     @Test
     public void parse_onlyIndex_success() {
         assertParseSuccess(parser, " i/1",
-                new UnmarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty()));
+                new UnmarkCommand(
+                        List.of(Index.fromOneBased(1)),
+                        Optional.empty(), Optional.empty()));
     }
 
     @Test

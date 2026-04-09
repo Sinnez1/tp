@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -24,14 +25,19 @@ public class PartCommandParserTest {
     @Test
     public void parse_allFieldsPresent_success() {
         assertParseSuccess(parser, " i/1 d/2026-03-16 g/T01 pv/4",
-                new PartCommand(Index.fromOneBased(1), Optional.of(LocalDate.of(2026, 3, 16)),
-                        Optional.of(new GroupName("T01")), new Participation(4)));
+                new PartCommand(
+                        List.of(Index.fromOneBased(1)),
+                        Optional.of(LocalDate.of(2026, 3, 16)),
+                        Optional.of(new GroupName("T01")),
+                        new Participation(4)));
     }
 
     @Test
     public void parse_onlyRequiredFields_success() {
         assertParseSuccess(parser, " i/1 pv/3",
-                new PartCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty(), new Participation(3)));
+                new PartCommand(
+                        List.of(Index.fromOneBased(1)),
+                        Optional.empty(), Optional.empty(), new Participation(3)));
     }
 
     @Test

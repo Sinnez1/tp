@@ -9,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,8 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty());
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty());
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
                 seedu.address.logic.Messages.format(updatedPerson, T01, SESSION_DATE));
 
@@ -85,7 +87,8 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(OTHER_DATE);
 
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(1), Optional.of(OTHER_DATE), Optional.empty());
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(OTHER_DATE), Optional.empty());
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
                 Messages.format(updatedPerson, T01, OTHER_DATE));
 
@@ -115,8 +118,8 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(T02));
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(T02));
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
                 Messages.format(updatedPerson, T02, SESSION_DATE));
 
@@ -151,7 +154,8 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(bob, updatedBob);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(2), Optional.empty(), Optional.empty());
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.empty(), Optional.empty());
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
                 Messages.format(updatedBob, T01, SESSION_DATE));
 
@@ -168,7 +172,7 @@ public class UnmarkCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").build());
 
         UnmarkCommand command = new UnmarkCommand(
-                Index.fromOneBased(1), Optional.of(SESSION_DATE), Optional.empty());
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty());
         assertThrows(CommandException.class, UnmarkCommand.MESSAGE_REQUIRES_GROUP_VIEW, () -> command.execute(model));
     }
 
@@ -181,7 +185,8 @@ public class UnmarkCommandTest {
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(VALID_MATRIC_NUMBER_AMY)
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty());
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty());
         assertThrows(CommandException.class, UnmarkCommand.MESSAGE_NO_ACTIVE_SESSION, () -> command.execute(model));
     }
 
@@ -195,8 +200,8 @@ public class UnmarkCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
         GroupName nonExistentGroup = new GroupName("T99");
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(nonExistentGroup));
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(nonExistentGroup));
         assertThrows(CommandException.class, UnmarkCommand.MESSAGE_GROUP_NOT_FOUND, () -> command.execute(model));
     }
 
@@ -211,7 +216,8 @@ public class UnmarkCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
         // List has 1 person; index 2 is one past the boundary
-        UnmarkCommand command = new UnmarkCommand(Index.fromOneBased(2), Optional.empty(), Optional.empty());
+        UnmarkCommand command = new UnmarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.empty(), Optional.empty());
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
@@ -219,17 +225,18 @@ public class UnmarkCommandTest {
 
     @Test
     public void equals() {
-        UnmarkCommand commandA = new UnmarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.empty());
-        UnmarkCommand commandB = new UnmarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.empty());
-        UnmarkCommand commandDiffIndex = new UnmarkCommand(Index.fromOneBased(2), Optional.of(SESSION_DATE),
-                Optional.empty());
-        UnmarkCommand commandDiffDate = new UnmarkCommand(Index.fromOneBased(1), Optional.of(OTHER_DATE),
-                Optional.empty());
-        UnmarkCommand commandDiffGroup = new UnmarkCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(T01));
-        UnmarkCommand commandNoDate = new UnmarkCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty());
+        UnmarkCommand commandA = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty());
+        UnmarkCommand commandB = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty());
+        UnmarkCommand commandDiffIndex = new UnmarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.of(SESSION_DATE), Optional.empty());
+        UnmarkCommand commandDiffDate = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(OTHER_DATE), Optional.empty());
+        UnmarkCommand commandDiffGroup = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(T01));
+        UnmarkCommand commandNoDate = new UnmarkCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty());
 
         // EP: same object -> equal
         assertEquals(commandA, commandA);

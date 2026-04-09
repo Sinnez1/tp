@@ -9,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,8 @@ public class PartCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty(),
                 newParticipation);
         String expectedMessage = String.format(PartCommand.MESSAGE_PARTICIPATION_SUCCESS,
                 Messages.format(updatedPerson, T01, SESSION_DATE));
@@ -88,7 +90,8 @@ public class PartCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(OTHER_DATE);
 
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.of(OTHER_DATE), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(OTHER_DATE), Optional.empty(),
                 newParticipation);
         String expectedMessage = String.format(PartCommand.MESSAGE_PARTICIPATION_SUCCESS,
                 Messages.format(updatedPerson, T01, OTHER_DATE));
@@ -120,8 +123,9 @@ public class PartCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(T02), newParticipation);
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(T02),
+                newParticipation);
         String expectedMessage = String.format(PartCommand.MESSAGE_PARTICIPATION_SUCCESS,
                 Messages.format(updatedPerson, T02, SESSION_DATE));
 
@@ -152,7 +156,8 @@ public class PartCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty(),
                 minParticipation);
         String expectedMessage = String.format(PartCommand.MESSAGE_PARTICIPATION_SUCCESS,
                 Messages.format(updatedPerson, T01, SESSION_DATE));
@@ -182,7 +187,8 @@ public class PartCommandTest {
         expectedModel.setPerson(originalPerson, updatedPerson);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty(),
                 maxParticipation);
         String expectedMessage = String.format(PartCommand.MESSAGE_PARTICIPATION_SUCCESS,
                 Messages.format(updatedPerson, T01, SESSION_DATE));
@@ -219,7 +225,8 @@ public class PartCommandTest {
         expectedModel.setPerson(bob, updatedBob);
         expectedModel.setActiveSessionDate(SESSION_DATE);
 
-        PartCommand command = new PartCommand(Index.fromOneBased(2), Optional.empty(), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(2)), Optional.empty(), Optional.empty(),
                 newParticipation);
         String expectedMessage = String.format(PartCommand.MESSAGE_PARTICIPATION_SUCCESS,
                 Messages.format(updatedBob, T01, SESSION_DATE));
@@ -237,7 +244,8 @@ public class PartCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").build());
 
         PartCommand command = new PartCommand(
-                Index.fromOneBased(1), Optional.of(SESSION_DATE), Optional.empty(), new Participation(3));
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty(),
+                new Participation(3));
         assertThrows(CommandException.class, PartCommand.MESSAGE_REQUIRES_GROUP_VIEW, () -> command.execute(model));
     }
 
@@ -250,7 +258,8 @@ public class PartCommandTest {
         model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber(VALID_MATRIC_NUMBER_AMY)
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.empty(), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty(),
                 new Participation(3));
         assertThrows(CommandException.class, PartCommand.MESSAGE_NO_ACTIVE_SESSION, () -> command.execute(model));
     }
@@ -265,7 +274,8 @@ public class PartCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
         GroupName nonExistentGroup = new GroupName("T99");
-        PartCommand command = new PartCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE),
                 Optional.of(nonExistentGroup), new Participation(3));
         assertThrows(CommandException.class, PartCommand.MESSAGE_GROUP_NOT_FOUND, () -> command.execute(model));
     }
@@ -281,7 +291,8 @@ public class PartCommandTest {
                 .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build());
 
         // List has 1 person; index 2 is one past the boundary
-        PartCommand command = new PartCommand(Index.fromOneBased(2), Optional.empty(), Optional.empty(),
+        PartCommand command = new PartCommand(
+                List.of(Index.fromOneBased(2)), Optional.empty(), Optional.empty(),
                 new Participation(3));
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
@@ -293,20 +304,20 @@ public class PartCommandTest {
         Participation participation = new Participation(3);
         Participation diffParticipation = new Participation(5);
 
-        PartCommand commandA = new PartCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.empty(), participation);
-        PartCommand commandB = new PartCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.empty(), participation);
-        PartCommand commandDiffIndex = new PartCommand(Index.fromOneBased(2), Optional.of(SESSION_DATE),
-                Optional.empty(), participation);
-        PartCommand commandDiffDate = new PartCommand(Index.fromOneBased(1), Optional.of(OTHER_DATE),
-                Optional.empty(), participation);
-        PartCommand commandDiffGroup = new PartCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.of(T01), participation);
-        PartCommand commandNoDate = new PartCommand(Index.fromOneBased(1), Optional.empty(),
-                Optional.empty(), participation);
-        PartCommand commandDiffParticipation = new PartCommand(Index.fromOneBased(1), Optional.of(SESSION_DATE),
-                Optional.empty(), diffParticipation);
+        PartCommand commandA = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty(), participation);
+        PartCommand commandB = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty(), participation);
+        PartCommand commandDiffIndex = new PartCommand(
+                List.of(Index.fromOneBased(2)), Optional.of(SESSION_DATE), Optional.empty(), participation);
+        PartCommand commandDiffDate = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(OTHER_DATE), Optional.empty(), participation);
+        PartCommand commandDiffGroup = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.of(T01), participation);
+        PartCommand commandNoDate = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.empty(), Optional.empty(), participation);
+        PartCommand commandDiffParticipation = new PartCommand(
+                List.of(Index.fromOneBased(1)), Optional.of(SESSION_DATE), Optional.empty(), diffParticipation);
 
         // EP: same object -> equal
         assertEquals(commandA, commandA);
