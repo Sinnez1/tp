@@ -861,17 +861,17 @@ testers are expected to do more *exploratory* testing.
 
 <p> </p>
 
-2. Test case: `delete i/1`
+3. Test case: `delete i/1`
     * Expected: The first contact is removed from the list. 
 
 <p> </p>
 
-3. Test case: `delete i/0`
+4. Test case: `delete i/0`
     * Expected: `Invalid command format!...` error message.
 
 <p> </p>
 
-4. Test case: `find n/Alex`, then `delete i/1`
+5. Test case: `find n/Alex`, then `delete i/1`
     * Prerequisites: Only 1 contact named `Alex` exists, and he is index 1 after running `find n/Alex` 
     * Expected: The contact `Alex` is deleted. Running `list` afterward confirms they are no longer present.
 
@@ -1031,28 +1031,28 @@ testers are expected to do more *exploratory* testing.
 <p></p>
 
 2. Test case: `editsession d/2026-04-10 nd/2026-04-11`
-    * Expected: `Updated session 2026-04-13 -> 2026-04-11 in group 2026-s1-t01.`
+    * Expected: `Updated session 2026-04-10 -> 2026-04-11 in group 2026-S1-T01.`
 
 <p></p>
 
 3. Test case: `editsession d/2026-04-11 nn/tutorial`
-    * Expected: `Updated session 2026-04-13 (note "tutorial") in group 2026-S1-T01.`
+    * Expected: `Updated session 2026-04-11 (note "tutorial") in group 2026-S1-T01.`
 
 <p></p>
 
 4. Test case: `editsession d/2026-04-11 nn/`
-    * Expected: The note on the session on `2026-04-11` is cleared.
+    * Expected: `Updated session 2026-04-11 (cleared note) in group 2026-s1-t01.`.
 
 <p></p>
 
 5. Test case: `editsession d/2026-04-11`
-    * Expected: No change. The result display shows an error indicating that at least one of `nd/` or `nn/` must be provided.
+    * Expected: `Invalid command format!...` error message.
 
 <p></p>
 
 6. Test case: `editsession d/2026-04-11 nd/2026-04-17`
     * Prerequisite: Sessions exist on both `2026-04-11` and `2026-04-17`.
-    * Expected: No change. The result display shows a conflicting session date error.
+    * Expected: `Cannot move session to 2026-04-17 because that date already exists in group 2026-S1-T01.`
 
 ### Deleting a session
 
@@ -1061,73 +1061,76 @@ testers are expected to do more *exploratory* testing.
 <p></p>
 
 2. Test case: `deletesession d/2026-04-11`
-    * Expected: The result display asks for confirmation. No session is deleted yet.
+    * Expected: `This will delete session 2026-04-11 from group 2026-S1-T01 for every student. Run the same command with "confirm" to proceed.`.
+    * Note: No session is deleted yet.
 
 <p></p>
 
 3. Test case: `deletesession confirm d/2026-04-11`
-    * Expected: The session on `2026-04-11` is deleted across all students in the group.
+    * Expected: `Deleted session 2026-04-11 from group 2026-S1-T01 and removed its attendance and participation records.`.
 
 <p></p>
 
 4. Test case: `deletesession confirm d/2026-04-17`
     * Prerequisite: Session on `2026-04-17` exists.
-    * Expected: The session is deleted immediately without a separate confirmation step.
+    * Expected: Similar expected output as Test Case 3.
+    * Note: The session is deleted immediately without a separate confirmation step.
 
 <p></p>
 
 5. Test case: `deletesession confirm d/2026-12-31`
-    * Expected: No change. The result display shows a session not found error.
+    * Expected: `No session on 2026-12-31 was found in group 2026-S1-T01.` error message.
 
 ### Marking attendance
 
-1. Prerequisites: Switch to `2026-S1-T01` using `switchgroup g/2026-S1-T01`. A session on `2026-04-10` exists.
+1. Prerequisites: Switch to calendar view using `view g/2026-S1-T01`. A session on `2026-04-10` exists.
 
 <p></p>
 
 2. Test case: `mark i/1 d/2026-04-10`
-    * Expected: The first student in the view is marked `PRESENT` for `2026-04-10`. The result display shows a success message.
+    * Expected: The first contact in the view is marked `PRESENT` for `2026-04-10`.
 
 <p></p>
 
 3. Test case: `unmark i/1 d/2026-04-10`
-    * Expected: The first student is marked `ABSENT` for `2026-04-10`.
+    * Expected: The first contact is marked `ABSENT` for `2026-04-10`.
 
 <p></p>
 
 4. Test case: `mark i/1 d/2026-04-10` (outside group view)
     * Prerequisite: Run `switchgroup all` first.
-    * Expected: No attendance is recorded. The result display shows an error indicating that a group view is required.
+    * Expected: `Mark attendance from a group view only. Use switchgroup g/GROUP_NAME first.` error message.
 
 <p></p>
 
 5. Test case: `mark i/1 d/2020-01-01`
-    * Prerequisite: Switch back to `2026-S1-T01` using `switchgroup g/2026-S1-T01`. No session exists on `2020-01-01`.
-    * Expected: No attendance is recorded. The result display shows a session not found error.
+    * Prerequisite: Switch back to `2026-S1-T01` using `view g/2026-S1-T01`. No session exists on `2020-01-01`.
+    * Expected: A session for `2020-01-01` is automatically created and first contact is marked as present.
 
 <p></p>
 
 6. Test case: `mark i/999 d/2026-04-10`
-    * Expected: No attendance is recorded. The result display shows an invalid index error.
+    * Prerequisite: No contact with index `999` exists.
+    * Expected: `The person index provided is invalid`.
 
 ### Assigning participation
 
-1. Prerequisites: Switch to `2026-S1-T01` using `switchgroup g/2026-S1-T01`. A session on `2026-04-10` exists.
+1. Prerequisites: Switch to calendar view using `view g/2026-S1-T01`. A session on `2026-04-10` exists.
 
 <p></p>
 
 2. Test case: `part i/1 d/2026-04-10 pv/4`
-    * Expected: A participation score of `4` is recorded for the first student on `2026-04-10`. The result display shows a success message.
+    * Expected: A participation score of `4` is recorded for the first student on `2026-04-10`.
 
 <p></p>
 
 3. Test case: `part i/1 d/2026-04-10 pv/6`
-    * Expected: No participation is recorded. The result display shows an error indicating that the value must be between 0 and 5.
+    * Expected: `Invalid command format!...` error message.
 
 <p></p>
 
 4. Test case: `part i/1 d/2026-04-10 pv/abc`
-    * Expected: No participation is recorded. The result display shows an invalid format error.
+    * Expected: `Invalid command format!...` error message.
 
 ### Viewing attendance and participation
 
@@ -1156,7 +1159,7 @@ testers are expected to do more *exploratory* testing.
 <p></p>
 
 6. Test case: `view from/2026-04-30 to/2026-04-01`
-    * Expected: The view is not updated. The result display shows an error indicating an invalid date range.
+    * Expected: `from/ date cannot be after to/ date.` error message.
 
 <p></p>
 
@@ -1170,28 +1173,27 @@ testers are expected to do more *exploratory* testing.
 <p></p>
 
 2. Test case: `createassignment a/Quiz 1 d/2026-05-01 mm/20`
-    * Expected: Assignment `Quiz 1` is created for `2026-S1-T01` with due date `2026-05-01` and max marks `20`.
+    * Expected: `Created assignment Quiz 1 in 2026-S1-T01.`.
 
 <p></p>
 
 3. Test case: `createa a/Quiz 2 d/2026-05-08 mm/10`
-    * Expected: Assignment `Quiz 2` is created. The shorthand `createa` behaves identically to `createassignment`.
+    * Expected: `Created assignment Quiz 2 in 2026-S1-T01.`.
+    * Note: `createa` is a shorthand that behaves like `createassignment`.
 
 <p></p>
 
 4. Test case: `createassignment a/Quiz 1 d/2026-06-01 mm/30`
-    * Prerequisite: `Quiz 1` already exists from the previous test case.
-    * Expected: No assignment is created. The result display shows a duplicate assignment error.
+    * Prerequisite: `Quiz 1` already exists from the Test Case 2.
+    * Expected: `An assignment with that name already exists in the current group.` error message.
 
 <p></p>
 
 5. Test case: `createassignment a/Quiz 3 d/2026-05-15 mm/10` (outside group view)
     * Prerequisite: Run `switchgroup all` first.
-    * Expected: No assignment is created. The result display shows an error indicating that a group view is required.
+    * Expected: `Assignment commands can only be used when viewing a specific group.` error message.
 
----
-
-#### Listing assignments
+### Listing assignments
 
 1. Prerequisite: Switch to `2026-S1-T01` using `switchgroup g/2026-S1-T01`.
 
@@ -1200,79 +1202,73 @@ testers are expected to do more *exploratory* testing.
 2. Test case: `lista`
     * Expected: All assignments for `2026-S1-T01` are shown, including their due dates, max marks, and graded counts.
 
----
-
-#### Editing an assignment
+### Editing an assignment
 
 1. Prerequisite: `Quiz 1` exists in `2026-S1-T01`.
 
 <p></p>
 
 2. Test case: `editassignment a/Quiz 1 na/Midterm d/2026-05-10 mm/25`
-    * Expected: The assignment is renamed to `Midterm` with the updated due date and max marks. Existing grades are preserved.
+    * Expected: `Edited assignment Midterm in 2026-S1-T01.`.
 
 <p></p>
 
 3. Test case: `editassignment a/NonExistent na/New d/2026-06-01 mm/10`
-    * Expected: No change. The result display shows an assignment not found error.
+    * Expected: `This assignment does not exist in the current group.` error message.
 
----
-
-#### Grading an assignment
+### Grading an assignment
 
 1. Prerequisites: `Quiz 2` (max marks `10`) exists in `2026-S1-T01`. At least 3 students are in the group.
 
 <p></p>
 
 2. Test case: `gradea a/Quiz 2 i/1 gr/8`
-    * Expected: The first student receives a grade of `8` for `Quiz 2`. The result display shows a success message.
+    * Expected: The first student receives a grade of `8` for `Quiz 2`.
 
 <p></p>
 
 3. Test case: `gradea a/Quiz 2 i/1-3 gr/7`
-    * Expected: Students at indices 1, 2, and 3 all receive a grade of `7` for `Quiz 2`.
+   * Expected: Students at indices 1, 2, and 3 all receive a grade of `7` for `Quiz 2`.
 
 <p></p>
 
 4. Test case: `gradea a/Quiz 2 m/A0102035A gr/10`
-    * Expected: `Alex Yeoh` receives a grade of `10` for `Quiz 2`.
+    * Expected: Contact with matric number `A0102035A` receives a grade of `10` for `Quiz 2`.
+    * Note: If sample data is used, `A0102035A` refers to `Alex Yeoh`.
 
 <p></p>
 
 5. Test case: `gradea a/Quiz 2 i/1 gr/100`
-    * Expected: No grade is recorded. The result display shows an error indicating the grade exceeds max marks.
+    * Expected: `Grade must be between 0 and 10 (the assignment's max marks) inclusive.` error message.
 
 <p></p>
 
 6. Test case: `gradea a/Quiz 2 i/1 gr/-1`
-    * Expected: No grade is recorded. The result display shows an invalid grade error.
+    * Expected: `Grade should be a non-negative integer.` error message.
 
----
-
-#### Deleting an assignment
+### Deleting an assignment
 
 1. Prerequisite: `Quiz 2` exists in `2026-S1-T01`.
 
 <p></p>
 
 2. Test case: `deleteassignment a/Quiz 2`
-    * Expected: `Quiz 2` is removed from the group. All student grades for this assignment are also removed.
+    * Expected: `Deleted assignment Quiz 2 from 2026-S1-T01.`
+    * Note: All contact grades for this assignment are also removed.
 
 <p></p>
 
 3. Test case: `deletea a/NonExistent`
-    * Expected: No change. The result display shows an assignment not found error.
-
----
+    * Expected: `This assignment does not exist in the current group.` error message.
 
 ### Export view
 
-1. Prerequisites: Switch to `2026-S1-T01` using `switchgroup g/2026-S1-T01`, then run `view` to display the attendance and participation overview.
+1. Prerequisites: Switch to `2026-S1-T01` using `switchgroup g/2026-S1-T01`.
 
 <p></p>
 
 2. Test case: `exportview`
-    * Expected: A CSV file is created at `[JAR file location]/view-export.csv`. The result display shows a success message with the file path.
+    * Expected: A CSV file is created at `[JAR file location]/view-export.csv`, containing contacts in group `2026-S1-T01`.
 
 <p></p>
 
@@ -1283,41 +1279,29 @@ testers are expected to do more *exploratory* testing.
 
 4. Test case: `exportview` (outside group view)
     * Prerequisite: Run `switchgroup all` first.
-    * Expected: No file is created. The result display shows an error indicating that a group view is required.
+    * Expected: `No group selected. Switch to a group before exporting the view` error message.
 
----
-
-### Utility commands
-
-#### Viewing help
+### Viewing help
 
 1. Test case: `help`
-    * Expected: A help window opens (or is brought to focus if already open) with a link to the User Guide.
-
----
+    * Expected: A help window opens (or is brought to focus if minimized) with a link to the User Guide.
 
 #### Clearing all entries
 
 1. Test case: `clear`
-    * Expected: All contacts and groups are removed. The list is now empty.
+    * Expected: All contacts and groups are removed.
 
 <p></p>
 
 2. Test case: `clear someExtraText`
     * Expected: All contacts and groups are removed. Extraneous parameters are ignored.
 
----
-
-#### Exiting the program
+### Exiting the program
 
 1. Test case: `exit`
     * Expected: The application closes.
 
----
-
-### Data persistence
-
-#### Saving and reloading data
+### Saving and reloading data
 
 1. Add a contact: `add n/Test User p/81111111 e/test@example.com m/A0308002Y`.
 
@@ -1328,30 +1312,27 @@ testers are expected to do more *exploratory* testing.
 <p></p>
 
 3. Re-launch TAA using `java -jar TAA.jar`.
-    * Expected: The contact `Test User` is still present. All changes persist across sessions.
-
----
+    * Expected: The contact `Test User` is still present.
 
 ### Handling corrupted or edge-case save files
 
-<box type="info" seamless>
+<box type="info">
 
-The following tests require direct editing of `TAA_savefile.json` in the `data` folder. Back up the file before each test.
+The following tests require direct editing of `TAA_savefile.json` in the `data` folder.<br>
+Back up the file before each test if you intend to continue using the existing data in your save file.
 
 </box>
 
 #### Blank save file
 
-1. Replace the contents of `TAA_savefile.json` with an empty file (0 bytes or no content).
+1. Delete all contents in `TAA_savefile.json`.
 
 <p></p>
 
-2. Launch TAA.
+2. Launch TAA with `java -jar TAA.jar`.
     * Expected: Sample data is loaded. The app starts normally.
 
----
-
-#### Malformed JSON
+### Malformed JSON
 
 1. Replace the contents of `TAA_savefile.json` with invalid JSON (e.g., `{ "persons": [`).
 
@@ -1360,48 +1341,46 @@ The following tests require direct editing of `TAA_savefile.json` in the `data` 
 2. Launch TAA.
     * Expected: TAA starts with an empty address book and displays a warning. All save operations are blocked for this session to prevent overwriting the original file.
 
----
+### Contact referencing a non-existent group
 
-#### Person referencing a non-existent group
-
-1. In `TAA_savefile.json`, add a person whose `groups` array references a group name not present in the `groups` array.
-
-<p></p>
-
-2. Launch TAA.
-    * Expected: That person is skipped and not loaded. TAA starts with the remaining valid entries. A load warning is displayed on startup. The skipped entry is preserved in `preservedSkippedPersons` in the save file so no data is permanently lost.
-
----
-
-#### Person with an invalid matric number
-
-1. Manually edit a person's `matricNumber` field to an invalid value (e.g., `A0000000Z`, which has an incorrect checksum).
+1. In `TAA_savefile.json`, add a contact whose `groups` array references a group name not present in the `groups` array.
+   * Alternatively, edit an existing `groups` array inside a person of sample data to reference a group that does not exist.
+   * Example: Edit `2026-S1-T01` for `Alex Yeoh` to `2026-S1-T15`.
 
 <p></p>
 
 2. Launch TAA.
-    * Expected: That person is skipped. A load warning is displayed. The remaining contacts load normally.
+    * Expected: 
+      * That contact is skipped and not loaded.
+      * TAA starts with the remaining valid entries. 
+      * A load warning is displayed on startup. 
+      * The skipped entry is preserved in `preservedSkippedPersons` in the save file.
 
----
+### Contact with an invalid matric number
 
-#### Person with an assignment grade exceeding max marks
-
-1. Manually set a student's grade for an assignment to a value greater than the assignment's `maxMarks`.
+1. Manually edit a contact's `matricNumber` field to an invalid value (example: `A0000000Z`).
 
 <p></p>
 
 2. Launch TAA.
-    * Expected: That person is skipped. A load warning is displayed. Other contacts are unaffected.
+    * Expected: 
+      * That contact is skipped. 
+      * A load warning is displayed. 
+      * The remaining contacts load normally.
 
+### Contact with an assignment grade exceeding max marks
 
-### Saving data
+1. Prerequisites: Ensure the contact's other fields are valid, otherwise the matric number error will be reported first (from [Contact with an invalid matric number](#contact-with-an-invalid-matric-number)).
 
-1. Dealing with missing/corrupted data files
+1. Edit a contact's grade for an assignment to a value greater than the assignment's `maxMarks`.
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+<p></p>
 
-1. _{ more test cases …​ }_
-
+2. Launch TAA.
+    * Expected: 
+      * That contact is skipped. 
+      * A load warning is displayed. 
+      * Other contacts load normally.
 
 ## Appendix: Effort
 
@@ -1424,3 +1403,7 @@ Overall, our team successfully transformed a generic contact-management applicat
 ## Appendix: Planned Enhancements
 
 Team size: 5
+
+1. Improve load error reporting for manually edited save files. 
+    * Currently, when a contact in the save file has invalid session or assignment grade fields, only the first error encountered is reported. 
+    * A future enhancement would accumulate and report all errors together, reducing the number of fix-and-relaunch cycles needed to fully correct a manually edited entry.
