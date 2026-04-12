@@ -629,6 +629,13 @@ The exported CSV file contains the students currently shown in the view.
 If you export again to the same file path, the existing file will be overwritten.
 If you want to keep an older export, save it to a different location or rename the file before exporting again.
 
+<box type="warning">
+
+**IMPORTANT:**
+Avoid illegal filename characters such as /, \, :, *, ?, ", <, >, and | in the export file name.
+<br> TAA will reject file names containing these characters and ask you to choose a different name.
+
+</box>
 
 ### Exiting the program : `exit`
 

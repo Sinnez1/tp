@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,6 +41,11 @@ public class ExportViewCommand extends Command {
     public static final String MESSAGE_NO_ACTIVE_GROUP =
             "No group selected. Switch to a group before exporting the view.";
     public static final String MESSAGE_EXPORT_FAILED = "Could not export view: %1$s";
+    public static final String MESSAGE_INVALID_FILE_NAME =
+            "The file name '%1$s' is invalid because it contains illegal character(s): '%2$s'. "
+                    + "Please choose a different file name.";
+
+    private static final String INVALID_FILE_NAME_CHARACTERS = "<>:\"|?*";
 
     private final String filePath;
 
@@ -80,7 +86,14 @@ public class ExportViewCommand extends Command {
             csv.append(System.lineSeparator());
         }
 
-        Path outputPath = Path.of(filePath);
+        validateFilePath(filePath);
+
+        Path outputPath;
+        try {
+            outputPath = Path.of(filePath);
+        } catch (InvalidPathException e) {
+            throw new CommandException(String.format(MESSAGE_EXPORT_FAILED, e.getMessage()), e);
+        }
         try {
             if (outputPath.getParent() != null) {
                 Files.createDirectories(outputPath.getParent());
@@ -113,6 +126,43 @@ public class ExportViewCommand extends Command {
                 .distinct()
                 .sorted()
                 .toList();
+    }
+
+    private void validateFilePath(String path) throws CommandException {
+        if (!path.isEmpty() && isPathSeparator(path.charAt(path.length() - 1))) {
+            throw new CommandException(String.format(
+                    MESSAGE_INVALID_FILE_NAME, getTrailingFileName(path), path.charAt(path.length() - 1)));
+        }
+
+        String[] segments = path.split("[/\\\\]");
+        for (String segment : segments) {
+            if (segment.isEmpty() || isWindowsDriveSpecifier(segment)) {
+                continue;
+            }
+
+            for (int i = 0; i < segment.length(); i++) {
+                char currentChar = segment.charAt(i);
+                if (INVALID_FILE_NAME_CHARACTERS.indexOf(currentChar) >= 0 || Character.isISOControl(currentChar)) {
+                    throw new CommandException(String.format(MESSAGE_INVALID_FILE_NAME, segment, currentChar));
+                }
+            }
+        }
+    }
+
+    private boolean isWindowsDriveSpecifier(String segment) {
+        return segment.length() == 2 && Character.isLetter(segment.charAt(0)) && segment.charAt(1) == ':';
+    }
+
+    private boolean isPathSeparator(char character) {
+        return character == '/' || character == '\\';
+    }
+
+    private String getTrailingFileName(String path) {
+        String trimmedPath = path.substring(0, path.length() - 1);
+        int lastUnixSeparator = trimmedPath.lastIndexOf('/');
+        int lastWindowsSeparator = trimmedPath.lastIndexOf('\\');
+        int lastSeparator = Math.max(lastUnixSeparator, lastWindowsSeparator);
+        return trimmedPath.substring(lastSeparator + 1);
     }
 
     private String escape(String value) {

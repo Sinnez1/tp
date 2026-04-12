@@ -45,4 +45,43 @@ public class ExportViewCommandTest {
             command.execute(model);
         });
     }
+
+    @Test
+    public void execute_invalidFileName_throwsCommandException() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+
+        ExportViewCommand command = new ExportViewCommand("build/tmp/export*view.csv");
+        assertThrows(CommandException.class,
+                String.format(ExportViewCommand.MESSAGE_INVALID_FILE_NAME, "export*view.csv", "*"), () -> {
+                    command.execute(model);
+                });
+    }
+
+    @Test
+    public void execute_filePathEndsWithForwardSlash_throwsCommandException() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+
+        ExportViewCommand command = new ExportViewCommand("build/tmp/");
+        assertThrows(CommandException.class,
+                String.format(ExportViewCommand.MESSAGE_INVALID_FILE_NAME, "tmp", "/"), () -> {
+                    command.execute(model);
+                });
+    }
+
+    @Test
+    public void execute_filePathEndsWithBackslash_throwsCommandException() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+
+        ExportViewCommand command = new ExportViewCommand("build\\tmp\\");
+        assertThrows(CommandException.class,
+                String.format(ExportViewCommand.MESSAGE_INVALID_FILE_NAME, "tmp", "\\"), () -> {
+                    command.execute(model);
+                });
+    }
 }
