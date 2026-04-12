@@ -33,8 +33,7 @@ public class FindCommand extends Command {
             + "p/98765432 "
             + "e/johnd@example.com "
             + "m/A1234567X "
-            + "t/friends "
-            + "t/owesMoney";
+            + "t/scholar ";
 
     private final PersonMatchesFieldsPredicate predicate;
 
