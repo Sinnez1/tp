@@ -77,10 +77,19 @@ public class PhoneTest {
     public void equals() {
         Phone phone = new Phone("999");
 
-        assertTrue(phone.equals(new Phone("999"))); // same values
-        assertTrue(phone.equals(phone)); // same object
-        assertFalse(phone.equals(null)); // null
-        assertFalse(phone.equals(5.0f)); // different types
-        assertFalse(phone.equals(new Phone("995"))); // different values
+        // same values -> returns true
+        assertTrue(phone.equals(new Phone("999")));
+
+        // same object -> returns true
+        assertTrue(phone.equals(phone));
+
+        // null -> returns false
+        assertFalse(phone.equals(null));
+
+        // different types -> returns false
+        assertFalse(phone.equals(5.0f));
+
+        // different values -> returns false
+        assertFalse(phone.equals(new Phone("995")));
     }
 }
