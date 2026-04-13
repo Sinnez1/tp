@@ -9,6 +9,7 @@ import java.util.Optional;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.group.Group;
 import seedu.address.model.group.GroupName;
 import seedu.address.model.person.Attendance;
 
@@ -133,11 +134,12 @@ public class ViewCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         if (groupName.isPresent()) {
-            GroupName targetName = groupName.get();
-            if (model.findGroupByName(targetName).isEmpty()) {
+            Optional<Group> foundGroup = model.findGroupByName(groupName.get());
+            if (foundGroup.isEmpty()) {
                 throw new CommandException(MESSAGE_GROUP_NOT_FOUND);
             }
-            model.switchToGroupView(targetName);
+            GroupName canonicalName = foundGroup.get().getGroupName();
+            model.switchToGroupView(canonicalName);
         }
 
         GroupName targetGroup = model.getActiveGroupName()
