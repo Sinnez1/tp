@@ -9,10 +9,12 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Phone {
 
-
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should not be blank, should only contain numbers, and should be at least 3 digits long";
-    public static final String VALIDATION_REGEX = "\\d{3,}";
+            "Phone number should not be blank, have between 3-20 digits,\n"
+                    + "and contain only digits, brackets for area code, or plus sign for country code.";
+    public static final String VALIDATION_REGEX = "^\\+?(\\d[-\\s()]{0,2})*\\d$";
+    public static final int MIN_DIGITS = 3;
+    public static final int MAX_DIGITS = 20;
     public final String value;
 
     /**
@@ -30,7 +32,19 @@ public class Phone {
      * Returns true if a given string is a valid phone number.
      */
     public static boolean isValidPhone(String test) {
+        return matchesRegex(test) && isWithinMaxDigits(test);
+    }
+
+    private static boolean matchesRegex(String test) {
         return test.matches(VALIDATION_REGEX);
+    }
+
+    private static boolean isWithinMaxDigits(String test) {
+        long digitCount = test.chars()
+                .filter(Character::isDigit)
+                .count();
+
+        return (digitCount >= MIN_DIGITS) && (digitCount <= MAX_DIGITS);
     }
 
     @Override

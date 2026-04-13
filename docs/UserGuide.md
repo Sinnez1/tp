@@ -851,9 +851,9 @@ If your changes to the save file makes its format invalid, TAA will not load you
 <panel id="faq-add_edit_valid_formats" header="What are the valid formats for the fields of an `add` or `edit` command?" type="seamless" expanded>
 
 
-* **Name:** Cannot start or end with a space, apostrophe (`'`), hyphen (`-`), or forward slash (`/`) and must adhere to these constraints:
-  * Separators like apostrophes, hyphens and forward slashes must be followed by a letter, number or combining mark.
-    * Combining mark refers to characters like `á`, `é`, `í`, `ó`, `ú`.
+* **Name:**
+  * Cannot start or end with a space, apostrophe (`'`), hyphen (`-`), or forward slash (`/`).
+  * Separators like apostrophes, hyphens and forward slashes must be followed by a letter, number or combining diacritical mark (`á`, `é`, `í`, `ó`, `ú`).
   * Valid name characters include: 
     * Unicode letters (examples: `ã`, `ó`, `ô`, `ç`)
     * Numbers
@@ -861,20 +861,26 @@ If your changes to the save file makes its format invalid, TAA will not load you
     * Apostrophes
     * Hyphens
     * Forward slashes
-  * Examples: `Mary-Jane O'Brien`, `X Æ A-Xii`, `Renée`
-* **Phone:** Must only contain numbers and be at least 3 digits long
-  * Examples: `123`, `88702270`, `2244668899`
-* **Email:** Must be in format of local-part@domain and adhere to these constraints:
-  * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (+_.-). 
-  <br> The local-part may not start or end with any special characters.
-  * This is followed by a @ and then a domain name. The domain name is made up of domain labels separated by periods. The domain name must:
-    * End with a domain label at least 2 characters long
-    * Have each domain label start and end with alphanumeric characters
-    * Have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
+    * Examples: `Mary-Jane O'Brien`, `X Æ A-Xii`, `Renée`
+* **Phone:**
+  * Have between 3 and 20 digits total.
+  * Optionally start with a single `+` (for country code).
+  * Optionally contain two consecutive digits, spaces, hyphens, and brackets between digits (for area code).
+  * Must start and end with a digit.
+  * Examples: `911`, `88702270`, `+1 (650) 253-0000`
+* **Email:**
+  * Must be in format of `local-part` + `@` + `domain-name`.
+  * The local-part should only contain alphanumeric characters and these special characters: `+`, `_`, `.`, `-`. 
+  <br> It should not start or end with any special characters.
+  * The domain-name is made up of domain labels separated by periods. The domain-name must:
+    * End with a domain label at least 2 characters long.
+    * Each domain label consists only of alphanumeric characters, optionally separated only by hyphens, and starts and ends with alphanumeric characters.
   * Examples: `example@gmail.com`, `e1111111@u.nus.edu.sg`, `jack_neo@u.nus.edu.sg`
-* **Matric number:** Must be a valid NUS matric number, starting with `A`, followed by 7 digits, and end with a letter.
+* **Matric number:**
+  * Must be a valid NUS matric number, starting with `A`, followed by 7 digits, and end with a checksum letter.
   * Examples:`A0123456J`, `A0308440M`, `A0308676R`
-* **Tags:** Must only contain alphanumeric characters and cannot contain spaces.
+* **Tags:**
+  * Must only contain alphanumeric characters and cannot contain spaces.
   * Examples:`groupB`, `exchangeStudent`, `scholar` 
 
 
