@@ -148,6 +148,8 @@ public class ViewCommand extends Command {
         model.setAttendanceViewActive(true);
         if (rangeStartDate.isPresent() || rangeEndDate.isPresent()) {
             model.setVisibleSessionRange(rangeStartDate.orElse(null), rangeEndDate.orElse(null));
+        } else if (sessionDate.isPresent() && shouldClearVisibleRangeForSession(model, sessionDate.get())) {
+            model.clearVisibleSessionRange();
         } else if (shouldResetVisibleRange()) {
             model.clearVisibleSessionRange();
         }
@@ -204,6 +206,14 @@ public class ViewCommand extends Command {
 
     private boolean shouldResetVisibleRange() {
         return attendance.isEmpty() && groupName.isEmpty() && sessionDate.isEmpty();
+    }
+
+    private boolean shouldClearVisibleRangeForSession(Model model, LocalDate targetSessionDate) {
+        Optional<LocalDate> visibleRangeStart = model.getVisibleSessionRangeStart();
+        Optional<LocalDate> visibleRangeEnd = model.getVisibleSessionRangeEnd();
+
+        return visibleRangeStart.filter(targetSessionDate::isBefore).isPresent()
+                || visibleRangeEnd.filter(targetSessionDate::isAfter).isPresent();
     }
 
     @Override

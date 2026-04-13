@@ -255,6 +255,29 @@ public class ViewCommandTest {
     }
 
     @Test
+    public void execute_refocusDateOutsideExistingVisibleRange_clearsVisibleRange() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+        model.setVisibleSessionRange(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 3, 10));
+        model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 0).build());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
+        expectedModel.setAttendanceViewActive(true);
+        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        ViewCommand command = new ViewCommand(SESSION_DATE);
+        assertCommandSuccess(command, model,
+                String.format(ViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE), expectedModel);
+        assertTrue(model.getVisibleSessionRangeStart().isEmpty());
+        assertTrue(model.getVisibleSessionRangeEnd().isEmpty());
+    }
+
+    @Test
     public void execute_plainView_clearsExistingVisibleRange() {
         Model model = new ModelManager();
         model.addGroup(new Group(T01));
