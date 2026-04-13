@@ -559,13 +559,63 @@
 }
 
 .attendance-matrix-student {
-    -fx-text-fill: white;
     -fx-background-color: linear-gradient(to bottom, #374042, #31383a);
     -fx-border-color: #5b696c;
     -fx-border-width: 1;
     -fx-padding: 8;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
+}
+
+.attendance-matrix-student-name {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.attendance-matrix-student-name-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.attendance-matrix-student-name-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 6px;
+    -fx-padding: 2 0 0 0;
+}
+
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal .track {
+    -fx-background-color: rgba(167, 198, 207, 0.14);
+    -fx-background-radius: 999px;
+}
+
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(167, 198, 207, 0.55);
+    -fx-background-radius: 999px;
+}
+
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal .increment-button,
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal .increment-arrow,
+.attendance-matrix-student-name-scroll .scroll-bar:horizontal .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+.attendance-matrix-student-id {
+    -fx-text-fill: #a7c6cf;
+    -fx-font-size: 11px;
+    -fx-font-family: "Consolas";
+    -fx-letter-spacing: 0.4px;
 }
 
 .attendance-matrix-row-even {

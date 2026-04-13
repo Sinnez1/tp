@@ -23,7 +23,7 @@ import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
+    private static final String INVALID_PHONE = "+()651234";
     private static final String INVALID_MATRIC_NUMBER = "A12345678N";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
@@ -44,8 +44,9 @@ public class ParserUtilTest {
 
     @Test
     public void parseIndex_outOfRangeInput_throwsParseException() {
+        long maxIntPlusOne = (long) Integer.MAX_VALUE + 1;
         assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, ()
-                -> ParserUtil.parseIndex(Long.toString(Integer.MAX_VALUE + 1)));
+                -> ParserUtil.parseIndex(Long.toString(maxIntPlusOne)));
     }
 
     @Test
@@ -335,4 +336,3 @@ public class ParserUtilTest {
         assertThrows(ParseException.class, () -> ParserUtil.parseSessionDate("2026-03-32"));
     }
 }
-

@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -354,7 +355,7 @@ public class PersonListPanel extends UiPart<Region> {
             Person person = personList.get(rowIndex);
             String rowStyleClass = getRowStyleClass(rowIndex);
 
-            Label studentLabel = createStudentLabel(person, rowIndex, rowStyleClass);
+            VBox studentLabel = createStudentLabel(person, rowIndex, rowStyleClass);
             attendanceMatrixGrid.add(studentLabel, STUDENT_COLUMN_INDEX, rowIndex + FIRST_DATA_ROW_OFFSET);
 
             for (int columnIndex = 0; columnIndex < sessionDates.size(); columnIndex++) {
@@ -383,17 +384,47 @@ public class PersonListPanel extends UiPart<Region> {
                 : "attendance-matrix-row-odd";
     }
 
-    private Label createStudentLabel(Person person, int rowIndex, String rowStyleClass) {
-        Label studentLabel = new Label((rowIndex + 1) + ". " + person.getName().fullName);
+    private VBox createStudentLabel(Person person, int rowIndex, String rowStyleClass) {
+        Label nameLabel = new Label((rowIndex + 1) + ". " + person.getName().fullName);
+        nameLabel.getStyleClass().add("attendance-matrix-student-name");
+        nameLabel.setWrapText(false);
+
+        ScrollPane nameScrollPane = new ScrollPane(nameLabel);
+        nameScrollPane.getStyleClass().add("attendance-matrix-student-name-scroll");
+        nameScrollPane.setFitToHeight(true);
+        nameScrollPane.setFitToWidth(false);
+        nameScrollPane.setPannable(true);
+        nameScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        nameScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        nameScrollPane.setMinHeight(26);
+        nameScrollPane.setPrefHeight(26);
+        nameScrollPane.setMaxHeight(26);
+
+        Label matricNumberLabel = new Label(person.getMatricNumber().value);
+        matricNumberLabel.getStyleClass().add("attendance-matrix-student-id");
+        matricNumberLabel.setWrapText(true);
+
+        VBox studentLabel = new VBox(3, nameScrollPane, matricNumberLabel);
         studentLabel.getStyleClass().addAll("attendance-matrix-student", rowStyleClass);
-        studentLabel.setWrapText(true);
         studentLabel.setMinWidth(STUDENT_COLUMN_WIDTH);
         studentLabel.setPrefWidth(STUDENT_COLUMN_WIDTH);
         studentLabel.setMaxWidth(STUDENT_COLUMN_WIDTH);
         studentLabel.setMinHeight(MATRIX_CELL_HEIGHT);
         studentLabel.setPrefHeight(MATRIX_CELL_HEIGHT);
         studentLabel.setMaxHeight(MATRIX_CELL_HEIGHT);
+        Tooltip.install(studentLabel, new Tooltip(buildStudentTooltip(person, rowIndex)));
         return studentLabel;
+    }
+
+    private String buildStudentTooltip(Person person, int rowIndex) {
+        return (rowIndex + 1) + ". " + person.getName().fullName
+                + System.lineSeparator()
+                + person.getMatricNumber().value;
+    }
+
+    static String formatMatrixStudentLabel(Person person, int rowIndex) {
+        String displayName = (rowIndex + 1) + ". " + person.getName().fullName;
+        return displayName + System.lineSeparator() + person.getMatricNumber().value;
     }
 
     private Label createHeaderLabel(String text,

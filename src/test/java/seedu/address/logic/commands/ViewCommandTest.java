@@ -134,6 +134,28 @@ public class ViewCommandTest {
     }
 
     @Test
+    public void execute_groupNameCaseInsensitive_usesCanonicalName() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01)); // stored as "T01"
+        model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 1).build());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
+        expectedModel.setAttendanceViewActive(true);
+        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        GroupName lowercaseName = new GroupName("t01"); // user types lowercase
+        ViewCommand command = new ViewCommand(lowercaseName, SESSION_DATE);
+        // success message should contain canonical "T01", not user-supplied "t01"
+        String expectedMessage = String.format(ViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE);
+
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_missingGroup_throwsCommandException() {
         Model model = new ModelManager();
         ViewCommand command = new ViewCommand(new GroupName("Missing"), SESSION_DATE);
@@ -252,6 +274,29 @@ public class ViewCommandTest {
         ViewCommand command = new ViewCommand(SESSION_DATE);
         assertCommandSuccess(command, model,
                 String.format(ViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE), expectedModel);
+    }
+
+    @Test
+    public void execute_refocusDateOutsideExistingVisibleRange_clearsVisibleRange() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.switchToGroupView(T01);
+        model.setVisibleSessionRange(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 3, 10));
+        model.addPerson(new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
+                .withEmail("alice@example.com").withPhone("91234567")
+                .withSession("T01", SESSION_DATE.toString(), "PRESENT", 0).build());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(T01);
+        expectedModel.setActiveSessionDate(SESSION_DATE);
+        expectedModel.setAttendanceViewActive(true);
+        expectedModel.updateFilteredPersonList(seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        ViewCommand command = new ViewCommand(SESSION_DATE);
+        assertCommandSuccess(command, model,
+                String.format(ViewCommand.MESSAGE_VIEW_SUCCESS, 1, T01, SESSION_DATE), expectedModel);
+        assertTrue(model.getVisibleSessionRangeStart().isEmpty());
+        assertTrue(model.getVisibleSessionRangeEnd().isEmpty());
     }
 
     @Test

@@ -27,12 +27,12 @@ import seedu.address.model.person.SessionList;
 public class ExportViewCommand extends Command {
 
     public static final String COMMAND_WORD = "exportview";
-    public static final String COMMAND_PARAMETERS = "[f/FILE_PATH]";
+    public static final String COMMAND_PARAMETERS = "[f/FILE_NAME.csv]";
 
     public static final String DEFAULT_FILE_NAME = "view-export.csv";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Exports the current view to a CSV file.\n"
+            + ": Exports the current view to a CSV-formatted file.\n"
             + "Parameters: " + COMMAND_PARAMETERS + "\n"
             + "Examples:\n"
             + COMMAND_WORD + " f/exports/t01-view.csv (will overwrite existing file with same name)\n"
@@ -77,7 +77,7 @@ public class ExportViewCommand extends Command {
         csv.append(System.lineSeparator());
 
         for (Person person : persons) {
-            csv.append(escape(person.getName().fullName));
+            csv.append(escape(formatExportStudentLabel(person)));
             for (LocalDate sessionDate : sessionDates) {
                 Attendance attendance = person.getAttendance(activeGroup, sessionDate);
                 csv.append(',').append(attendance.value);
@@ -126,6 +126,10 @@ public class ExportViewCommand extends Command {
                 .distinct()
                 .sorted()
                 .toList();
+    }
+
+    private String formatExportStudentLabel(Person person) {
+        return person.getName().fullName + " (" + person.getMatricNumber().value + ")";
     }
 
     private void validateFilePath(String path) throws CommandException {

@@ -24,18 +24,53 @@ public class PhoneTest {
         // null phone number
         assertThrows(NullPointerException.class, () -> Phone.isValidPhone(null));
 
-        // invalid phone numbers
-        assertFalse(Phone.isValidPhone("")); // empty string
-        assertFalse(Phone.isValidPhone(" ")); // spaces only
-        assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
-        assertFalse(Phone.isValidPhone("phone")); // non-numeric
-        assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
+        // invalid: empty, whitespace, non-numeric, mixed alpha
+        assertFalse(Phone.isValidPhone(""));
+        assertFalse(Phone.isValidPhone(" "));
+        assertFalse(Phone.isValidPhone("phone"));
+        assertFalse(Phone.isValidPhone("9011p041"));
 
-        // valid phone numbers
-        assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
+        // invalid: disallowed special characters
+        assertFalse(Phone.isValidPhone("9123.4567"));
+        assertFalse(Phone.isValidPhone("9123/4567"));
+
+        // invalid: plus sign not at start
+        assertFalse(Phone.isValidPhone("91234+567"));
+        assertFalse(Phone.isValidPhone("++6591234567"));
+
+        // invalid: leading/trailing separators
+        assertFalse(Phone.isValidPhone(" 91234567"));
+        assertFalse(Phone.isValidPhone("91234567 "));
+
+        // invalid: BVA 3 consecutive separators
+        assertFalse(Phone.isValidPhone("9123   4567"));
+        assertFalse(Phone.isValidPhone("+1  (650) 253-0000"));
+
+        // invalid: multiple numbers
+        assertFalse(Phone.isValidPhone("91234567, 81234567"));
+        assertFalse(Phone.isValidPhone("91234567 / 81234567"));
+
+        // invalid: digit count BVA (min 3, max 20)
+        assertFalse(Phone.isValidPhone("91"));
+        assertFalse(Phone.isValidPhone("123456789012345678901")); // 21 digits
+
+        // valid: digit count BVA
+        assertTrue(Phone.isValidPhone("911")); // 3 digits (min)
+        assertTrue(Phone.isValidPhone("12345678901234567890")); // 20 digits (max)
+
+        // valid: BVA 2 consecutive separators
+        assertTrue(Phone.isValidPhone("9123  4567"));
+        assertTrue(Phone.isValidPhone("+1 (650) 253-0000"));
+
+        // valid: local SG numbers
         assertTrue(Phone.isValidPhone("93121534"));
-        assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
+        assertTrue(Phone.isValidPhone("9312 1534"));
+        assertTrue(Phone.isValidPhone("9312-1534"));
+
+        // valid: international numbers
+        assertTrue(Phone.isValidPhone("+6591234567"));
+        assertTrue(Phone.isValidPhone("+65 9123 4567"));
+        assertTrue(Phone.isValidPhone("+44 20 7946 0958"));
     }
 
     @Test

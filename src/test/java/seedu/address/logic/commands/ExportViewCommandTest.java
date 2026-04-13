@@ -34,7 +34,7 @@ public class ExportViewCommandTest {
 
         assertTrue(Files.exists(output));
         assertTrue(Files.readString(output).contains("Student"));
-        assertTrue(Files.readString(output).contains("Alice"));
+        assertTrue(Files.readString(output).contains("Alice (A1234567X)"));
     }
 
     @Test
