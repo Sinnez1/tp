@@ -423,6 +423,18 @@ Rules:
 
 ---
 
+### Max Marks and Grade
+
+The `mm/MAX_MARKS` parameter refers to the maximum marks (grade) for an Assignment.
+
+Allowed value: Whole number from 1 to 2147483647 (this number is the technical limit)
+
+The `gr/GRADE` parameter refers to the grade (marks) for an Assignment given to a Student.
+
+Allowed value: 2-decimal-place number from 0 to MAX_MARKS
+
+---
+
 <div style="page-break-after: always;"></div>
 
 ## Feature: Managing Students
@@ -796,7 +808,6 @@ When a student is removed from a group, their grades for that group’s assignme
 
 </box>
 
-
 ---
 
 ### Edit assignment: `editassignment` (`edita`)
@@ -804,7 +815,9 @@ When a student is removed from a group, their grades for that group’s assignme
 Edits an existing assignment for people in the current group .
 
 Format: 
-* `editassignment a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS`
+* `editassignment a/ASSIGNMENT_NAME [na/NEW_ASSIGNMENT_NAME] [d/NEW_DUE_DATE] [mm/NEW_MAX_MARKS]`
+
+Note: At least one optional field should be provided.
 
 Examples:
 *  `editassignment a/Quiz 1 na/Test d/2026-04-08 mm/25` Changes existing assignment `Quiz 1` for the current group to have a name Test, a due date on 8 April 2026 and maximum marks of 25.
@@ -1033,7 +1046,7 @@ You should follow the format below closely to prevent an invalid save file.
 {
   "persons" : [ {
     "name" : "NAME",
-    "phone" : "PHONE_NUMBER",
+    "phone" : "PHONE",
     "email" : "EMAIL",
     "matricNumber" : "MATRIC_NUMBER",
     "tags" : [ "TAGS" ],
@@ -1140,25 +1153,25 @@ You should close TAA and manually fix the save file before continuing your use o
 
 <div style="page-break-after: always;"></div>
 
-## Command summary
+## Command Summary
 
 | Action                            | Formats and Examples                                                                                                                                                                                                                                                                                                                                         |
 |-----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**                           | `add n/NAME p/PHONE_NUMBER e/EMAIL m/MATRIC_NUMBER [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com m/A1234567X t/scholar`                                                                                                                                                                                                             |
+| **Add**                           | `add n/NAME p/PHONE e/EMAIL m/MATRIC_NUMBER [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com m/A1234567X t/scholar`                                                                                                                                                                                                                    |
 | **Add to Group**                  | `addtogroup g/GROUP_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER]` <br/>`addtogroup g/GROUP_NAME i/INDEX_EXPRESSION` <br> e.g., `addtogroup g/T01 m/A1234567X m/A2345678L`                                                                                                                                                                                          |
 | **Add Session**                   | `addsession d/YYYY-MM-DD [g/GROUP_NAME] [n/NOTE]` <br> e.g., `addsession d/2026-03-16 g/T01 n/tutorial`                                                                                                                                                                                                                                                      |
 | **Edit Session**                  | `editsession d/OLD_DATE [nd/NEW_DATE] [nn/NEW_NOTE] [g/GROUP_NAME]` <br> e.g., `editsession d/2026-03-16 nd/2026-03-23 nn/lab g/T01`                                                                                                                                                                                                                         |
-| **View Attendance/Participation** | `view [STATUS] [d/YYYY-MM-DD] [g/GROUP_NAME] [from/YYYY-MM-DD] [to/YYYY-MM-DD]` <br> e.g., `view absent from/2026-03-01 to/2026-03-31`                                                                                                                                                                                                                       |
-| **Export View**                   | `exportview [f/FILE_NAME.csv]` <br> e.g., `exportview f/exports/t01-view.csv`                                                                                                                                                                                                                                                                                |
+| **View Attendance/Participation** | `view [STATUS] [d/YYYY-MM-DD] [from/YYYY-MM-DD] [to/YYYY-MM-DD] [g/GROUP_NAME]` <br> e.g., `view absent d/2026-03-16`                                                                                                                                                                                                                                        |
+| **Export View**                   | `exportview [f/FILE_NAME]` <br> e.g., `exportview f/exports/t01-view.csv`                                                                                                                                                                                                                                                                                    |
 | **Clear**                         | `clear`                                                                                                                                                                                                                                                                                                                                                      |
 | **Create Assignment**             | `createassignment a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` <br/>`createa a/ASSIGNMENT_NAME d/DUE_DATE mm/MAX_MARKS` <br> e.g., `createassignment a/Quiz 1 d/2026-04-05 mm/20`                                                                                                                                                                              |
 | **Create Group**                  | `creategroup g/GROUP_NAME` <br> e.g., `creategroup g/T01`                                                                                                                                                                                                                                                                                                    |
 | **Delete**                        | `delete i/INDEX`<br> e.g., `delete i/3`                                                                                                                                                                                                                                                                                                                      |
 | **Delete Assignment**             | `deleteassignment a/ASSIGNMENT_NAME` <br/>`deletea a/ASSIGNMENT_NAME` <br> e.g., `deleteassignment a/Quiz 1`                                                                                                                                                                                                                                                 |
 | **Delete Group**                  | `deletegroup g/GROUP_NAME` <br> e.g., `deletegroup g/T01`                                                                                                                                                                                                                                                                                                    |
-| **Delete Session**                | `deletesession [confirm] d/YYYY-MM-DD [g/GROUP_NAME]` <br> e.g., `deletesession confirm d/2026-03-16 g/T01`                                                                                                                                                                                                                                                  |
+| **Delete Session**                | `deletesession d/YYYY-MM-DD [g/GROUP_NAME]` <br> e.g., `deletesession d/2026-03-16 g/T01`                                                                                                                                                                                                                                                                    |
 | **Edit**                          | `edit i/INDEX [n/NAME] [p/PHONE] [e/EMAIL] [m/MATRIC_NUMBER] [t/TAG]…​` <br> e.g.,`edit i/2 n/James Lee e/jameslee@example.com`                                                                                                                                                                                                                              |
-| **Edit Assignment**               | `editassignment a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS` <br/>`edita a/ASSIGNMENT_NAME na/NEW_ASSIGNMENT_NAME d/NEW_DUE_DATE mm/NEW_MAX_MARKS` <br> e.g., `editassignment a/Quiz 1 na/Test d/2026-04-08 mm/25`                                                                                                              |
+| **Edit Assignment**               | `editassignment a/ASSIGNMENT_NAME [na/NEW_ASSIGNMENT_NAME] [d/NEW_DUE_DATE] [mm/NEW_MAX_MARKS]` <br/>`edita a/ASSIGNMENT_NAME [na/NEW_ASSIGNMENT_NAME] [d/NEW_DUE_DATE] [mm/NEW_MAX_MARKS]` <br> e.g., `editassignment a/Quiz 1 na/Test d/2026-04-08 mm/25`                                                                                                  |
 | **Exit**                          | `exit`                                                                                                                                                                                                                                                                                                                                                       |
 | **Find**                          | `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRIC_NUMBER]... [t/TAG]...`<br> e.g., `find n/john p/987 e/example.com m/123 t/scholar`                                                                                                                                                                                                                     |
 | **Grade Assignment**              | `gradeassignment a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE` <br/>`gradeassignment a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME i/INDEX_EXPRESSION gr/GRADE`<br/>`gradea a/ASSIGNMENT_NAME m/MATRIC_NUMBER [m/MATRIC_NUMBER] gr/GRADE` <br> e.g., `gradeassignment a/Quiz 1 m/A1234567X m/A2345678L gr/17` |
@@ -1183,6 +1196,39 @@ You should close TAA and manually fix the save file before continuing your use o
 
 When you first launch TAA, a `data` folder should be created containing `TAA_savefile.json`, which is where the data is stored.
 <br> Sample data will be populated onto TAA. To clear all existing data and begin your use of TAA, run `clear`.
+
+</panel>
+
+<panel id="faq-resizeable_handles" header="Can I resize the input and response text areas?" type="seamless" expanded>
+
+Yes, you can click and vertically drag the bar between the input, response, and layout areas. It lights up when you mouse over it.
+You can resize things to best suit your display arrangement.
+
+</panel>
+
+<panel id="faq-duplicate" header="What is considered a duplicate student?" type="seamless" expanded>
+
+TAA considers 2 students to be duplicates if they share the same matric number (case-insensitive).
+
+This means that:
+- Two students with the same name but different matric numbers **are not** duplicates and can both exist.
+- Two students with different names but the same matric number **are** duplicates.
+
+If you try to `add` a student whose matric number already exists, or `edit` a student such that its matric number would match an existing student, TAA will reject it and not make any changes to the app.
+
+</panel>
+
+<panel id="faq-edit_tags" header="What happens when I edit the tags of a student?" type="seamless" expanded>
+
+All existing tags of the student will be removed and replaced by any new tags you add when running `edit i/INDEX t/TAG`. This means that adding tags is not cumulative. <br>
+**Here's an example**: if a student has tags of `t/groupB` and `t/exchangeStudent`, running the command `edit i/INDEX t/groupA` will result in the student only having the `t/groupA` tag.
+
+
+</panel>
+
+<panel id="faq-remove_tags" header="How can I remove all tags from a student?" type="seamless" expanded>
+
+You can remove all tags from a student by running `edit i/INDEX t/`, without specifying any tags.
 
 </panel>
 
@@ -1238,7 +1284,7 @@ These sections will be loaded into your save file once you start TAA.
 <box type="tip" light>
 
 **Tip:**
-You can read the <code>loadWarnings</code> as a reference to fix your save file.
+You can read the `loadWarnings` as a reference to fix your save file.
 <br> If you fix all errors and rerun TAA, the warnings will be cleared. 
 <br> If errors remain, you will see updated warnings reflecting any outstanding issues.
 </box>
@@ -1257,8 +1303,8 @@ You can also refer to `loadWarnings` in the save file to see the errors for each
 
 </box>
 
-You can fix the invalid student details by editing them in the <code>preservedSkippedPersons</code> section of the save file.<br>
-Once these students are valid, TAA will automatically load these students on the next run and clear the <code>loadWarnings</code>.
+You can fix the invalid student details by editing them in the `preservedSkippedPersons` section of the save file.<br>
+Once these students are valid, TAA will automatically load these students on the next run and clear the `loadWarnings`.
 
 <panel header="Here's an example of how `preservedSkippedPersons` looks like if you run TAA with an invalid student!" type="seamless" expanded>
 
@@ -1304,6 +1350,9 @@ Rerun TAA and `John` will now be loaded into the contact list!
 
 You will see an error message telling you how many groups are invalid once TAA starts running.
 
+You can fix the invalid groups by editing them in the `preservedSkippedGroups` section of the save file.<br>
+Once the groups are valid, TAA will automatically load these groups on the next run and clear the `loadWarnings`.
+
 <box type="warning" light>
 
 **Warning:**
@@ -1319,9 +1368,6 @@ Students that reference invalid groups will be considered invalid and moved to `
 They will automatically be loaded back once the invalid group is fixed in `preservedSkippedGroups`.
 
 </box>
-
-You can fix the invalid groups by editing them in the <code>preservedSkippedGroups</code> section of the save file.<br>
-Once the groups are valid, TAA will automatically load these groups on the next run and clear the <code>loadWarnings</code>.
 
 <panel header="Here's an example of how `preservedSkippedGroups` looks if you run TAA with an invalid group!" type="seamless" expanded>
 
@@ -1386,32 +1432,6 @@ Rerun TAA and group `T02` will exist. `John` will also be loaded into the contac
 
 </panel>
 
-<panel id="faq-duplicate" header="What is considered a duplicate student?" type="seamless" expanded>
-
-TAA considers 2 students to be duplicates if they share the same matric number (case-insensitive).
-
-This means that:
-- Two students with the same name but different matric numbers **are not** duplicates and can both exist. 
-- Two students with different names but the same matric number **are** duplicates.
-
-If you try to `add` a student whose matric number already exists, or `edit` a student such that its matric number would match an existing student, TAA will reject it and not make any changes to the app.
-
-</panel>
-
-<panel id="faq-edit_tags" header="What happens when I edit the tags of a student?" type="seamless" expanded>
-
-All existing tags of the student will be removed and replaced by any new tags you add when running `edit i/INDEX t/TAG`. This means that adding tags is not cumulative. <br>
-**Here's an example**: if a student has tags of `t/groupB` and `t/exchangeStudent`, running the command `edit i/INDEX t/groupA` will result in the student only having the `t/groupA` tag.
-
-
-</panel>
-
-<panel id="faq-remove_tags" header="How can I remove all tags from a student?" type="seamless" expanded>
-
-You can remove all tags from a student by running `edit i/INDEX t/`, without specifying any tags.
-
-</panel>
-
 ---------------------------------------------------
 
 <div style="page-break-after: always;"></div>
@@ -1435,9 +1455,9 @@ You should refer to this section to find out more about some common errors faced
 | `Contact has sessions for group 'X' but is not a member of it`                                                            | Ensure that student has matching groups in `"groups": [ ]` and `"groupSessions": { }` in `"persons": [ ]`.                                                  |
 
 ### Troubleshooting manual editing of groups
-| Error shown                                                                                                                                           | How to fix                                                                                                                     |
-|:------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
-| `Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank`                                      | Ensure that the group name follows the constraints given in the error message.                                                 |
-| `Skipped duplicate group: 'X'`                                                                                                                        | Delete the group by deleting `{ "name": "X", "assignments": [ ] }` from `"preservedSkippedGroups": [ ]` , or rename the group. |
-| `Assignment names should only contain alphanumeric characters and spaces, and should not be blank`                                                    | Ensure that the assignment name follows the constraints given in the error message.                                            |
-| `Max marks should be a positive integer`                                                                                                              | Ensure that max marks is a positive integer. <br> Marks is an integer from 1 to 2147483647 due to technical limits.            |
+| Error shown                                                                                                      | How to fix                                                                                                                     |
+|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
+| `Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank` | Ensure that the group name follows the constraints given in the error message.                                                 |
+| `Skipped duplicate group: 'X'`                                                                                   | Delete the group by deleting `{ "name": "X", "assignments": [ ] }` from `"preservedSkippedGroups": [ ]` , or rename the group. |
+| `Assignment names should only contain alphanumeric characters and spaces, and should not be blank`               | Ensure that the assignment name follows the constraints given in the error message.                                            |
+| `Max marks should be an integer between 1 and 2147483647`                                                        | Ensure that max marks is a positive integer from 1 to 2147483647 (this number is the technical limit).                         |
