@@ -475,8 +475,8 @@ Shows a list of all students in the current group.
 Format: `list`
 
 Examples:
-* `list` when `current group: T01` shows a list of all the students in group `T01`.
-* `list` when `current group: All Students` shows a list of all the students in TAA.
+* `list` when `Current Group: T01` shows a list of all the students in group `T01`.
+* `list` when `Current Group: No Group Selected` shows a list of all the students in TAA.
 
 ---
 
