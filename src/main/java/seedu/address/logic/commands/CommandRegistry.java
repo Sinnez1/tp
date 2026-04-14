@@ -36,5 +36,13 @@ public class CommandRegistry {
             Map.entry(ViewCommand.COMMAND_WORD, ViewCommand.COMMAND_PARAMETERS)
     );
 
+    public static final Map<String, String> COMMAND_ALIASES = Map.of(
+            CreateAssignmentCommand.SHORT_COMMAND_WORD, CreateAssignmentCommand.COMMAND_PARAMETERS,
+            EditAssignmentCommand.SHORT_COMMAND_WORD, EditAssignmentCommand.COMMAND_PARAMETERS,
+            DeleteAssignmentCommand.SHORT_COMMAND_WORD, DeleteAssignmentCommand.COMMAND_PARAMETERS,
+            ListAssignmentsCommand.SHORT_COMMAND_WORD, ListAssignmentsCommand.COMMAND_PARAMETERS,
+            GradeAssignmentCommand.SHORT_COMMAND_WORD, GradeAssignmentCommand.COMMAND_PARAMETERS
+    );
+
     private CommandRegistry() {} // prevent instantiation
 }

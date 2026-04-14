@@ -97,6 +97,9 @@ public class CommandBox extends UiPart<Region> {
 
         String commandWord = extractCommandWord(input);
         String parameters = CommandRegistry.COMMAND_ATTRIBUTES.get(commandWord);
+        if (parameters == null) {
+            parameters = CommandRegistry.COMMAND_ALIASES.get(commandWord);
+        }
 
         if (parameters != null && !parameters.isBlank()) {
             if (!commandWord.equals(activeCommandWord)) {

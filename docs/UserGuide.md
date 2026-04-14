@@ -23,14 +23,14 @@ Spend less time organizing data and more time focusing on what matters most: **t
 
 <div style="page-break-after: always;"></div>
 
-## Downloading and opening the app
+## Downloading and Launching the app
 
 1. Ensure you have **Java 17** or above installed on your computer.<br>
-You can refer to [this guide](https://se-education.org/guides/tutorials/javaInstallation.html) on how to install or verify that you have **Java 17** installed.
+ To install it or verify that you have the right version installed, you can refer to [this guide](https://se-education.org/guides/tutorials/javaInstallation.html).
 
 <box type="info" light>
 
-**Mac users:** Please ensure you have the precise Java version as stated [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+**macOS users:** Please ensure you have the exact Java version as stated [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
 </box>
 
@@ -48,13 +48,13 @@ You can refer to [this guide](https://se-education.org/guides/tutorials/javaInst
 
 <br>
 
-4. To launch TAA, open a command terminal and follow these instructions:
+4. To launch TAA, open a command terminal and follow the instructions for your Operating System:
 
 <panel header="**Windows**" type=seamless expanded>
 
-1. Open **Terminal**.
-2. Navigate to the filepath for "TAA App Folder".
-For example, if you put `TAA.jar` in a folder named **TAA App Folder** in your **Downloads** folder, you should type the following and press enter:
+1. Launch the **Terminal** app.
+2. Navigate to the folder for "TAA App Folder" using the `cd` (change directory) command. <br>
+For example, if you put `TAA.jar` in a folder named **TAA App Folder** in your **Downloads** folder, type the following and press enter:
 ```
 cd "%USERPROFILE%\Downloads\TAA"
 ```
@@ -66,11 +66,11 @@ java -jar TAA.jar
 
 <panel header="**macOS** or **Linux**" type=seamless expanded>
 
-1. Open **Terminal**.
-2. Navigate to the filepath for "TAA App Folder".
-   For example, if you put `TAA.jar` in a folder named **TAA App Folder** in your **Downloads** folder, you should type the following and press enter:
+1. Launch the **Terminal** app.
+2. Navigate to the folder for "TAA App Folder" using the `cd` (change directory) command. <br>
+   For example, if you put `TAA.jar` in a folder named **TAA App Folder** in your **Downloads** folder, type the following and press enter:
 ```
-cd ~/Downloads/TAA"
+cd "~/Downloads/TAA"
 ```
 3. Launch the app. Type the following and press enter:
 ```
@@ -647,7 +647,7 @@ When a group is renamed, its assignments and grades stay attached.
 
 ---
 
-### Switching view of groups: `switchgroup`
+### Switching groups: `switchgroup`
 
 Switches into or out of a group.
 
@@ -657,7 +657,7 @@ Format:
 
 Examples:
 *  `switchgroup g/T01` Switches current group to `T01`
-*  `switchgroup all` Switches out of the current group
+*  `switchgroup all` Switches out of the current group (i.e. No Group Selected)
 
 <div style="page-break-after: always;"></div>
 
