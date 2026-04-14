@@ -56,6 +56,10 @@ public class EditAssignmentCommand extends ClassScopedAssignmentCommand {
         Assignment assignmentToEdit = getRequiredAssignment(activeGroup, targetAssignmentName);
         Assignment editedAssignment = createEditedAssignment(assignmentToEdit, editAssignmentDescriptor);
 
+        if (assignmentToEdit.equals(editedAssignment)) {
+            throw new CommandException(MESSAGE_NOTHING_CHANGED);
+        }
+
         if (!assignmentToEdit.getAssignmentName().equals(editedAssignment.getAssignmentName())
                 && activeGroup.hasAssignment(editedAssignment.getAssignmentName())) {
             throw new CommandException(MESSAGE_DUPLICATE_ASSIGNMENT);
@@ -97,13 +101,13 @@ public class EditAssignmentCommand extends ClassScopedAssignmentCommand {
         return new Assignment(updatedAssignmentName, updatedDueDate, updatedMaxMarks);
     }
 
-    private int findHighestExistingGrade(Model model, Group activeGroup, AssignmentName assignmentName) {
+    private double findHighestExistingGrade(Model model, Group activeGroup, AssignmentName assignmentName) {
         return getStudentsInClass(model, activeGroup.getGroupName()).stream()
                 .flatMap(person -> person.getAssignmentGrade(activeGroup.getGroupName(),
                                 assignmentName)
                         .stream())
-                .max(Integer::compareTo)
-                .orElse(0);
+                .max(Double::compareTo)
+                .orElse(0.0);
     }
 
     @Override

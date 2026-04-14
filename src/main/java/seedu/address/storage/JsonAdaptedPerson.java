@@ -36,7 +36,7 @@ class JsonAdaptedPerson {
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final List<String> groups = new ArrayList<>();
     private final Map<String, List<JsonAdaptedSession>> groupSessions = new HashMap<>();
-    private final Map<String, Map<String, Integer>> assignmentGrades = new HashMap<>();
+    private final Map<String, Map<String, Double>> assignmentGrades = new HashMap<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -50,7 +50,7 @@ class JsonAdaptedPerson {
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("groups") List<String> groups,
             @JsonProperty("groupSessions") Map<String, List<JsonAdaptedSession>> groupSessions,
-            @JsonProperty("assignmentGrades") Map<String, Map<String, Integer>> assignmentGrades) {
+            @JsonProperty("assignmentGrades") Map<String, Map<String, Double>> assignmentGrades) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -71,7 +71,7 @@ class JsonAdaptedPerson {
         }
         if (assignmentGrades != null) {
             assignmentGrades.forEach((groupName, grades) -> {
-                Map<String, Integer> adaptedGrades = (grades == null)
+                Map<String, Double> adaptedGrades = (grades == null)
                         ? new HashMap<>()
                         : new HashMap<>(grades);
                 this.assignmentGrades.put(groupName, adaptedGrades);
@@ -217,24 +217,24 @@ class JsonAdaptedPerson {
         return modelSessionMap;
     }
 
-    private Map<GroupName, Map<AssignmentName, Integer>> parseAssignmentGrades() throws IllegalValueException {
-        Map<GroupName, Map<AssignmentName, Integer>> modelAssignmentGrades = new HashMap<>();
-        for (Map.Entry<String, Map<String, Integer>> entry : assignmentGrades.entrySet()) {
+    private Map<GroupName, Map<AssignmentName, Double>> parseAssignmentGrades() throws IllegalValueException {
+        Map<GroupName, Map<AssignmentName, Double>> modelAssignmentGrades = new HashMap<>();
+        for (Map.Entry<String, Map<String, Double>> entry : assignmentGrades.entrySet()) {
             String groupNameString = entry.getKey();
             if (!GroupName.isValidGroupName(groupNameString)) {
                 throw new IllegalValueException(GroupName.MESSAGE_CONSTRAINTS);
             }
             GroupName groupName = new GroupName(groupNameString);
-            Map<AssignmentName, Integer> classGrades = new HashMap<>();
-            Map<String, Integer> storedGrades = entry.getValue() == null ? Map.of() : entry.getValue();
-            for (Map.Entry<String, Integer> gradeEntry : storedGrades.entrySet()) {
+            Map<AssignmentName, Double> classGrades = new HashMap<>();
+            Map<String, Double> storedGrades = entry.getValue() == null ? Map.of() : entry.getValue();
+            for (Map.Entry<String, Double> gradeEntry : storedGrades.entrySet()) {
                 String assignmentNameString = gradeEntry.getKey();
-                Integer gradeValue = gradeEntry.getValue();
+                Double gradeValue = gradeEntry.getValue();
                 if (!AssignmentName.isValidAssignmentName(assignmentNameString)) {
                     throw new IllegalValueException(AssignmentName.MESSAGE_CONSTRAINTS);
                 }
                 if (gradeValue == null || gradeValue < 0) {
-                    throw new IllegalValueException("Assignment grades should be non-negative integers.");
+                    throw new IllegalValueException("Assignment grades should be non-negative numbers.");
                 }
                 classGrades.put(new AssignmentName(assignmentNameString), gradeValue);
             }

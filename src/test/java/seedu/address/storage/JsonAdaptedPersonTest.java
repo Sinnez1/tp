@@ -198,8 +198,8 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidGroupNameInGrades_throwsIllegalValueException() {
         // EP: Group name key in assignmentGrades is invalid (empty string fails validation)
-        Map<String, Map<String, Integer>> invalidGrades = Map.of(
-                " ", Map.of("Assignment 1", 50) // invalid group name
+        Map<String, Map<String, Double>> invalidGrades = Map.of(
+                " ", Map.of("Assignment 1", 50.0)
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
                 VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
@@ -210,8 +210,8 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidAssignmentNameInGrades_throwsIllegalValueException() {
         // EP: Assignment name key in grades is invalid (empty string fails validation)
-        Map<String, Map<String, Integer>> invalidGrades = Map.of(
-                "CS2103T-T01", Map.of(" ", 50) // invalid assignment name
+        Map<String, Map<String, Double>> invalidGrades = Map.of(
+                "CS2103T-T01", Map.of(" ", 50.0)
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
                 VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,
@@ -222,8 +222,8 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_negativeGradeValue_throwsIllegalValueException() {
         // EP: assignment with negative max marks
-        Map<String, Map<String, Integer>> invalidGrades = Map.of(
-                "CS2103T-T01", Map.of("Assignment 1", -1)
+        Map<String, Map<String, Double>> invalidGrades = Map.of(
+                "CS2103T-T01", Map.of("Assignment 1", -1.0)
         );
         JsonAdaptedPerson person = new JsonAdaptedPerson(
                 VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_MATRIC_NUMBER, VALID_TAGS,

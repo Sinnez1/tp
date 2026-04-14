@@ -37,7 +37,7 @@ public class Person {
     //@@author Sinnez1
     private final Map<GroupName, SessionList> groupSessions = new HashMap<>();
     //@@author ongrussell
-    private final Map<GroupName, Map<AssignmentName, Integer>> assignmentGrades = new HashMap<>();
+    private final Map<GroupName, Map<AssignmentName, Double>> assignmentGrades = new HashMap<>();
     //@@author
 
     /**
@@ -87,7 +87,7 @@ public class Person {
     /**
      * Used for assignment-grade updates. Every field must be present and not null.
      */
-    public Person(Person person, Map<GroupName, Map<AssignmentName, Integer>> updatedAssignmentGrades,
+    public Person(Person person, Map<GroupName, Map<AssignmentName, Double>> updatedAssignmentGrades,
                   boolean ignored) {
         this(person.name, person.phone, person.email, person.matricNumber, person.tags, person.groups,
                 person.groupSessions,
@@ -101,7 +101,7 @@ public class Person {
                    Set<Tag> tags,
                    Set<GroupName> groups,
                    Map<GroupName, SessionList> groupSessions,
-                   Map<GroupName, Map<AssignmentName, Integer>> assignmentGrades) {
+                   Map<GroupName, Map<AssignmentName, Double>> assignmentGrades) {
         requireAllNonNull(name, phone, email, matricNumber, tags, groups, groupSessions, assignmentGrades);
         this.name = name;
         this.phone = phone;
@@ -167,11 +167,11 @@ public class Person {
     /**
      * Returns a copy of the {@code Person} with the given assignment grade added or overwritten.
      */
-    public Person withUpdatedAssignmentGrade(GroupName groupName, AssignmentName assignmentName, int grade) {
+    public Person withUpdatedAssignmentGrade(GroupName groupName, AssignmentName assignmentName, double grade) {
         requireAllNonNull(groupName, assignmentName);
-        Map<GroupName, Map<AssignmentName, Integer>> updatedAssignmentGrades =
+        Map<GroupName, Map<AssignmentName, Double>> updatedAssignmentGrades =
                 copyAssignmentGradeMap(this.assignmentGrades);
-        Map<AssignmentName, Integer> classAssignmentGrades =
+        Map<AssignmentName, Double> classAssignmentGrades =
                 updatedAssignmentGrades.getOrDefault(groupName, new HashMap<>());
         classAssignmentGrades.put(assignmentName, grade);
         updatedAssignmentGrades.put(groupName, classAssignmentGrades);
@@ -191,7 +191,7 @@ public class Person {
         Map<GroupName, SessionList> updatedSessionMap = copySessionMap(this.groupSessions);
         updatedSessionMap.remove(groupName);
 
-        Map<GroupName, Map<AssignmentName, Integer>> updatedAssignmentGrades =
+        Map<GroupName, Map<AssignmentName, Double>> updatedAssignmentGrades =
                 copyAssignmentGradeMap(this.assignmentGrades);
         updatedAssignmentGrades.remove(groupName);
 
@@ -218,9 +218,9 @@ public class Person {
             updatedSessionMap.put(newGroupName, existingSessions);
         }
 
-        Map<GroupName, Map<AssignmentName, Integer>> updatedAssignmentGrades =
+        Map<GroupName, Map<AssignmentName, Double>> updatedAssignmentGrades =
                 copyAssignmentGradeMap(this.assignmentGrades);
-        Map<AssignmentName, Integer> existingGrades = updatedAssignmentGrades.remove(oldGroupName);
+        Map<AssignmentName, Double> existingGrades = updatedAssignmentGrades.remove(oldGroupName);
         if (existingGrades != null) {
             updatedAssignmentGrades.put(newGroupName, existingGrades);
         }
@@ -234,9 +234,9 @@ public class Person {
      */
     public Person withoutAssignmentGrade(GroupName groupName, AssignmentName assignmentName) {
         requireAllNonNull(groupName, assignmentName);
-        Map<GroupName, Map<AssignmentName, Integer>> updatedAssignmentGrades =
+        Map<GroupName, Map<AssignmentName, Double>> updatedAssignmentGrades =
                 copyAssignmentGradeMap(this.assignmentGrades);
-        Map<AssignmentName, Integer> classAssignmentGrades = updatedAssignmentGrades.get(groupName);
+        Map<AssignmentName, Double> classAssignmentGrades = updatedAssignmentGrades.get(groupName);
         if (classAssignmentGrades == null) {
             return this;
         }
@@ -257,13 +257,13 @@ public class Person {
     public Person withRenamedAssignmentGrade(GroupName groupName, AssignmentName oldAssignmentName,
                                              AssignmentName newAssignmentName) {
         requireAllNonNull(groupName, oldAssignmentName, newAssignmentName);
-        Map<GroupName, Map<AssignmentName, Integer>> updatedAssignmentGrades =
+        Map<GroupName, Map<AssignmentName, Double>> updatedAssignmentGrades =
                 copyAssignmentGradeMap(this.assignmentGrades);
-        Map<AssignmentName, Integer> classAssignmentGrades = updatedAssignmentGrades.get(groupName);
+        Map<AssignmentName, Double> classAssignmentGrades = updatedAssignmentGrades.get(groupName);
         if (classAssignmentGrades == null || !classAssignmentGrades.containsKey(oldAssignmentName)) {
             return this;
         }
-        Integer existingGrade = classAssignmentGrades.remove(oldAssignmentName);
+        Double existingGrade = classAssignmentGrades.remove(oldAssignmentName);
         classAssignmentGrades.put(newAssignmentName, existingGrade);
         updatedAssignmentGrades.put(groupName, classAssignmentGrades);
         return new Person(this.name, this.phone, this.email, this.matricNumber, this.tags, this.groups,
@@ -284,7 +284,7 @@ public class Person {
     /**
      * Returns the assignment grade map.
      */
-    public Map<GroupName, Map<AssignmentName, Integer>> getAssignmentGrades() {
+    public Map<GroupName, Map<AssignmentName, Double>> getAssignmentGrades() {
         return assignmentGrades.entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey,
                         entry -> Collections.unmodifiableMap(entry.getValue())));
@@ -293,7 +293,7 @@ public class Person {
     /**
      * Returns the grade for the specified assignment in the given group, if it exists.
      */
-    public Optional<Integer> getAssignmentGrade(GroupName groupName, AssignmentName assignmentName) {
+    public Optional<Double> getAssignmentGrade(GroupName groupName, AssignmentName assignmentName) {
         requireAllNonNull(groupName, assignmentName);
         return Optional.ofNullable(assignmentGrades.getOrDefault(groupName, Collections.emptyMap())
                 .get(assignmentName));
@@ -451,9 +451,9 @@ public class Person {
         return copiedMap;
     }
 
-    private static Map<GroupName, Map<AssignmentName, Integer>> copyAssignmentGradeMap(
-            Map<GroupName, Map<AssignmentName, Integer>> source) {
-        Map<GroupName, Map<AssignmentName, Integer>> copiedMap = new HashMap<>();
+    private static Map<GroupName, Map<AssignmentName, Double>> copyAssignmentGradeMap(
+            Map<GroupName, Map<AssignmentName, Double>> source) {
+        Map<GroupName, Map<AssignmentName, Double>> copiedMap = new HashMap<>();
         source.forEach((groupName, assignmentGradeMap) ->
                 copiedMap.put(groupName, new HashMap<>(assignmentGradeMap)));
         return copiedMap;

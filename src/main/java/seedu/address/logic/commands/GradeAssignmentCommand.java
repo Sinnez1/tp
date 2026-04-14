@@ -43,10 +43,10 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
     private final AssignmentName assignmentName;
     private final List<Index> targetIndexes;
     private final List<MatricNumber> targetMatricNumbers;
-    private final int grade;
+    private final double grade;
 
     private GradeAssignmentCommand(AssignmentName assignmentName, List<Index> targetIndexes,
-                                   List<MatricNumber> targetMatricNumbers, int grade) {
+                                   List<MatricNumber> targetMatricNumbers, double grade) {
         requireNonNull(assignmentName);
         requireNonNull(targetIndexes);
         requireNonNull(targetMatricNumbers);
@@ -57,13 +57,13 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
     }
 
     public static GradeAssignmentCommand forIndexes(AssignmentName assignmentName, List<Index> targetIndexes,
-                                                     int grade) {
+                                                    double grade) {
         return new GradeAssignmentCommand(assignmentName, targetIndexes, List.of(), grade);
     }
 
     public static GradeAssignmentCommand forMatricNumbers(AssignmentName assignmentName,
-                                                           List<MatricNumber> targetMatricNumbers,
-                                                           int grade) {
+                                                          List<MatricNumber> targetMatricNumbers,
+                                                          double grade) {
         return new GradeAssignmentCommand(assignmentName, List.of(), targetMatricNumbers, grade);
     }
 
@@ -86,7 +86,7 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
 
         return new CommandResult(String.format("Graded %s for %s: %s.", assignmentName.value,
                 joinNames(targetPersons.stream().map(person -> person.getName().fullName).toList()),
-                grade + "/" + assignment.getMaxMarks()));
+                formatGrade(grade) + "/" + assignment.getMaxMarks()));
     }
 
     private List<Person> resolveTargetPersons(Model model, GroupName groupName)
@@ -127,6 +127,14 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
         return names.stream().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining(", "));
     }
 
+    private String formatGrade(double grade) {
+        if (grade == Math.rint(grade)) {
+            return Integer.toString((int) grade);
+        }
+        String formatted = String.format("%.3f", grade);
+        return formatted.replaceAll("0+$", "").replaceAll("\\.$", "");
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -139,6 +147,6 @@ public class GradeAssignmentCommand extends ClassScopedAssignmentCommand {
         return assignmentName.equals(otherCommand.assignmentName)
                 && targetIndexes.equals(otherCommand.targetIndexes)
                 && targetMatricNumbers.equals(otherCommand.targetMatricNumbers)
-                && grade == otherCommand.grade;
+                && Double.compare(grade, otherCommand.grade) == 0;
     }
 }

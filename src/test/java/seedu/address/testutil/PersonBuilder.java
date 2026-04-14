@@ -39,7 +39,7 @@ public class PersonBuilder {
     private Set<Tag> tags;
     private Set<GroupName> groups;
     private Map<GroupName, SessionList> groupSessions;
-    private Map<GroupName, Map<AssignmentName, Integer>> assignmentGrades;
+    private Map<GroupName, Map<AssignmentName, Double>> assignmentGrades;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -124,10 +124,10 @@ public class PersonBuilder {
     /**
      * Adds or overwrites an assignment grade for the specified group and assignment.
      */
-    public PersonBuilder withAssignmentGrade(String groupName, String assignmentName, int grade) {
+    public PersonBuilder withAssignmentGrade(String groupName, String assignmentName, double grade) {
         GroupName parsedGroupName = new GroupName(groupName);
         groups.add(parsedGroupName);
-        Map<AssignmentName, Integer> classGrades = assignmentGrades.getOrDefault(parsedGroupName, new HashMap<>());
+        Map<AssignmentName, Double> classGrades = assignmentGrades.getOrDefault(parsedGroupName, new HashMap<>());
         classGrades.put(new AssignmentName(assignmentName), grade);
         assignmentGrades.put(parsedGroupName, classGrades);
         return this;

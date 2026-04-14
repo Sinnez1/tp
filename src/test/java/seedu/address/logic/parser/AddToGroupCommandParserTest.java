@@ -66,4 +66,10 @@ public class AddToGroupCommandParserTest {
         assertParseFailure(parser, " i/1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddToGroupCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_duplicateIndexPrefix_failure() {
+        assertParseFailure(parser, " g/weird name i/2 i/1 i/3",
+                "There should only be one of this prefix: i/");
+    }
 }

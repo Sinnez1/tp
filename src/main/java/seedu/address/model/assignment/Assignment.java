@@ -12,7 +12,8 @@ import seedu.address.commons.util.ToStringBuilder;
  */
 public class Assignment {
 
-    public static final String MESSAGE_MAX_MARKS_CONSTRAINTS = "Max marks should be a positive integer.";
+    public static final String MESSAGE_MAX_MARKS_CONSTRAINTS =
+            "Max marks should be an integer between 1 and 2147483647.";
 
     private final AssignmentName assignmentName;
     private final LocalDate dueDate;

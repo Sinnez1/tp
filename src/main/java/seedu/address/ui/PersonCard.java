@@ -107,8 +107,8 @@ public class PersonCard extends UiPart<Region> {
     }
 
     private Label createAssignmentLabel(Assignment assignment, GroupName activeGroupName) {
-        Optional<Integer> grade = person.getAssignmentGrade(activeGroupName, assignment.getAssignmentName());
-        String gradeText = grade.map(value -> value + "/" + assignment.getMaxMarks())
+        Optional<Double> grade = person.getAssignmentGrade(activeGroupName, assignment.getAssignmentName());
+        String gradeText = grade.map(value -> formatGrade(value) + "/" + assignment.getMaxMarks())
                 .orElse("-");
 
         Label assignmentLabel = new Label(assignment.getAssignmentName().value + ": " + gradeText);
@@ -121,6 +121,14 @@ public class PersonCard extends UiPart<Region> {
         }
 
         return assignmentLabel;
+    }
+
+    private String formatGrade(double grade) {
+        if (grade == Math.rint(grade)) {
+            return Integer.toString((int) grade);
+        }
+        String formatted = String.format("%.3f", grade);
+        return formatted.replaceAll("0+$", "").replaceAll("\\.$", "");
     }
 
     private String formatAttendance(Person person, GroupName groupName, LocalDate sessionDate) {

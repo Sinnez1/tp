@@ -36,4 +36,17 @@ public class GradeAssignmentCommandParserTest {
         assertParseFailure(parser, " a/Quiz 1 i/1 m/A1234567X gr/17",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, GradeAssignmentCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_decimalGrade_success() {
+        assertParseSuccess(parser, " a/Quiz 1 i/1 gr/8.5",
+                GradeAssignmentCommand.forIndexes(new AssignmentName("Quiz 1"),
+                        List.of(Index.fromOneBased(1)), 8.5));
+    }
+
+    @Test
+    public void parse_moreThanThreeDecimalPlaces_failure() {
+        assertParseFailure(parser, " a/Quiz 1 i/1 gr/8.1234",
+                "Grade should be a non-negative number with at most 3 decimal places.");
+    }
 }

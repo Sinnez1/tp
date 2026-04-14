@@ -71,6 +71,14 @@ public class RenameGroupCommandTest {
     }
 
     @Test
+    public void execute_sameGroupName_failure() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+
+        assertCommandFailure(new RenameGroupCommand(T01, T01), model, Command.MESSAGE_NOTHING_CHANGED);
+    }
+
+    @Test
     public void equals() {
         RenameGroupCommand renameToT02Command = new RenameGroupCommand(T01, T02);
         RenameGroupCommand renameToLab1Command = new RenameGroupCommand(T01, LAB1);

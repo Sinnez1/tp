@@ -31,6 +31,11 @@ public class Messages {
         Set<String> duplicateFields =
                 Stream.of(duplicatePrefixes).map(Prefix::toString).collect(Collectors.toSet());
 
+        if (duplicateFields.size() == 1) {
+            return "There should only be one of this prefix: "
+                    + duplicateFields.iterator().next();
+        }
+
         return MESSAGE_DUPLICATE_FIELDS + String.join(" ", duplicateFields);
     }
 

@@ -69,6 +69,19 @@ public class EditSessionCommandTest {
     }
 
     @Test
+    public void execute_sameSessionDate_failure() {
+        Model model = new ModelManager();
+        Group group = new Group(T01).withUpdatedSession(new seedu.address.model.person.Session(ORIGINAL_DATE,
+                new seedu.address.model.person.Attendance("PRESENT"),
+                new seedu.address.model.person.Participation(2)));
+        model.addGroup(group);
+        model.switchToGroupView(T01);
+
+        EditSessionCommand command = new EditSessionCommand(ORIGINAL_DATE, ORIGINAL_DATE);
+        assertThrows(CommandException.class, Command.MESSAGE_NOTHING_CHANGED, () -> command.execute(model));
+    }
+
+    @Test
     public void execute_withSpecifiedGroupFromAllStudentsView_retainsCurrentView() {
         Model model = new ModelManager();
         model.addGroup(new Group(T01));

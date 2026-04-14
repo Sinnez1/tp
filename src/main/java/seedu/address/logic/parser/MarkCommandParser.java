@@ -40,7 +40,9 @@ public class MarkCommandParser implements Parser<MarkCommand> {
 
             Optional<LocalDate> date = Optional.empty();
             if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
-                date = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
+                String dateValue = argMultimap.getValue(PREFIX_DATE).get();
+                ParserUtil.rejectDateExtraTokens(dateValue, MarkCommand.MESSAGE_USAGE);
+                date = Optional.of(ParserUtil.parseSessionDate(dateValue));
             }
 
             Optional<GroupName> groupName = Optional.empty();

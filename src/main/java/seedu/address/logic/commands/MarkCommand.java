@@ -74,40 +74,49 @@ public class MarkCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        // Step 1: switch group if g/ provided
-        if (groupName.isPresent()) {
-            GroupName targetName = groupName.get();
+        GroupName group;
+        List<Person> lastShownList;
 
-            if (model.findGroupByName(targetName).isEmpty()) {
+        if (groupName.isPresent()) {
+            group = groupName.get();
+
+            if (model.findGroupByName(group).isEmpty()) {
                 throw new CommandException(MESSAGE_GROUP_NOT_FOUND);
             }
 
-            model.switchToGroupView(targetName);
+            lastShownList = model.getAddressBook().getPersonList().stream()
+                    .filter(person -> person.hasGroup(group))
+                    .collect(Collectors.toList());
+        } else {
+            Optional<GroupName> activeGroup = model.getActiveGroupName();
+
+            if (activeGroup.isEmpty()) {
+                throw new CommandException(MESSAGE_REQUIRES_GROUP_VIEW);
+            }
+
+            group = activeGroup.get();
+            lastShownList = model.getFilteredPersonList();
         }
 
-        // Step 2: resolve active group
-        Optional<GroupName> activeGroup = model.getActiveGroupName();
-
-        if (activeGroup.isEmpty()) {
-            throw new CommandException(MESSAGE_REQUIRES_GROUP_VIEW);
+        Optional<LocalDate> resolvedDate = date;
+        if (resolvedDate.isEmpty() && groupName.isEmpty()) {
+            resolvedDate = model.getActiveSessionDate();
         }
-
-        GroupName group = activeGroup.get();
-        Optional<LocalDate> resolvedDate = date.isPresent() ? date : model.getActiveSessionDate();
         if (resolvedDate.isEmpty()) {
             throw new CommandException(MESSAGE_NO_ACTIVE_SESSION);
         }
         LocalDate targetDate = resolvedDate.get();
 
-        // Step 3: get persons
-        List<Person> lastShownList = model.getFilteredPersonList();
         List<Person> personsToUpdate = new ArrayList<>();
-
         for (Index targetIndex : targetIndexes) {
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
             personsToUpdate.add(lastShownList.get(targetIndex.getZeroBased()));
+        }
+
+        if (groupName.isPresent()) {
+            model.switchToGroupView(group);
         }
 
         // Step 4 - 7: update each person

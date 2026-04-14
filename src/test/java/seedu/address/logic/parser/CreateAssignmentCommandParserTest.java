@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.CreateAssignmentCommand;
+import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.AssignmentName;
 
 public class CreateAssignmentCommandParserTest {
@@ -25,5 +26,11 @@ public class CreateAssignmentCommandParserTest {
     public void parse_missingAssignmentPrefix_failure() {
         assertParseFailure(parser, " Quiz 1 d/2026-04-05 mm/20",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, CreateAssignmentCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_maxMarksTooLarge_failure() {
+        assertParseFailure(parser, " a/Quiz 1 d/2026-04-05 mm/1000000000000000",
+                Assignment.MESSAGE_MAX_MARKS_CONSTRAINTS);
     }
 }

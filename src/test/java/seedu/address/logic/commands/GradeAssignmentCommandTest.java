@@ -60,4 +60,27 @@ public class GradeAssignmentCommandTest {
 
         assertCommandFailure(command, model, String.format(GradeAssignmentCommand.MESSAGE_GRADE_OUT_OF_RANGE, 20));
     }
+
+    @Test
+    public void execute_decimalGrade_success() {
+        Model model = new ModelManager();
+        Group group = new Group(T01,
+                List.of(new Assignment(new AssignmentName("Quiz 1"), LocalDate.of(2026, 4, 5), 20)));
+        model.addGroup(group);
+        model.switchToGroupView(T01);
+
+        Person originalPerson = new PersonBuilder().withName("Alice").withMatricNumber("A1234567X")
+                .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build();
+        model.addPerson(originalPerson);
+
+        GradeAssignmentCommand command = GradeAssignmentCommand.forIndexes(new AssignmentName("Quiz 1"),
+                List.of(Index.fromOneBased(1)), 8.5);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.switchToGroupView(T01);
+        expectedModel.setPerson(originalPerson,
+                originalPerson.withUpdatedAssignmentGrade(T01, new AssignmentName("Quiz 1"), 8.5));
+
+        assertCommandSuccess(command, model, "Graded Quiz 1 for Alice: 8.5/20.", expectedModel);
+    }
 }

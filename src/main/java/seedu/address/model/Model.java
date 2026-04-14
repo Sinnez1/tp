@@ -22,7 +22,7 @@ import seedu.address.model.person.Person;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
-    String ALL_STUDENTS_VIEW_NAME = "All Students";
+    String ALL_STUDENTS_VIEW_NAME = "No Group Selected";
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.

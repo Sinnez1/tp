@@ -47,4 +47,28 @@ public class ViewCommandParserTest {
                 new ViewCommand(new Attendance("PRESENT"),
                         new GroupName("T01"), LocalDate.of(2026, 3, 16)));
     }
+
+    @Test
+    public void parse_trailingTokensAfterDate_throwsParseException() {
+        // EP: trailing tokens after d/ value
+        assertParseFailure(parser, "d/2026-03-16 garbage",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        ViewCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_trailingTokensAfterFromDate_throwsParseException() {
+        // EP: trailing tokens after from/ value
+        assertParseFailure(parser, "from/2026-03-01 garbage to/2026-03-31",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        ViewCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_trailingTokensAfterToDate_throwsParseException() {
+        // EP: trailing tokens after to/ value
+        assertParseFailure(parser, "from/2026-03-01 to/2026-03-31 garbage",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        ViewCommand.MESSAGE_USAGE));
+    }
 }

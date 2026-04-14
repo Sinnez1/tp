@@ -28,7 +28,7 @@ public class StatusBarFooter extends UiPart<Region> {
     public StatusBarFooter(Path saveLocation, ReadOnlyStringProperty currentViewProperty) {
         super(FXML);
         saveLocationStatus.setText(Paths.get(".").resolve(saveLocation).toString());
-        currentViewStatus.textProperty().bind(Bindings.concat("Current view: ", currentViewProperty));
+        currentViewStatus.textProperty().bind(Bindings.concat("Current Group: ", currentViewProperty));
     }
 
 }

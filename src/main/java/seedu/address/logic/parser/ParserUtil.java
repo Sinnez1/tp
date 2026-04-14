@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -163,19 +164,18 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a grade as a non-negative integer.
+     * Parses a grade as a non-negative number with at most 3 decimal places.
      */
-    public static int parseGrade(String grade) throws ParseException {
+    public static double parseGrade(String grade) throws ParseException {
         requireNonNull(grade);
         String trimmedGrade = grade.trim();
+        if (!trimmedGrade.matches("\\d+(\\.\\d{1,3})?")) {
+            throw new ParseException("Grade should be a non-negative number with at most 3 decimal places.");
+        }
         try {
-            int parsedGrade = Integer.parseInt(trimmedGrade);
-            if (parsedGrade < 0) {
-                throw new ParseException("Grade should be a non-negative integer.");
-            }
-            return parsedGrade;
+            return Double.parseDouble(trimmedGrade);
         } catch (NumberFormatException e) {
-            throw new ParseException("Grade should be a non-negative integer.");
+            throw new ParseException("Grade should be a non-negative number with at most 3 decimal places.");
         }
     }
     /**
@@ -283,6 +283,19 @@ public class ParserUtil {
             String errorMessage = getDateErrorMessage(trimmedDate);
             logger.warning("Invalid date input: " + trimmedDate + " -- " + errorMessage);
             throw new ParseException(errorMessage);
+        }
+    }
+
+    /**
+     * Rejects a date string that contains trailing tokens.
+     *
+     * @param value Date string value from argument multimap.
+     * @param commandUsage Usage message of command, used for error message.
+     * @throws ParseException If date string has a space after trimming.
+     */
+    public static void rejectDateExtraTokens(String value, String commandUsage) throws ParseException {
+        if (value.trim().contains(" ")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, commandUsage));
         }
     }
 

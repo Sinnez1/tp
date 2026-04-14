@@ -44,6 +44,10 @@ public class RenameGroupCommand extends Command {
         requireNonNull(model);
         Group target = model.findGroupByName(targetName)
                 .orElseThrow(() -> new CommandException(MESSAGE_GROUP_NOT_FOUND));
+        if (targetName.equals(newName)) {
+            throw new CommandException(MESSAGE_NOTHING_CHANGED);
+        }
+
         if (!targetName.equals(newName) && model.findGroupByName(newName).isPresent()) {
             throw new CommandException(MESSAGE_DUPLICATE_GROUP);
         }

@@ -261,4 +261,28 @@ public class MarkCommandTest {
         // EP: one has date, other does not -> not equal
         assertNotEquals(commandA, commandNoDate);
     }
+
+    @Test
+    public void execute_invalidIndexWithGroup_keepsOriginalView() {
+        Model model = new ModelManager();
+        model.addGroup(new Group(T01));
+        model.addGroup(new Group(T02));
+
+        Person t01Person = new PersonBuilder().withName("Alice").withMatricNumber(VALID_MATRIC_NUMBER_AMY)
+                .withEmail("alice@example.com").withPhone("91234567").withGroups("T01").build();
+        Person t02Person = new PersonBuilder().withName("Bob").withMatricNumber(VALID_MATRIC_NUMBER_BOB)
+                .withEmail("bob@example.com").withPhone("98765432").withGroups("T02").build();
+
+        model.addPerson(t01Person);
+        model.addPerson(t02Person);
+        model.switchToGroupView(T02);
+        model.setActiveSessionDate(OTHER_DATE);
+
+        MarkCommand command = new MarkCommand(
+                List.of(Index.fromOneBased(2)), Optional.of(SESSION_DATE), Optional.of(T01));
+
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertEquals(T02, model.getActiveGroupName().orElseThrow());
+        assertEquals(OTHER_DATE, model.getActiveSessionDate().orElseThrow());
+    }
 }

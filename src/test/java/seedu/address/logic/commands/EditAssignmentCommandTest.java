@@ -61,6 +61,22 @@ public class EditAssignmentCommandTest {
     }
 
     @Test
+    public void execute_sameAssignmentDetails_failure() {
+        Model model = new ModelManager();
+        Assignment originalAssignment = new Assignment(new AssignmentName("Quiz 1"),
+                LocalDate.of(2026, 4, 5), 20);
+        model.addGroup(new Group(T01, List.of(originalAssignment)));
+        model.switchToGroupView(T01);
+
+        EditAssignmentCommand.EditAssignmentDescriptor descriptor =
+                new EditAssignmentCommand.EditAssignmentDescriptor();
+        descriptor.setNewAssignmentName(new AssignmentName("Quiz 1"));
+
+        assertCommandFailure(new EditAssignmentCommand(new AssignmentName("Quiz 1"), descriptor),
+                model, Command.MESSAGE_NOTHING_CHANGED);
+    }
+
+    @Test
     public void execute_duplicateAssignmentName_failure() {
         Model model = new ModelManager();
         model.addGroup(new Group(T01, List.of(

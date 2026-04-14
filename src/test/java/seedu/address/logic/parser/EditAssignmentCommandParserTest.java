@@ -29,4 +29,12 @@ public class EditAssignmentCommandParserTest {
     public void parse_noFields_failure() {
         assertParseFailure(parser, " a/Quiz 1", EditAssignmentCommand.MESSAGE_NOT_EDITED);
     }
+
+    @Test
+    public void parse_trailingTokensAfterDate_throwsParseException() {
+        // EP: trailing tokens after d/ value
+        assertParseFailure(parser, " a/Quiz 1 d/2026-04-08 garbage mm/25",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        EditAssignmentCommand.MESSAGE_USAGE));
+    }
 }

@@ -15,6 +15,7 @@ public abstract class Command {
      * @return feedback message of the operation result for display
      * @throws CommandException If an error occurs during command execution.
      */
+    public static final String MESSAGE_NOTHING_CHANGED = "Nothing has been changed.";
     public abstract CommandResult execute(Model model) throws CommandException;
 
 }

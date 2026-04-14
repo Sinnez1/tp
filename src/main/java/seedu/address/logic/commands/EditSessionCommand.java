@@ -132,6 +132,11 @@ public class EditSessionCommand extends Command {
                 sourceGroupSession.getAttendance(),
                 sourceGroupSession.getParticipation(),
                 newNote.orElse(sourceGroupSession.getNote()));
+
+        if (sourceGroupSession.equals(updatedGroupSession)) {
+            throw new CommandException(MESSAGE_NOTHING_CHANGED);
+        }
+
         model.setGroup(group, group.withoutSession(originalDate).withUpdatedSession(updatedGroupSession));
 
         for (Person person : List.copyOf(model.getAddressBook().getPersonList())) {

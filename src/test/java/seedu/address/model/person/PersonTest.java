@@ -135,7 +135,7 @@ public class PersonTest {
         Person updatedPerson = originalPerson.withUpdatedAssignmentGrade(testGroup, assignmentName, 17);
 
         assertTrue(originalPerson.getAssignmentGrade(testGroup, assignmentName).isEmpty());
-        assertEquals(17, updatedPerson.getAssignmentGrade(testGroup, assignmentName).orElseThrow());
+        assertEquals(17.0, updatedPerson.getAssignmentGrade(testGroup, assignmentName).orElseThrow());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class PersonTest {
         assertFalse(updatedPerson.hasGroup(testGroup));
         assertTrue(updatedPerson.hasGroup(renamedGroup));
         assertTrue(updatedPerson.getGroupSessions().containsKey(renamedGroup));
-        assertEquals(18, updatedPerson.getAssignmentGrade(renamedGroup, assignmentName).orElseThrow());
+        assertEquals(18.0, updatedPerson.getAssignmentGrade(renamedGroup, assignmentName).orElseThrow());
     }
 
     @Test

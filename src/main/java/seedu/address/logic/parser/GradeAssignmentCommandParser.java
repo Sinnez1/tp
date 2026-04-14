@@ -35,7 +35,7 @@ public class GradeAssignmentCommandParser implements Parser<GradeAssignmentComma
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ASSIGNMENT, PREFIX_INDEXES, PREFIX_GRADE);
 
         AssignmentName assignmentName = ParserUtil.parseAssignmentName(argMultimap.getValue(PREFIX_ASSIGNMENT).get());
-        int grade = ParserUtil.parseGrade(argMultimap.getValue(PREFIX_GRADE).get());
+        double grade = ParserUtil.parseGrade(argMultimap.getValue(PREFIX_GRADE).get());
 
         boolean hasIndexTargets = argMultimap.getValue(PREFIX_INDEXES).isPresent();
         boolean hasMatricTargets = !argMultimap.getAllValues(PREFIX_MATRIC_NUMBER).isEmpty();

@@ -21,7 +21,7 @@ public class PersonLoadValidator {
     private static final String HAS_SESSION_BUT_NOT_IN_GROUP =
             "Contact has sessions for group '%s' but is not a member of it.";
     private static final String GRADE_EXCEEDS_MAX_MARKS =
-            "Grade %d for assignment '%s' in group '%s' exceeds max marks of %d.";
+            "Grade %s for assignment '%s' in group '%s' exceeds max marks of %d.";
 
     private static final String ASSIGNMENT_DOES_NOT_EXIST =
             "Contact has a grade for assignment '%s' in group '%s', but that assignment does not exist.";
@@ -54,7 +54,7 @@ public class PersonLoadValidator {
     public static void validateAssignmentGrades(AddressBook addressBook, Person person) throws IllegalValueException {
         for (var groupEntry : person.getAssignmentGrades().entrySet()) {
             GroupName groupName = groupEntry.getKey();
-            Map<AssignmentName, Integer> grades = groupEntry.getValue();
+            Map<AssignmentName, Double> grades = groupEntry.getValue();
 
             validatePersonIsMemberOfGroup(person, groupName);
             /*
@@ -99,10 +99,10 @@ public class PersonLoadValidator {
 
     private static void validateAssignmentAgainstGroup(Group group, GroupName groupName,
                                                        Map<AssignmentName,
-                                                               Integer> grades) throws IllegalValueException {
+                                                               Double> grades) throws IllegalValueException {
         for (var gradeEntry : grades.entrySet()) {
             AssignmentName assignmentName = gradeEntry.getKey();
-            int grade = gradeEntry.getValue();
+            double grade = gradeEntry.getValue();
 
             if (!group.hasAssignment(assignmentName)) {
                 throw new IllegalValueException(String.format(

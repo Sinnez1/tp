@@ -30,10 +30,14 @@ public class EditSessionCommandParser implements Parser<EditSessionCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_DATE, PREFIX_NEW_DATE, PREFIX_NEW_NOTE, PREFIX_GROUP);
-        LocalDate originalDate = ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get());
+        String dateValue = argMultimap.getValue(PREFIX_DATE).get();
+        ParserUtil.rejectDateExtraTokens(dateValue, EditSessionCommand.MESSAGE_USAGE);
+        LocalDate originalDate = ParserUtil.parseSessionDate(dateValue);
         Optional<LocalDate> newDate = Optional.empty();
         if (argMultimap.getValue(PREFIX_NEW_DATE).isPresent()) {
-            newDate = Optional.of(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_NEW_DATE).get()));
+            String newDateValue = argMultimap.getValue(PREFIX_NEW_DATE).get();
+            ParserUtil.rejectDateExtraTokens(newDateValue, EditSessionCommand.MESSAGE_USAGE);
+            newDate = Optional.of(ParserUtil.parseSessionDate(newDateValue));
         }
         Optional<String> newNote = argMultimap.getValue(PREFIX_NEW_NOTE).map(String::trim);
         if (argMultimap.getValue(PREFIX_GROUP).isPresent()) {
