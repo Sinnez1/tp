@@ -38,7 +38,9 @@ You can refer to [this guide](https://se-education.org/guides/tutorials/javaInst
 
 2. Download the latest version of the app (called `TAA.jar`) from [our GitHub page here](https://github.com/AY2526S2-CS2103T-F14-1/tp/releases/latest):
 
-<img src="images/GitHubAssets.png" alt="Ui" width="600">
+<a href="https://github.com/AY2526S2-CS2103T-F14-1/tp/releases/latest">
+  <img src="images/GitHubAssets.png" alt="Ui" width="600">
+</a>
 
 <br>
 
