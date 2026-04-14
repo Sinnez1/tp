@@ -1527,12 +1527,12 @@ testers are expected to do more *exploratory* testing.
 <p></p>
 
 5. Test case: `gradea a/Quiz 2 i/1 gr/100`
-    * Expected: `Grade should be a non-negative number with at most 3 decimal places.` error message
+    * Expected: `Grade must be between 0 and 10 (the assignment's max marks) inclusive.` error message
 
 <p></p>
 
 6. Test case: `gradea a/Quiz 2 i/1 gr/-1`
-    * Expected: `Grade should be a non-negative integer.` error message.
+    * Expected: `Grade should be a non-negative number with at most 3 decimal places.` error message.
 
 ### Deleting an assignment
 
