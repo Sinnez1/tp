@@ -1350,7 +1350,8 @@ Once these students are valid, TAA will automatically load these students on the
     }
   } ],
   "loadWarnings": [
-    "Skipped invalid contact 'John':\n- The matric number checksum letter is incorrect. For the given digits, it should be 'X'."
+    "Skipped invalid contact 'John':\n- The matric number checksum letter is incorrect.",
+    "For the given digits, it should be 'X'."
   ]
 }
 ```
@@ -1441,7 +1442,8 @@ They will automatically be loaded back once the invalid group is fixed in `prese
     }
   ],
   "loadWarnings": [
-    "Skipped invalid group 'T02#':\n- Group names should only contain letters, numbers, spaces, hyphens, and underscores, and it should not be blank.",
+    "Skipped invalid group 'T02#':\n- Group names should only contain letters, numbers, spaces, hyphens,",
+    "and underscores, and it should not be blank.",
     "Skipped invalid contact 'John':\n- Contact references group 'T02' which does not exist yet."
   ]
 }
