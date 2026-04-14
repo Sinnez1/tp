@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -24,7 +25,14 @@ public class AddSessionCommandParserTest {
     @Test
     public void parse_missingDate_throwsParseException() {
         assertParseFailure(parser, " g/T01",
-                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                         AddSessionCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_trailingTokensAfterDate_throwsParseException() {
+        // EP: trailing tokens after date value
+        assertParseFailure(parser, " d/2026-03-16 garbage",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddSessionCommand.MESSAGE_USAGE));
     }
 }

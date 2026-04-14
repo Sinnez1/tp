@@ -37,7 +37,9 @@ public class EditAssignmentCommandParser implements Parser<EditAssignmentCommand
                     ParserUtil.parseAssignmentName(argMultimap.getValue(PREFIX_NEW_ASSIGNMENT).get()));
         }
         if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
-            descriptor.setDueDate(ParserUtil.parseSessionDate(argMultimap.getValue(PREFIX_DATE).get()));
+            String dateValue = argMultimap.getValue(PREFIX_DATE).get();
+            ParserUtil.rejectDateExtraTokens(dateValue, EditAssignmentCommand.MESSAGE_USAGE);
+            descriptor.setDueDate(ParserUtil.parseSessionDate(dateValue));
         }
         if (argMultimap.getValue(PREFIX_MAX_MARKS).isPresent()) {
             descriptor.setMaxMarks(ParserUtil.parseMaxMarks(argMultimap.getValue(PREFIX_MAX_MARKS).get()));

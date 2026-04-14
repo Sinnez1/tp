@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -283,6 +284,19 @@ public class ParserUtil {
             String errorMessage = getDateErrorMessage(trimmedDate);
             logger.warning("Invalid date input: " + trimmedDate + " -- " + errorMessage);
             throw new ParseException(errorMessage);
+        }
+    }
+
+    /**
+     * Rejects a date string that contains trailing tokens.
+     *
+     * @param value Date string value from argument multimap.
+     * @param commandUsage Usage message of command, used for error message.
+     * @throws ParseException If date string has a space after trimming.
+     */
+    public static void rejectDateExtraTokens(String value, String commandUsage) throws ParseException {
+        if (value.trim().contains(" ")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, commandUsage));
         }
     }
 

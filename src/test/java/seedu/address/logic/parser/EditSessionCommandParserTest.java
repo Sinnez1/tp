@@ -29,4 +29,20 @@ public class EditSessionCommandParserTest {
                 String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
                         EditSessionCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_trailingTokensAfterDate_throwsParseException() {
+        // EP: trailing tokens after d/ value
+        assertParseFailure(parser, " d/2026-03-16 garbage nd/2026-03-23",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        EditSessionCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_trailingTokensAfterNewDate_throwsParseException() {
+        // EP: trailing tokens after nd/ value
+        assertParseFailure(parser, " d/2026-03-16 nd/2026-03-23 garbage",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        EditSessionCommand.MESSAGE_USAGE));
+    }
 }

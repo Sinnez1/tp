@@ -60,4 +60,11 @@ public class UnmarkCommandParserTest {
     public void parse_invalidDate_failure() {
         assertParseFailure(parser, " i/1 d/2026-04-300", Session.MESSAGE_CONSTRAINTS);
     }
+
+    @Test
+    public void parse_trailingTokensAfterDate_throwsParseException() {
+        // EP: trailing tokens after date value
+        assertParseFailure(parser, " i/1 d/2026-03-16 garbage",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnmarkCommand.MESSAGE_USAGE));
+    }
 }
