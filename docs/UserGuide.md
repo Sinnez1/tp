@@ -461,7 +461,7 @@ Adds a student to TAA.
 Format: `add n/NAME p/PHONE e/EMAIL m/MATRIC_NUMBER [t/TAG]…​`
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com m/A1234567X t/scholar`
+* `add n/John Doe p/98765432 e/johnd@example.com m/A1234567X t/scholar` Adds a student named "John Doe" with phone number "98765432", email "johnd@example.com", matric number "A1234567X", and one tag named "scholar", type: 
 
 **Related FAQs:**
 * [What is considered a duplicate student?](#faq-duplicate)
@@ -475,8 +475,8 @@ Shows a list of all students in the current group.
 Format: `list`
 
 Examples:
-* `list` when `Current Group: T01` shows a list of all the students in group `T01`.
-* `list` when `Current Group: No Group Selected` shows a list of all the students in TAA.
+* `list` when `Current Group: T01` Shows a list of all the students in group `T01`.
+* `list` when `Current Group: No Group Selected` Shows a list of all the students in TAA.
 
 ---
 
@@ -515,9 +515,9 @@ Format: `find [n/NAME]... [p/PHONE]... [e/EMAIL]... [m/MATRIC_NUMBER]... [t/TAG]
 * Multiple of the same parameter type can be used. e.g. `find n/alex n/david` returns a list of students with names containing `alex` or `david`
 
 Examples:
-* `find n/john` returns students with the names `john` and `John Doe`
-* `find n/john p/987 e/example.com m/123 t/scholar` returns students with a name containing `john`, a phone number containing `987`, an email containing `example.com`, a matric number containing `123` or a tag containing `scholar`
-* `find n/alex n/david` returns the students `Alex Yeoh`, `David Li`<br>
+* `find n/john` Returns students with the names `john` and `John Doe`
+* `find n/john p/987 e/example.com m/123 t/scholar` Returns students with a name containing `john`, a phone number containing `987`, an email containing `example.com`, a matric number containing `123` or a tag containing `scholar`
+* `find n/alex n/david` Returns the students `Alex Yeoh`, `David Li`<br>
   
   <img src="images/findAlexDavidResult.png" alt="result for 'find alex david'" width="800">
 
@@ -530,8 +530,8 @@ Deletes the specified student from TAA.
 Format: `delete i/INDEX`
 
 Examples:
-* `list` followed by `delete i/2` deletes the 2nd student in the current list.
-* `find n/Betsy` followed by `delete i/1` deletes the 1st student in the result list of the `find` command.
+* `list` followed by `delete i/2` Deletes the 2nd student in the current list.
+* `find n/Betsy` followed by `delete i/1` Deletes the 1st student in the result list of the `find` command.
 
 <div style="page-break-after: always;"></div>
 
@@ -596,6 +596,9 @@ When a group is deleted, its assignments and grades are deleted too.
 Shows a list of all groups in TAA.
 
 Format: `listgroups`
+
+Examples: 
+* `listgroups` when in `Current Group: T01` or `Current Group: No Group Selected` shows a list of all the groups in TAA.
 
 ---
 
@@ -701,7 +704,7 @@ Format: `mark i/INDEX_EXPRESSION d/YYYY-MM-DD`
 * The attendance will be assigned for the current group.
 
 Examples:
-*  `mark i/1 d/2026-03-16` Mark the attendance of the student at index 1 of the current list as PRESENT for the 16 of March 2026.
+*  `mark i/1 d/2026-03-16` Marks the attendance of the student at index 1 of the current list as PRESENT for the 16 of March 2026.
 
 <box type="tip" light>
 
@@ -722,7 +725,7 @@ Format: `unmark i/INDEX_EXPRESSION d/YYYY-MM-DD`
 * The attendance will be assigned for the current group.
 
 Examples:
-*  `unmark i/1 d/2026-03-16` Mark the attendance of the student at index 1 of the current list as ABSENT for the 16 of March 2026.
+*  `unmark i/1 d/2026-03-16` Marks the attendance of the student at index 1 of the current list as ABSENT for the 16 of March 2026.
 
 <box type="tip" light>
 
@@ -760,10 +763,10 @@ You can still use the full forms if needed:
 * `part i/1 d/2026-03-16 pv/4`
 
 Examples:
-*  `view` Show the semester overview of attendance and participation for the current group.
-*  `view d/2026-03-16` Highlight the session on 16 March 2026.
-*  `view absent d/2026-03-16` Show the list of students who have the attendance status ABSENT on 16 March 2026 for the current group.
-*  `view from/2026-03-01 to/2026-03-31` Show only March 2026 session columns in the overview.
+*  `view` Shows the semester overview of attendance and participation for the current group.
+*  `view d/2026-03-16` Highlights the session on 16 March 2026.
+*  `view absent d/2026-03-16` Shows the list of students who have the attendance status ABSENT on 16 March 2026 for the current group.
+*  `view from/2026-03-01 to/2026-03-31` Shows only March 2026 session columns in the overview.
 
 <box type="tip" light>
 
@@ -777,7 +780,7 @@ You can optionally narrow the visible session columns with a date range:
 * `from/` sets the earliest visible session date.
 * `to/` sets the latest visible session date.
 * Both `from/` and `to/` can be used together:
-    * Example: `view from/2026-01-20 to/2026-01-30`
+    * Example: `view from/2026-01-20 to/2026-01-30` Shows the session columns from 20 January 2026 to 30 January 2026.
     * `from/` cannot be later than `to/`.
 
 </box>
@@ -846,7 +849,7 @@ Examples:
 Shows a list of all assignments for the current group.
 
 Format:
-* `listassignments`
+* `listassignments` when `Current Group: T01` shows a list of the assignments for the group `T01`
 
 ---
 
@@ -895,9 +898,9 @@ Format: `addsession d/YYYY-MM-DD [g/GROUP_NAME] [n/NOTE]`
 * If the session already exists for every student in that class, the command will be rejected.
 
 Examples:
-* `addsession d/2026-03-16`
-* `addsession d/2026-03-16 n/tutorial`
-* `addsession d/2026-03-16 g/T01`
+* `addsession d/2026-03-16` When `Current Group: T01`, adds a session of date 16 March 2026 for group `T01`.
+* `addsession d/2026-03-16 n/tutorial` When `Current Group: T01`, adds a session of date 16 March 2026 with label `tutorial` for group `T01`.
+* `addsession d/2026-03-16 g/T01` When `Current Group: No Group Selected`, adds a session of date 16 March 2026 for group `T01`.
 
 ---
 
@@ -913,9 +916,9 @@ Format: `editsession d/OLD_DATE [nd/NEW_DATE] [nn/NEW_NOTE] [g/GROUP_NAME]`
 * If a session already exists on the new date for the same student, the command will be rejected to avoid overwriting data.
 
 Examples:
-* `editsession d/2026-03-16 nd/2026-03-23`
-* `editsession d/2026-03-16 nn/lab`
-* `editsession d/2026-03-16 nd/2026-03-23 nn/make-up tutorial`
+* `editsession d/2026-03-16 nd/2026-03-23` When `Current Group: T01`, edits the sessions date from 16 March 2026 to 23 March 2026 for group `T01`.
+* `editsession d/2026-03-16 nn/lab` When `Current Group: T01`, edits the sessions label to `lab`.
+* `editsession d/2026-03-16 nd/2026-03-23 nn/make-up tutorial` When `Current Group: T01`, edits the sessions date from 16 March 2026 to 23 March 2026 and adds a label `make-up-tutorial` for group `T01`.
 * `editsession d/2026-03-16 nd/2026-03-23 g/T01`
 
 ---
@@ -931,8 +934,8 @@ Format: `deletesession d/YYYY-MM-DD [g/GROUP_NAME]`
 * If the deleted date is currently highlighted in `view`, the highlight is cleared.
 
 Examples:
-* `deletesession d/2026-03-16`
-* `deletesession d/2026-03-16 g/T01`
+* `deletesession d/2026-03-16` When `Current Group: T01`, deletes the session of date 16 March 2026 for group `T01`.
+* `deletesession d/2026-03-16 g/T01` When `Current Group: No Group Selected`, deletes the session of date 16 March 2026 for group `T01`.
 
 ---
 
@@ -957,6 +960,9 @@ Clears all entries from TAA. This includes all students, groups, assignments and
 
 Format: `clear`
 
+Examples: 
+* `clear` when `Current Group: T01` or `Current Group: No Group Selected` deletes all entries from TAA, regardless of view.
+
 ---
 
 ### Export the current session overview: `exportview`
@@ -977,8 +983,10 @@ Format: `exportview [f/FILE_NAME]`
 * If a file name is provided, TAA will write to `[JAR file location]/[FILE_NAME]`
 
 Examples:
-* `exportview`
-* `exportview f/exports/t01-view.csv`
+* `exportview` When `Current Group: T01`, exports a .csv file named view-export by default containing the sessions, attendance and participation values for group `T01`.
+* `exportview f/exports/t01-view.csv` When `Current Group: T01`, exports a .csv file named `t01-view` in a folder `exports` containing the sessions, attendance and participation values for group `T01`.
+
+For an example of the exported CSV structure, refer to the [CSV file format](#csv-file-format) section below.
 
 <box type="warning" light>
 
